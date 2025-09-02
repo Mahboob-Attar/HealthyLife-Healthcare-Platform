@@ -3,21 +3,21 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-.Python
-env/
-venv/
-health_venv/
+*.db
+*.sqlite3
 
-# Node.js
-node_modules/
-npm-debug.log
-yarn-error.log
+# Environment
+.env
+venv/
+ENV/
+.venv/
+
+# Packaging
+*.egg-info/
+dist/
+build/
 
 # IDE
 .vscode/
 .idea/
 *.swp
-
-# OS
-.DS_Store
-Thumbs.db
