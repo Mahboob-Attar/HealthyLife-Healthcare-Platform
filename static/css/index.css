@@ -1,0 +1,199 @@
+/*  Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background: linear-gradient(to bottom, #0a0f2c, #13235c);
+  color: #fff;
+  line-height: 1.6;
+  height: 100vh;
+  width: 100vw;
+}
+
+/*  Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 60px;
+  background: transparent;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.logo-text {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: 500;
+  transition: color 0.3s ease-in-out;
+}
+
+.nav-links a:hover {
+  color: #1da1f2;
+}
+
+/*  Hero Section */
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 60px;
+  flex-wrap: wrap;
+}
+
+/* Left Content */
+.hero-text {
+  max-width: 600px;
+}
+
+.hero-text h1 {
+  font-size: 45px;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.hero-text p {
+  margin: 20px 0;
+  font-size: 16px;
+  color: #dcdcdc;
+}
+
+/*  Predict Now Button */
+.btn {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 25px;
+  background: #fff;
+  color: #1e3eff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn:hover {
+  background: #1e3eff;
+  color: #fff;
+}
+
+/*  Disclaimer */
+strong {
+  color: red;
+}
+
+.disclaimer {
+  position: fixed;
+  bottom: 0;
+  color: white;
+  padding: 12px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 6px;
+  font-size: 14px;
+  line-height: 1.5;
+  max-width: 90%;
+}
+
+/* Right-side Images */
+.hero-images {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 200px);
+  gap: 15px;
+}
+
+.grid img {
+  width: 200%;
+  border-radius: 15px;
+  object-fit: cover;
+  transition: transform 0.3s ease-in-out;
+}
+
+/*  Chatbot Dancing Container */
+.chatbot-container {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  margin-top: 20px;
+  height: 150px;
+  cursor: help;
+  width: fit-content;
+  position: relative;
+  left: 350px;
+}
+
+/* Chatbot Image */
+.chatbot-img {
+  width: 120px;
+  animation: chatbotDance 3s ease-in-out infinite;
+  transition: transform 0.3s ease-in-out;
+  object-fit: cover;
+}
+
+/* Chatbot Label Text */
+.chatbot-label {
+  margin-top: 8px;
+  font-size: 16px;
+  color: #1da1f2;
+  font-weight: bold;
+  animation: glowText 1.5s ease-in-out infinite alternate;
+}
+
+/* Chatbot Dancing Animation */
+@keyframes chatbotDance {
+  0% {
+    transform: translateX(0) rotate(0deg);
+  }
+  25% {
+    transform: translateX(30px) rotate(5deg);
+  }
+  50% {
+    transform: translateX(0) rotate(0deg);
+  }
+  75% {
+    transform: translateX(-30px) rotate(-5deg);
+  }
+  100% {
+    transform: translateX(0) rotate(0deg);
+  }
+}
+
+/*  Glowing Text Effect */
+@keyframes glowText {
+  from {
+    color: #1da1f2;
+    text-shadow: 0 0 5px #1da1f2;
+  }
+  to {
+    color: #00e1ff;
+    text-shadow: 0 0 15px #00e1ff;
+  }
+}

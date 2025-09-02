@@ -1,0 +1,39 @@
+Metadata-Version: 2.4
+Name: HealthyLife
+Version: 2.0.0
+Summary: ML-based Healthcare Platform
+Author: Mahboob Attar
+Author-email: freespace.alltime@gmail.com
+License: MIT (Educational Use Only)
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: backports.tarfile==1.2.0
+Requires-Dist: docopt==0.6.2
+Requires-Dist: flask-cors==6.0.1
+Requires-Dist: importlib-metadata==8.0.0
+Requires-Dist: jaraco.collections==5.1.0
+Requires-Dist: packaging==24.2
+Requires-Dist: pandas==2.3.2
+Requires-Dist: pip-chill==1.0.3
+Requires-Dist: platformdirs==4.2.2
+Requires-Dist: scikit-learn==1.7.1
+Requires-Dist: tomli==2.0.1
+Requires-Dist: yarg==0.1.10
+Dynamic: author
+Dynamic: author-email
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: license
+Dynamic: license-file
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# HealthyLife
+An ML-based Healthcare Platform.  
+
+Features:
+- Disease prediction  
+- Wellness recommendations by real chatbot  
+- Pharmacy & lab integration  
