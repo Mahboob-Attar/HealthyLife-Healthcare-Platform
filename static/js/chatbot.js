@@ -1,72 +1,87 @@
+// chatbot.js
+
 document.addEventListener("DOMContentLoaded", () => {
+  const chatbotIcon = document.getElementById("chatbotIcon");
+  const chatPopup = document.getElementById("chatPopup");
+  const closeChat = document.getElementById("closeChat");
   const sendBtn = document.getElementById("sendBtn");
   const userInput = document.getElementById("userInput");
-  const chatbox = document.getElementById("chatbox");
-  const loadingMsg = document.createElement("div");
+  const chatBody = document.getElementById("chatBody");
 
-  // Loader Styling
-  loadingMsg.classList.add("bot-msg");
-  loadingMsg.innerHTML = "🤖 Typing...";
-  loadingMsg.style.opacity = "0.7";
-  loadingMsg.style.fontStyle = "italic";
+  // Open chatbot popup
+  chatbotIcon.addEventListener("click", () => {
+    chatPopup.classList.add("active");
+    userInput.focus();
 
-  // Send Button Click
-  sendBtn.addEventListener("click", sendMessage);
+    // Show fresh welcome message when opening
+    chatBody.innerHTML = `<p><b>Nurse:</b> Hi 👩‍⚕️ How can I help you today?</p>`;
+  });
 
-  // Enter Key Press
+  // Close chatbot popup and clear messages
+  closeChat.addEventListener("click", () => {
+    chatPopup.classList.remove("active");
+    chatBody.innerHTML = ""; // Clear old chat
+    userInput.value = ""; // Clear input box
+  });
+
+  // Send message on Enter key
   userInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
-      e.preventDefault();
       sendMessage();
     }
   });
 
-  // Send Message Function
+  // Send message on button click
+  sendBtn.addEventListener("click", sendMessage);
+
+  // Send message function
   function sendMessage() {
     const message = userInput.value.trim();
     if (message === "") return;
 
-    appendMessage("user", message);
+    // Show user message
+    appendMessage("You", message, "user");
+
+    // Clear input field
     userInput.value = "";
 
-    // Show loader while waiting
-    chatbox.appendChild(loadingMsg);
-    chatbox.scrollTop = chatbox.scrollHeight;
+    // Show typing indicator
+    const typingIndicator = document.createElement("div");
+    typingIndicator.classList.add("nurse-msg");
+    typingIndicator.innerHTML = `<b>Nurse:</b> <i>Typing...</i>`;
+    chatBody.appendChild(typingIndicator);
+    chatBody.scrollTop = chatBody.scrollHeight;
 
-    // Send message to Flask backend
-    fetch("/chatbot/get_response", {
+    // Fetch Nurse response from Flask API
+    fetch("/chatbot", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ message: message }),
     })
       .then((res) => res.json())
       .then((data) => {
-        chatbox.removeChild(loadingMsg);
-        appendMessage("bot", data.response);
+        typingIndicator.remove();
+        appendMessage("Nurse", data.reply, "nurse");
       })
-      .catch(() => {
-        chatbox.removeChild(loadingMsg);
-        appendMessage("bot", "⚠️ Server not responding. Try again later.");
+      .catch((err) => {
+        typingIndicator.remove();
+        appendMessage(
+          "Nurse",
+          "⚠️ Sorry, something went wrong. Please try again.",
+          "nurse"
+        );
+        console.error("Chatbot Error:", err);
       });
   }
 
-  // Append Message Function
-  function appendMessage(sender, text) {
-    const msg = document.createElement("div");
-    msg.classList.add(sender === "user" ? "user-msg" : "bot-msg");
-
-    // Smooth typing effect for bot messages
-    if (sender === "bot") {
-      let index = 0;
-      const typingInterval = setInterval(() => {
-        msg.innerHTML = text.slice(0, index++);
-        if (index > text.length) clearInterval(typingInterval);
-      }, 15);
-    } else {
-      msg.textContent = text;
-    }
-
-    chatbox.appendChild(msg);
-    chatbox.scrollTo({ top: chatbox.scrollHeight, behavior: "smooth" });
+  // Append message to chat body
+  function appendMessage(sender, message, type) {
+    const msgDiv = document.createElement("div");
+    msgDiv.classList.add(`${type}-msg`);
+    msgDiv.innerHTML = `<b>${sender}:</b> ${message}`;
+    chatBody.appendChild(msgDiv);
+    chatBody.scrollTop = chatBody.scrollHeight;
   }
 });

@@ -9,6 +9,7 @@
 body {
   background: linear-gradient(to bottom, #0a0f2c, #13235c);
   color: #fff;
+  min-height: 100vh;
 }
 
 /* Navbar */
