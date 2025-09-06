@@ -6,8 +6,7 @@ setup(
     author="Mahboob Attar",
     author_email="freespace.alltime@gmail.com",
     description="ML-based Healthcare Platform",
-    long_description="""# HealthyLife
-An ML-based Healthcare Platform.  
+    long_description="""# HealthyLife An ML-based Healthcare Platform.  
 
 Features:
 - Disease prediction  

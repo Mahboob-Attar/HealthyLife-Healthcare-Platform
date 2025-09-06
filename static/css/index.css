@@ -99,6 +99,12 @@ body {
   background: #1e3eff;
   color: #fff;
 }
+/* #appointmentbtn{
+  position: relative;
+  right: 29%;
+  top: 70px;
+
+}  */
 
 /* Right-side Images */
 .hero-images {
@@ -258,4 +264,3 @@ body {
 .chat-footer button:hover {
   background-color: #0056b3;
 }
-
