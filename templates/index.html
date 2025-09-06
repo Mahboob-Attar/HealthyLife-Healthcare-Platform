@@ -4,21 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HealthyLife</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/index.css') }}"
-    />
+    <link rel="stylesheet"href="{{ url_for('static', filename='css/index.css') }}"/>
   </head>
   <body>
     <!-- Navbar -->
     <header>
       <nav class="navbar">
         <div class="nav-left">
-          <img
-            src="{{ url_for('static', filename='assets/logo.png') }}"
-            alt="Logo"
-            class="logo-img"
-          />
+          <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Logo" class="logo-img"/>
           <div class="logo-text">HealthyLife</div>
         </div>
         <ul class="nav-links">
@@ -44,11 +37,7 @@
 
         <!-- Chatbot Button -->
         <div class="chatbot-container" id="chatbotIcon">
-          <img
-            src="{{ url_for('static', filename='assets/chatbot.png') }}"
-            alt="Chatbot"
-            class="chatbot-img"
-          />
+          <img src="{{ url_for('static', filename='assets/chatbot.png') }}"alt="Chatbot" class="chatbot-img"/>
           <div class="chatbot-label">Ask Me!!</div>
         </div>
       </div>
@@ -56,25 +45,9 @@
       <!-- Right Side Doctor Image -->
       <div class="hero-images">
         <div class="grid">
-          <img
-            id="img1"
-            src="{{ url_for('static', filename='assets/doc1.png') }}"
-            alt="Doctor 1"
-          />
+          <img id="img1"src="{{ url_for('static', filename='assets/doc1.png') }}"alt="Doctor 1"/>
         </div>
       </div>
-
-      <!-- Disclaimer -->
-      <div class="disclaimer">
-        <p>
-          <strong>Disclaimer:</strong> This platform is intended for educational
-          and informational purposes only. It is not a substitute for
-          professional medical advice, diagnosis, or treatment. Always seek the
-          guidance of a qualified healthcare provider with any questions
-          regarding a medical condition.
-        </p>
-      </div>
-    </section>
 
     <!-- Chat Popup -->
     <div id="chatPopup" class="chat-popup">
@@ -92,13 +65,7 @@
     </div>
 
     <!-- JS -->
-    <script
-      src="{{ url_for('static', filename='js/index.js') }}"
-      defer
-    ></script>
-    <script
-      src="{{ url_for('static', filename='js/chatbot.js') }}"
-      defer
-    ></script>
+    <script src="{{ url_for('static', filename='js/index.js') }}"defer></script>
+    <script src="{{ url_for('static', filename='js/chatbot.js') }}"defer></script>
   </body>
 </html>

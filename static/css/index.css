@@ -100,23 +100,6 @@ body {
   color: #fff;
 }
 
-/*  Disclaimer */
-strong {
-  color: red;
-}
-
-.disclaimer {
-  position: fixed;
-  bottom: 0;
-  color: white;
-  padding: 12px;
-  background-color: rgba(0, 0, 0, 0.6);
-  border-radius: 6px;
-  font-size: 14px;
-  line-height: 1.5;
-  max-width: 90%;
-}
-
 /* Right-side Images */
 .hero-images {
   display: flex;
@@ -147,7 +130,8 @@ strong {
   cursor: help;
   width: fit-content;
   position: relative;
-  left: 350px;
+  left: 400px;
+  top: 50px;
 }
 
 /* Chatbot Image */
@@ -274,3 +258,4 @@ strong {
 .chat-footer button:hover {
   background-color: #0056b3;
 }
+
