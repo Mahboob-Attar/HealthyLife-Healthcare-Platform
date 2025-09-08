@@ -20,8 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Close chatbot popup and clear messages
   closeChat.addEventListener("click", () => {
     chatPopup.classList.remove("active");
-    chatBody.innerHTML = ""; // Clear old chat
-    userInput.value = ""; // Clear input box
+    chatBody.innerHTML = "";
+    userInput.value = "";
   });
 
   // Send message on Enter key

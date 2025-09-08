@@ -1,7 +1,7 @@
 // Wait until DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
   const predictBtn = document.getElementById("predictBtn");
-  const chatbotIcon = document.getElementById("chatbotIcon"); // updated ID
+  const chatbotIcon = document.getElementById("chatbotIcon");
   const chatPopup = document.getElementById("chatPopup");
   const closeChat = document.getElementById("closeChat");
 
@@ -15,14 +15,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // Chatbot Icon → Toggle Chat Popup
   if (chatbotIcon && chatPopup) {
     chatbotIcon.addEventListener("click", () => {
-      chatPopup.classList.add("active"); // slide down
+      chatPopup.classList.add("active");
     });
   }
 
   // Close Button → Hide Chat Popup
   if (closeChat) {
     closeChat.addEventListener("click", () => {
-      chatPopup.classList.remove("active"); // slide up
+      chatPopup.classList.remove("active");
     });
   }
 });
