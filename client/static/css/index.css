@@ -99,12 +99,12 @@ body {
   background: #1e3eff;
   color: #fff;
 }
-/* #appointmentbtn{
-  position: relative;
-  right: 29%;
-  top: 70px;
 
-}  */
+#appointmentbtn {
+  position: relative;
+  right: 28%;
+  top: 70px;
+}
 
 /* Right-side Images */
 .hero-images {
