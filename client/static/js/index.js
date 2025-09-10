@@ -1,4 +1,3 @@
-// Wait until DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
   const predictBtn = document.getElementById("predictBtn");
   const chatbotIcon = document.getElementById("chatbotIcon");
