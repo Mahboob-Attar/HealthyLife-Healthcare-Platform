@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HealthyLife - Appointment Portal</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/appointment.css') }}"
+    />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <header>
+      <nav class="navbar">
+        <div class="nav-left">
+          <div class="logo-text">HealthyLife</div>
+        </div>
+        <ul class="nav-links">
+          <li><a href="{{ url_for('home.index') }}">HOME</a></li>
+          <li><a href="#" id="doctorBtn">DOCTOR</a></li>
+          <li><a href="#" id="userBtn">USER</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Doctor Registration Sidebar -->
+    <div id="doctorForm" class="sidebar-form">
+      <div class="form-header">
+        <h2>Doctor Registration</h2>
+        <span class="close-btn" id="closeDoctor">&times;</span>
+      </div>
+      <form id="doctorRegisterForm">
+        <label>Full Name*</label>
+        <input type="text" name="name" required />
+
+        <label>Contact No*</label>
+        <input type="tel" name="contact" required />
+
+        <label>Specialization*</label>
+        <input type="text" name="specialization" required />
+
+        <label>Experience (years)*</label>
+        <input type="number" name="experience" required />
+
+        <label>Hospital Location*</label>
+        <input type="text" name="location" required />
+
+        <label>Services*</label>
+        <input type="text" name="services" required />
+
+        <label>Govt License ID*</label>
+        <input
+          type="email"
+          name="license"
+          placeholder="ABC123@gov.ac.in"
+          required
+        />
+
+        <button type="submit" class="btn">Register</button>
+      </form>
+    </div>
+
+    <!-- User Login Sidebar -->
+    <div id="userForm" class="sidebar-form">
+      <div class="form-header">
+        <h2>User Login</h2>
+        <span class="close-btn" id="closeUser">&times;</span>
+      </div>
+      <form id="userLoginForm">
+        <label>Full Name*</label>
+        <input type="text" name="username" required />
+
+        <label>Contact No*</label>
+        <input type="tel" name="contact" required />
+
+        <label>Age*</label>
+        <input type="number" name="age" required />
+
+        <label>Address*</label>
+        <textarea name="address" required></textarea>
+
+        <button type="submit" class="btn">Login</button>
+      </form>
+    </div>
+
+    <!-- Doctors List -->
+    <section class="doctors-list" id="doctorsList">
+      <h2>Available Doctors</h2>
+      <div class="doctor-cards" id="doctorCards">
+        <!-- JS will insert doctor cards here after fetching from DB -->
+      </div>
+    </section>
+
+    <!-- Toast Notifications -->
+    <div id="toast" class="toast"></div>
+
+    <script src="{{ url_for('static', filename='js/appointment.js') }}"></script>
+  </body>
+</html>

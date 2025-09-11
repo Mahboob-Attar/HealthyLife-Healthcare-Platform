@@ -1,4 +1,4 @@
-const form = document.getElementById("predictForm");
+const form = document.getElementById("#predictForm");
 const resultBox = document.getElementById("result");
 const predictionText = document.getElementById("prediction");
 

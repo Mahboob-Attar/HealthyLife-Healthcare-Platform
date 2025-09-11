@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const predictBtn = document.getElementById("predictBtn");
+  const appointmentBtn = document.getElementById("appointmentbtn");
   const chatbotIcon = document.getElementById("chatbotIcon");
   const chatPopup = document.getElementById("chatPopup");
   const closeChat = document.getElementById("closeChat");
@@ -11,7 +12,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Chatbot Icon → Toggle Chat Popup
+  // Appointment Now Button → Go to Appointment Portal
+  if (appointmentBtn) {
+    appointmentBtn.addEventListener("click", () => {
+      window.location.href = "/appointment";
+    });
+  }
+
+  // Chatbot Icon → Open Chat Popup
   if (chatbotIcon && chatPopup) {
     chatbotIcon.addEventListener("click", () => {
       chatPopup.classList.add("active");
