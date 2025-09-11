@@ -5,4 +5,4 @@ appointment_bp = Blueprint('appointment', __name__,url_prefix="/appointment")
 
 @appointment_bp.route('/appointment')
 def appointment_portal():
-    return render_template('appointment_portal.html')
+    return render_template('appointment.html')
