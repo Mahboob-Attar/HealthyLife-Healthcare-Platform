@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const predictBtn = document.getElementById("predictBtn");
-  const appointmentBtn = document.getElementById("appointmentbtn");
+  const appointmentBtn = document.getElementById("appointmentBtn");
   const chatbotIcon = document.getElementById("chatbotIcon");
   const chatPopup = document.getElementById("chatPopup");
   const closeChat = document.getElementById("closeChat");
