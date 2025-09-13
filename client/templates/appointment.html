@@ -16,75 +16,54 @@
         <div class="nav-left">
           <div class="logo-text">HealthyLife</div>
         </div>
-        <ul class="nav-links">
+        <ul class="nav-links" id="navLinks">
           <li><a href="/">HOME</a></li>
+          <li><a href="#" id="appointmentBtn">APPOINTMENT</a></li>
         </ul>
       </nav>
     </header>
 
-    <!-- Doctor Registration Sidebar -->
-    <div id="doctorForm" class="sidebar-form">
-      <div class="form-header">
-        <h2>Doctor Registration</h2>
-        <span class="close-btn" id="closeDoctor">&times;</span>
+    <!-- Login/Register Modal -->
+    <div id="authModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" id="closeAuth">&times;</span>
+        <h2 id="authTitle">User Login</h2>
+        <form id="authForm">
+          <label>Full Name*</label>
+          <input type="text" name="username" required />
+
+          <label>Email*</label>
+          <input type="email" name="email" required />
+
+          <label>Phone No*</label>
+          <input type="tel" name="phone" required />
+
+          <label>Password*</label>
+          <input type="password" name="password" required />
+
+          <button type="submit" class="btn">Login</button>
+
+          <p class="switch-text">
+            Don’t have an account?
+            <a href="#" id="switchToRegister">Register</a>
+          </p>
+          <p class="switch-text">
+            <a href="#" id="forgotPassword">Forgot Password?</a>
+          </p>
+        </form>
       </div>
-      <form id="doctorRegisterForm">
-        <label>Full Name*</label>
-        <input type="text" name="name" required />
-
-        <label>Contact No*</label>
-        <input type="tel" name="contact" required />
-
-        <label>Specialization*</label>
-        <input type="text" name="specialization" required />
-
-        <label>Experience (years)*</label>
-        <input type="number" name="experience" required />
-
-        <label>Hospital Location*</label>
-        <input type="text" name="location" required />
-
-        <label>Services*</label>
-        <input type="text" name="services" required />
-
-        <label>Govt License ID*</label>
-        <input
-          type="email"
-          name="license"
-          placeholder="ABC123@gov.ac.in"
-          required
-        />
-
-        <button type="submit" class="btn">Register</button>
-      </form>
-    </div>
-
-    <!-- User Login Sidebar -->
-    <div id="userForm" class="sidebar-form">
-      <div class="form-header">
-        <h2>User Login</h2>
-        <span class="close-btn" id="closeUser">&times;</span>
-      </div>
-      <form id="userLoginForm">
-        <label>Full Name*</label>
-        <input type="text" name="username" required />
-
-        <label>Contact No*</label>
-        <input type="tel" name="contact" required />
-
-        <label>Age*</label>
-        <input type="number" name="age" required />
-
-        <label>Address*</label>
-        <textarea name="address" required></textarea>
-
-        <button type="submit" class="btn">Login</button>
-      </form>
     </div>
 
     <!-- Doctors List -->
     <section class="doctors-list" id="doctorsList">
       <h2>Available Doctors</h2>
+      <div class="filter">
+        <label>Select City:</label>
+        <select id="citySelect">
+          <option value="">--Choose City--</option>
+        </select>
+      </div>
+      <div id="doctorsContainer"></div>
     </section>
 
     <!-- Toast Notifications -->

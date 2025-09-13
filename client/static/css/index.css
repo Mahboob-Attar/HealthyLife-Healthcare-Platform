@@ -62,13 +62,14 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 60px;
+  padding: 40px;
   flex-wrap: wrap;
 }
 
 /* Left Content */
 .hero-text {
-  max-width: 600px;
+  max-width: 800px;
+  height: 400px;
 }
 
 .hero-text h1 {
@@ -83,9 +84,10 @@ body {
   color: #dcdcdc;
 }
 
-/*  Predict Now Button */
+/* Button */
 .btn {
   padding: 12px 28px;
+  margin: 4px;
   border: none;
   border-radius: 25px;
   background: #fff;
@@ -100,12 +102,6 @@ body {
   color: #fff;
 }
 
-#appointmentBtn {
-  position: relative;
-  right: 28%;
-  top: 70px;
-}
-
 /* Right-side Images */
 .hero-images {
   display: flex;
@@ -116,7 +112,7 @@ body {
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 200px);
-  gap: 15px;
+  gap: 10px;
 }
 
 .grid img {
