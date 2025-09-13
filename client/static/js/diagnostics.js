@@ -1,4 +1,4 @@
-const form = document.getElementById("#predictForm");
+const form = document.getElementById("predictForm");
 const resultBox = document.getElementById("result");
 const predictionText = document.getElementById("prediction");
 
@@ -8,14 +8,17 @@ resultBox.style.display = "none";
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const symptoms = document.getElementById("symptoms").value.trim();
-  if (!symptoms) return;
+  // Get symptoms as comma-separated input and convert to array
+  const symptomsInput = document.getElementById("symptoms").value.trim();
+  if (!symptomsInput) return;
+
+  const symptomsArray = symptomsInput.split(",").map(s => s.trim());
 
   try {
-    const res = await fetch("/predict", {
+    const res = await fetch("/diagnostics/predict", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ symptoms }),
+      body: JSON.stringify({ symptoms: symptomsArray }),
     });
 
     const data = await res.json();
