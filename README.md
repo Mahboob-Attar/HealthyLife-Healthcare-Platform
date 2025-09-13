@@ -16,14 +16,18 @@ Version 2 is currently **in development** and includes major improvements, new m
   - A complete upgrade with multiple healthcare modules.
   - More user-friendly design and organized backend.
   - **REST APIs** and **JWT Authentication** for secure login & signup.
-  - **MySQL database connectivity** for persistent data storage.
+  - **MySQL database connectivity** for persistent storage of doctors and users.
   - Advanced **AI/ML features** for health recommendations & predictions.
   - Integration with **datasets** and external APIs (e.g., **OpenAI** for chatbot).
-  - Structured for **scalability and deployment**.
   - **Analytical Dashboard**
-    - Provides insights such as:
-    - Track **total registered doctors and users**.
-    - Visualize **AI model accuracy** with interactive bar charts.
-    - Insights displayed in a clean dashboard UI for decision-making.
+     - Provides insights such as:
+     - Track **total registered doctors and users**.
+     - Visualize **AI model accuracy** with interactive bar charts.
+     - Insights displayed in a clean dashboard UI for decision-making.
+  
+  - All data is **persistently stored** in the database and updated in real-time.
+
+ - Structured for **scalability and deployment**.
 
 ---
+
