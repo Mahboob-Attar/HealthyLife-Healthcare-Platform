@@ -27,7 +27,8 @@ Version 2 is currently **in development** and includes major improvements, new m
   
   - All data is **persistently stored** in the database and updated in real-time.
 
- - Structured for **scalability and deployment**.
+  - Structured for **scalability and deployment**.
 
 ---
+
 
