@@ -20,5 +20,10 @@ Version 2 is currently **in development** and includes major improvements, new m
   - Advanced **AI/ML features** for health recommendations & predictions.
   - Integration with **datasets** and external APIs (e.g., **OpenAI** for chatbot).
   - Structured for **scalability and deployment**.
+  - **Analytical Dashboard**
+    - Provides insights such as:
+    - Track **total registered doctors and users**.
+    - Visualize **AI model accuracy** with interactive bar charts.
+    - Insights displayed in a clean dashboard UI for decision-making.
 
 ---
