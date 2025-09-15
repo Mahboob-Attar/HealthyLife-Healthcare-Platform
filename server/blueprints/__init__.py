@@ -4,6 +4,7 @@ from .pharmacy import pharmacy_bp
 from .labtest import labtest_bp
 from .chatbot import chatbot_bp
 from .appointment import appointment_bp
+from .doctorRegistration import doctor_bp
 
 def init_blueprints(app):
     """Register all blueprints here"""
@@ -13,3 +14,4 @@ def init_blueprints(app):
     app.register_blueprint(labtest_bp)
     app.register_blueprint(chatbot_bp)
     app.register_blueprint(appointment_bp)
+    app.register_blueprint(doctor_bp)

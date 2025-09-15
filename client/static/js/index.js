@@ -1,35 +1,64 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const predictBtn = document.getElementById("predictBtn");
-  const appointmentBtn = document.getElementById("appointmentBtn");
-  const chatbotIcon = document.getElementById("chatbotIcon");
-  const chatPopup = document.getElementById("chatPopup");
-  const closeChat = document.getElementById("closeChat");
+// Elements
+const doctorBtn = document.getElementById("doctorBtn");
+const doctorPopup = document.getElementById("doctorPopup");
+const closeDoctor = document.getElementById("closeDoctor");
+const doctorForm = document.getElementById("doctorForm");
 
-  // Predict Now Button → Go to Diagnostics Page
-  if (predictBtn) {
-    predictBtn.addEventListener("click", () => {
-      window.location.href = "/diagnostics";
-    });
-  }
+const successPopup = document.getElementById("successPopup");
+const closeSuccess = document.getElementById("closeSuccess");
+const successMessage = document.getElementById("successMessage");
 
-  // Appointment Now Button → Go to Appointment Portal
-  if (appointmentBtn) {
-    appointmentBtn.addEventListener("click", () => {
-      window.location.href = "/appointment";
-    });
-  }
+// Open/Close Doctor Popup
+doctorBtn?.addEventListener("click", () => doctorPopup.classList.add("active"));
+closeDoctor?.addEventListener("click", () =>
+  doctorPopup.classList.remove("active")
+);
 
-  // Chatbot Icon → Open Chat Popup
-  if (chatbotIcon && chatPopup) {
-    chatbotIcon.addEventListener("click", () => {
-      chatPopup.classList.add("active");
-    });
-  }
+// Handle Form Submission
+doctorForm?.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-  // Close Button → Hide Chat Popup
-  if (closeChat) {
-    closeChat.addEventListener("click", () => {
-      chatPopup.classList.remove("active");
+  const formData = {
+    name: doctorForm.querySelector('input[name="name"]').value.trim(),
+    phone: doctorForm.querySelector('input[name="phone"]').value.trim(),
+    email: doctorForm.querySelector('input[name="email"]').value.trim(),
+    experience: doctorForm
+      .querySelector('input[name="experience"]')
+      .value.trim(),
+    specialization: doctorForm
+      .querySelector('input[name="specialization"]')
+      .value.trim(),
+    services: doctorForm
+      .querySelector('textarea[name="services"]')
+      .value.trim(),
+    clinic: doctorForm.querySelector('input[name="clinic"]').value.trim(),
+    location: doctorForm.querySelector('input[name="location"]').value.trim(),
+  };
+
+  try {
+    const response = await fetch("/register_doctor", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
     });
+    const result = await response.json();
+
+    if (result.success) {
+      doctorForm.reset();
+      doctorPopup.classList.remove("active");
+      successMessage.innerHTML =
+        "✅ Successfully Registered! <br> If you need help or any changes, please visit the Support page.";
+      successPopup.classList.add("active");
+    } else {
+      alert(result.message || "⚠️ Registration failed. Please try again.");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("⚠️ Server error. Please contact support.");
   }
 });
+
+// Close Success Popup
+closeSuccess?.addEventListener("click", () =>
+  successPopup.classList.remove("active")
+);

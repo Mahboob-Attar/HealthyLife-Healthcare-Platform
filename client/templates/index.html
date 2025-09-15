@@ -1,76 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HealthyLife</title>
-    <link rel="stylesheet"href="{{ url_for('static', filename='css/index.css') }}"/>
-  </head>
-  <body>
-    <!-- Navbar -->
-    <header>
-      <nav class="navbar">
-        <div class="nav-left">
-          <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Logo" class="logo-img"/>
-          <div class="logo-text">HealthyLife</div>
-        </div>
-        <ul class="nav-links">
-          <li><a href="{{ url_for('home.index') }}">HOME</a></li>
-          <li><a href="#about">ABOUT</a></li>
-          <li><a href="#faq">FAQ</a></li>
-          <li><a href="#contact">SUPPORT</a></li>
-        </ul>
-      </nav>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero">
-      <!-- Left Section -->
-      <div class="hero-text">
-        <h1>The Future Medical Ways</h1>
-        <p>
-          Predict multiple diseases quickly and accurately with our advanced
-          platform <br />
-          — your health, simplified!
-        </p>
-
-        <!-- Predict Button  And Appointment Button -->
-        <button class="btn" id="predictBtn">Predict Now</button>
-        <button class="btn" id="appointmentBtn">Appointment Now</button>
-        <button class="btn" id="doctorBtn">Doctor's Register Here!</button>
-        <button class="btn" id="analyticBtn">Analytical Dashboard</button>
-
-        <!-- Chatbot Button -->
-        <div class="chatbot-container" id="chatbotIcon">
-          <img src="{{ url_for('static', filename='assets/chatbot.png') }}"alt="Chatbot" class="chatbot-img"/>
-          <div class="chatbot-label">Ask Me!!</div>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HealthyLife</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" />
+</head>
+<body>
+  <!-- Navbar -->
+  <header>
+    <nav class="navbar">
+      <div class="nav-left">
+        <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Logo" class="logo-img"/>
+        <div class="logo-text">HealthyLife</div>
       </div>
+      <ul class="nav-links">
+        <li><a href="{{ url_for('home.index') }}">HOME</a></li>
+        <li><a href="#about">ABOUT</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#contact">SUPPORT</a></li>
+      </ul>
+    </nav>
+  </header>
 
-      <!-- Right Side Doctor Image -->
-      <div class="hero-images">
-        <div class="grid">
-          <img id="img1"src="{{ url_for('static', filename='assets/doc1.png') }}"alt="Doctor 1"/>
-        </div>
-      </div>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-text">
+      <h1>The Future Medical Ways</h1>
+      <p>Predict multiple diseases quickly and accurately with our advanced platform — your health, simplified!</p>
 
-    <!-- Chat Popup -->
-    <div id="chatPopup" class="chat-popup">
-      <div class="chat-header">
-        <h3>AI Virtual Nurse</h3>
-        <span id="closeChat">&times;</span>
-      </div>
-      <div class="chat-body" id="chatBody">
-        <p><b>Bot:</b> Hi 👋 How can I help you today?</p>
-      </div>
-      <div class="chat-footer">
-        <input type="text" id="userInput" placeholder="Type a message..." />
-        <button id="sendBtn">Send</button>
+      <!-- Buttons -->
+      <button class="btn" id="predictBtn">Predict Now</button>
+      <button class="btn" id="appointmentBtn">Appointment Now</button>
+      <button class="btn" id="doctorBtn">Doctor's Register Here!</button>
+      <button class="btn" id="analyticBtn">Analytical Dashboard</button>
+
+      <!-- Chatbot -->
+      <div class="chatbot-container" id="chatbotIcon">
+        <img src="{{ url_for('static', filename='assets/chatbot.png') }}" alt="Chatbot" class="chatbot-img"/>
+        <div class="chatbot-label">Ask Me!!</div>
       </div>
     </div>
 
-   
-    <script src="{{ url_for('static', filename='js/index.js') }}"defer></script>
-    <script src="{{ url_for('static', filename='js/chatbot.js') }}"defer></script>
-  </body>
+    <div class="hero-images">
+      <div class="grid">
+        <img id="img1" src="{{ url_for('static', filename='assets/doc1.png') }}" alt="Doctor 1"/>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chat Popup -->
+  <div id="chatPopup" class="chat-popup">
+    <div class="chat-header">
+      <h3>AI Virtual Nurse</h3>
+      <span id="closeChat">&times;</span>
+    </div>
+    <div class="chat-body" id="chatBody">
+      <p><b>Bot:</b> Hi 👋 How can I help you today?</p>
+    </div>
+    <div class="chat-footer">
+      <input type="text" id="userInput" placeholder="Type a message..." />
+      <button id="sendBtn">Send</button>
+    </div>
+  </div>
+
+  <!-- Doctor Registration Popup -->
+  <div id="doctorPopup" class="doctor-popup">
+    <div class="doctor-header">
+      <h3>Doctor Registration</h3>
+      <span id="closeDoctor">&times;</span>
+    </div>
+    <form id="doctorForm" class="doctor-form">
+      <label>Full Name</label>
+      <input type="text" name="name" placeholder="Dr. John Doe" required />
+
+      <label>Phone Number</label>
+      <input type="tel" name="phone" placeholder="+91 9876543210" required />
+
+      <label>Email</label>
+      <input type="email" name="email" placeholder="doctor@example.com" required />
+
+      <label>Experience (Years)</label>
+      <input type="number" name="experience" placeholder="e.g. 10" min="0" required />
+
+      <label>Specialization</label>
+      <input type="text" name="specialization" placeholder="e.g. Cardiologist" required />
+
+      <label>Services Provided</label>
+      <textarea name="services" placeholder="e.g. General Checkups, ECG, Surgery"></textarea>
+
+      <label>Clinic/Hospital</label>
+      <input type="text" name="clinic" placeholder="e.g. Apollo Hospital" />
+
+      <label>Location</label>
+      <input type="text" name="location" placeholder="City, State" />
+
+      <button type="submit" class="btn">Register</button>
+    </form>
+  </div>
+
+  <!-- Success Popup -->
+  <div id="successPopup" class="popup">
+    <div class="popup-content">
+      <span id="closeSuccess" class="close">&times;</span>
+      <p id="successMessage"></p>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/index.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/chatbot.js') }}" defer></script>
+</body>
 </html>
