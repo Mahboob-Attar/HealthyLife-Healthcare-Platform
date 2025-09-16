@@ -62,13 +62,13 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 40px;
+  padding: 50px;
   flex-wrap: wrap;
 }
 
 /* Left Content */
 .hero-text {
-  max-width: 800px;
+  max-width: 580px;
   height: 400px;
 }
 
@@ -94,6 +94,7 @@ body {
   color: #1e3eff;
   font-weight: bold;
   cursor: pointer;
+  text-decoration: none;
   transition: all 0.3s ease-in-out;
 }
 

@@ -56,7 +56,7 @@ body {
 
 /* Diagnostic Section */
 .diagnostic {
-  max-width: 700px;
+  max-width: 800px;
   margin: 60px auto;
   padding: 30px;
   background-color: rgba(255, 255, 255, 0.05);
@@ -139,14 +139,14 @@ textarea::placeholder {
 /* Result Box */
 .result-box {
   margin-top: 20px;
-  padding: 20px;
+  padding: 25px;
   background-color: rgba(0, 255, 255, 0.1);
-  border-radius: 10px;
+  border-radius: 12px;
   display: none;
-  text-align: center;
   opacity: 0;
   transform: translateY(10px);
   transition: all 0.5s ease-in-out;
+  text-align: left;
 }
 
 .result-box.show {
@@ -157,25 +157,34 @@ textarea::placeholder {
 
 .result-box h2 {
   font-size: 22px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  text-align: center;
 }
 
+/* Individual Sections */
+.result-box p {
+  margin: 10px 0 5px;
+  font-size: 16px;
+}
+
+.result-box ul {
+  list-style: disc inside;
+  margin-bottom: 15px;
+  padding-left: 10px;
+}
+
+.result-box ul li {
+  margin: 5px 0;
+  font-size: 15px;
+  color: #fff;
+}
+
+/* Disease Name */
 #prediction {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
-}
-
-/* Color-coded Outcomes */
-.mild {
-  color: #4caf50;
-}
-
-.moderate {
-  color: #ffeb3b;
-}
-
-.critical {
-  color: #ff3b3b;
+  color: #00b579;
+  text-align: center;
 }
 
 /* Responsive */
@@ -199,6 +208,15 @@ textarea::placeholder {
 
   .btn {
     padding: 10px 24px;
+    font-size: 14px;
+  }
+
+  .result-box {
+    padding: 15px;
+  }
+
+  .result-box p,
+  .result-box ul li {
     font-size: 14px;
   }
 }

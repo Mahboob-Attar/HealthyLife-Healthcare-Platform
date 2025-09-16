@@ -30,10 +30,10 @@
       <p>Predict multiple diseases quickly and accurately with our advanced platform — your health, simplified!</p>
 
       <!-- Buttons -->
-      <button class="btn" id="predictBtn">Predict Now</button>
-      <button class="btn" id="appointmentBtn">Appointment Now</button>
+      <a href="{{ url_for('diagnostics.diagnostics') }}" class="btn">Predict Now</a>
+      <a href="{{ url_for('appointment.appointment') }}" class="btn">Appointment Now</a>
       <button class="btn" id="doctorBtn">Doctor's Register Here!</button>
-      <button class="btn" id="analyticBtn">Analytical Dashboard</button>
+    
 
       <!-- Chatbot -->
       <div class="chatbot-container" id="chatbotIcon">
