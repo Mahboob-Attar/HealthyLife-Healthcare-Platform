@@ -53,7 +53,7 @@ form.addEventListener("submit", async (e) => {
       workoutsList.innerHTML = "";
     }
     resultBox.style.display = "block";
-    resultBox.classList.add("show"); 
+    resultBox.classList.add("show");
   } catch (err) {
     predictionText.textContent = "Error contacting prediction service.";
     descriptionText.textContent = "";

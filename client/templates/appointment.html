@@ -3,72 +3,55 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HealthyLife - Appointment Portal</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/appointment.css') }}"
-    />
+    <title>Pharmacy - HealthyLife</title>
+    <link rel="stylesheet" href="../static/css/appointment.css" />
   </head>
   <body>
     <!-- Navbar -->
     <header>
       <nav class="navbar">
         <div class="nav-left">
+          <img src="../static/assets/logo.png" alt="Logo" class="logo-img" />
           <div class="logo-text">HealthyLife</div>
         </div>
-        <ul class="nav-links" id="navLinks">
+        <ul class="nav-links">
           <li><a href="/">HOME</a></li>
-          <li><a href="#" id="appointmentBtn">APPOINTMENT</a></li>
+          <li><a href="/diagnostics">DIAGNOSTICS</a></li>
+          <li><a href="/appointment" class="active">APPOINTMENT</a></li>
+          <li><a href="/dashboard">DASHBOARD</a></li>
         </ul>
       </nav>
     </header>
 
-    <!-- Login/Register Modal -->
-    <div id="authModal" class="modal">
-      <div class="modal-content">
-        <span class="close-btn" id="closeAuth">&times;</span>
-        <h2 id="authTitle">User Login</h2>
-        <form id="authForm">
-          <label>Full Name*</label>
-          <input type="text" name="username" required />
+    <!-- Pharmacy Section -->
+    <section class="pharmacy">
+      <h1>Pharmacy Recommendation</h1>
+      <p>Get medicine suggestions based on disease, age, and weight.</p>
 
-          <label>Email*</label>
-          <input type="email" name="email" required />
+      <form id="pharmacyForm">
+        <label for="disease">Enter Disease:</label>
+        <input type="text" id="disease" placeholder="e.g. fever" required />
 
-          <label>Phone No*</label>
-          <input type="tel" name="phone" required />
-
-          <label>Password*</label>
-          <input type="password" name="password" required />
-
-          <button type="submit" class="btn">Login</button>
-
-          <p class="switch-text">
-            Don’t have an account?
-            <a href="#" id="switchToRegister">Register</a>
-          </p>
-          <p class="switch-text">
-            <a href="#" id="forgotPassword">Forgot Password?</a>
-          </p>
-        </form>
-      </div>
-    </div>
-
-    <!-- Doctors List -->
-    <section class="doctors-list" id="doctorsList">
-      <h2>Available Doctors</h2>
-      <div class="filter">
-        <label>Select City:</label>
-        <select id="citySelect">
-          <option value="">--Choose City--</option>
+        <label for="age">Select Age Group:</label>
+        <select id="age" required>
+          <option value="">-- Select --</option>
+          <option value="below18">Below 18</option>
+          <option value="18to60">18 to 60</option>
+          <option value="above60">Above 60</option>
         </select>
+
+        <label for="weight">Enter Weight (kg):</label>
+        <input type="number" id="weight" placeholder="e.g. 65" required />
+
+        <button type="submit" class="btn">Get Medicines</button>
+      </form>
+
+      <div id="pharmacyResult" class="result-box">
+        <h2>Recommended Medicines:</h2>
+        <ul id="medicineList"></ul>
       </div>
-      <div id="doctorsContainer"></div>
     </section>
 
-    <!-- Toast Notifications -->
-    <div id="toast" class="toast"></div>
-
-    <script src="{{ url_for('static', filename='js/appointment.js') }}"></script>
+    <script src="../static/js/appointment.js" defer></script>
   </body>
 </html>

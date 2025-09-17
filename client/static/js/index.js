@@ -18,23 +18,15 @@ closeDoctor?.addEventListener("click", () =>
 doctorForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const formData = {
-    name: doctorForm.querySelector('input[name="name"]').value.trim(),
-    phone: doctorForm.querySelector('input[name="phone"]').value.trim(),
-    email: doctorForm.querySelector('input[name="email"]').value.trim(),
-    experience: doctorForm.querySelector('input[name="experience"]').value.trim(),
-    specialization: doctorForm.querySelector('input[name="specialization"]').value.trim(),
-    services: doctorForm.querySelector('textarea[name="services"]').value.trim(),
-    clinic: doctorForm.querySelector('input[name="clinic"]').value.trim(),
-    location: doctorForm.querySelector('input[name="location"]').value.trim(),
-  };
+  // Use FormData (supports text + files)
+  const formData = new FormData(doctorForm);
 
   try {
     const response = await fetch("/register_doctor", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
+      body: formData, // send as multipart/form-data
     });
+
     const result = await response.json();
 
     if (result.success) {

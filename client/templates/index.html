@@ -70,43 +70,41 @@
       <h3>Doctor Registration</h3>
       <span id="closeDoctor">&times;</span>
     </div>
-    <form id="doctorForm" class="doctor-form">
-      <label>Full Name</label>
+  
+    <form id="doctorForm" class="doctor-form" enctype="multipart/form-data">
+      
+      <label>Full Name <span style="color:red">*</span></label>
       <input type="text" name="name" placeholder="Dr. John Doe" required />
-
-      <label>Phone Number</label>
+  
+      <label>Phone Number <span style="color:red">*</span></label>
       <input type="tel" name="phone" placeholder="+91 9876543210" required />
-
-      <label>Email</label>
+  
+      <label>Email <span style="color:red">*</span></label>
       <input type="email" name="email" placeholder="doctor@example.com" required />
-
-      <label>Experience (Years)</label>
+  
+      <label>Experience (Years) <span style="color:red">*</span></label>
       <input type="number" name="experience" placeholder="e.g. 10" min="0" required />
-
-      <label>Specialization</label>
-      <input type="text" name="specialization" placeholder="e.g. Cardiologist" required />
-
-      <label>Services Provided</label>
-      <textarea name="services" placeholder="e.g. General Checkups, ECG, Surgery"></textarea>
-
-      <label>Clinic/Hospital</label>
-      <input type="text" name="clinic" placeholder="e.g. Apollo Hospital" />
-
-      <label>Location</label>
-      <input type="text" name="location" placeholder="City, State" />
-
+  
+      <label>Specialization <span style="color:red">*</span></label>
+      <input type="text" name="specialization" placeholder="e.g. general surgeon" required />
+  
+      <label>Services Provided <span style="color:red">*</span></label>
+      <textarea name="services" placeholder="e.g. General Checkups, ECG, Surgery" required></textarea>
+  
+      <label>Clinic/Hospital <span style="color:red">*</span></label>
+      <input type="text" name="clinic" placeholder="e.g. Apollo Hospital" required />
+  
+      <label>Location <span style="color:red">*</span></label>
+      <input type="text" name="location" placeholder="City, State" required />
+  
+  
+      <label>Passport Photo <span style="color:red">*</span></label>
+      <input type="file" name="photo" accept="image/png, image/jpeg" required />
+  
       <button type="submit" class="btn">Register</button>
     </form>
   </div>
-
-  <!-- Success Popup -->
-  <div id="successPopup" class="popup">
-    <div class="popup-content">
-      <span id="closeSuccess" class="close">&times;</span>
-      <p id="successMessage"></p>
-    </div>
-  </div>
-
+  
   <script src="{{ url_for('static', filename='js/index.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/chatbot.js') }}" defer></script>
 </body>
