@@ -1,79 +1,78 @@
 from flask import Blueprint, request, jsonify
-import pymysql
+import pymysql, os
 from datetime import datetime
+from werkzeug.utils import secure_filename
 
 doctor_bp = Blueprint("doctor_bp", __name__)
 
-# MySQL configuration (adjust to your database)
+# ================= DB CONFIG =================
 DB_CONFIG = {
     "host": "localhost",
-    "user": "your_username",
-    "password": "your_password",
-    "database": "healthydb",
+    "user": "Healthylife",      
+    "password": "Health@2025//",   
+    "database": "healthylifedb",
     "charset": "utf8mb4"
 }
 
-# Doctor registration route
+# ================= UPLOADS =================
+UPLOAD_FOLDER = os.path.join(os.getcwd(), "uploads", "doctors")
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+# ================= DB CONNECTION =================
+def get_connection():
+    return pymysql.connect(**DB_CONFIG)
+
+# ================= ROUTES =================
 @doctor_bp.route("/register_doctor", methods=["POST"])
 def register_doctor():
-    data = request.get_json()
-    conn = pymysql.connect(**DB_CONFIG)
+    conn = get_connection()
     cursor = conn.cursor()
 
     try:
-        # Check if email exists
-        cursor.execute("SELECT id FROM doctors WHERE email=%s", (data["email"],))
+        # Extract form fields
+        name = request.form.get("name")
+        phone = request.form.get("phone")
+        email = request.form.get("email")
+        experience = request.form.get("experience")
+        specialization = request.form.get("specialization")
+        services = request.form.get("services")
+        clinic = request.form.get("clinic")
+        location = request.form.get("location")
+        photo = request.files.get("photo")
+
+        # Check required fields
+        if not (name and phone and email and specialization and photo):
+            return jsonify({"success": False, "message": "Missing required fields"}), 400
+
+        # Check duplicate email
+        cursor.execute("SELECT id FROM doctors WHERE email=%s", (email,))
         if cursor.fetchone():
-            return jsonify({"success": False, "message": "Email already registered."})
+            return jsonify({"success": False, "message": "Email already registered"}), 409
+
+        # Save photo file
+        filename = secure_filename(photo.filename)
+        photo_path = os.path.join(UPLOAD_FOLDER, filename)
+        photo.save(photo_path)
 
         # Insert doctor
         sql = """
         INSERT INTO doctors 
-        (name, phone, email, experience, specialization, services, clinic, location, created_at)
-        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
+        (name, phone, email, experience, specialization, services, clinic, location, photo_path, created_at)
+        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
         """
         values = (
-            data["name"],
-            data["phone"],
-            data["email"],
-            int(data["experience"]),
-            data["specialization"],
-            data.get("services"),
-            data.get("clinic"),
-            data.get("location"),
-            datetime.utcnow()
+            name, phone, email, int(experience), specialization,
+            services, clinic, location, photo_path, datetime.utcnow()
         )
-
         cursor.execute(sql, values)
         conn.commit()
+
         return jsonify({"success": True})
 
     except Exception as e:
         print("Error:", e)
-        return jsonify({"success": False, "message": "Server error. Please contact support."})
+        return jsonify({"success": False, "message": "Server error. Please contact support."}), 500
 
     finally:
         cursor.close()
         conn.close()
-
-# Function to create table if it doesn't exist
-def create_table():
-    conn = pymysql.connect(**DB_CONFIG)
-    cursor = conn.cursor()
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS doctors (
-        id INT PRIMARY KEY AUTO_INCREMENT,
-        name VARCHAR(100) NOT NULL,
-        phone VARCHAR(20) NOT NULL,
-        email VARCHAR(100) NOT NULL UNIQUE,
-        experience INT NOT NULL,
-        specialization VARCHAR(100) NOT NULL,
-        services TEXT,
-        clinic VARCHAR(100),
-        location VARCHAR(100),
-        created_at DATETIME
-    )
-    """)
-    conn.commit()
-    cursor.close()
-    conn.close()

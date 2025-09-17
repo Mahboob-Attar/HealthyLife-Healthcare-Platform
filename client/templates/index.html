@@ -30,12 +30,11 @@
       <p>Predict multiple diseases quickly and accurately with our advanced platform — your health, simplified!</p>
 
       <!-- Buttons -->
-      <a href="{{ url_for('diagnostics.diagnostics') }}" class="btn">Predict Now</a>
+      <a href="{{ url_for('diagnostic.diagnostic') }}" class="btn">Predict Now</a>
       <a href="{{ url_for('appointment.appointment') }}" class="btn">Appointment Now</a>
       <button class="btn" id="doctorBtn">Doctor's Register Here!</button>
-    
 
-      <!-- Chatbot -->
+      <!-- Chatbot Icon -->
       <div class="chatbot-container" id="chatbotIcon">
         <img src="{{ url_for('static', filename='assets/chatbot.png') }}" alt="Chatbot" class="chatbot-img"/>
         <div class="chatbot-label">Ask Me!!</div>
@@ -72,7 +71,6 @@
     </div>
   
     <form id="doctorForm" class="doctor-form" enctype="multipart/form-data">
-      
       <label>Full Name <span style="color:red">*</span></label>
       <input type="text" name="name" placeholder="Dr. John Doe" required />
   
@@ -97,15 +95,24 @@
       <label>Location <span style="color:red">*</span></label>
       <input type="text" name="location" placeholder="City, State" required />
   
-  
       <label>Passport Photo <span style="color:red">*</span></label>
       <input type="file" name="photo" accept="image/png, image/jpeg" required />
   
       <button type="submit" class="btn">Register</button>
     </form>
   </div>
-  
+
+  <!-- Success Popup -->
+  <div id="successPopup" class="success-popup">
+    <div class="success-content">
+      <span id="closeSuccess">&times;</span>
+      <p id="successMessage"></p>
+    </div>
+  </div>
+
+  <!-- JS Files -->
   <script src="{{ url_for('static', filename='js/index.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/chatbot.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/doctorRegistration.js') }}" defer></script>
 </body>
 </html>

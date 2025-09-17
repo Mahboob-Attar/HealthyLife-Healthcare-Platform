@@ -370,3 +370,37 @@ body {
     opacity: 1;
   }
 }
+
+
+/* ================= Success Popup ================= */
+.success-popup {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #ffffff;
+  color: #333;
+  border-left: 6px solid #28a745; /* green success border */
+  border-radius: 10px;
+  padding: 18px 20px 18px 50px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.25);
+  width: 320px;
+  font-size: 15px;
+  display: none;
+  z-index: 4000;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.4s ease;
+}
+
+/* When visible */
+.success-popup.show {
+  display: block;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Fade out */
+.success-popup.hide {
+  opacity: 0;
+  transform: translateX(100%);
+}

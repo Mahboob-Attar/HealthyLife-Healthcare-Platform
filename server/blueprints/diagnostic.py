@@ -93,13 +93,13 @@ def get_predicted_value(symptoms):
     return diseases_list.get(prediction_index, "Unknown disease")
 
 # Flask Blueprint
-diagnostics_bp = Blueprint("diagnostics", __name__, url_prefix="/diagnostics")
+diagnostic_bp = Blueprint("diagnostic", __name__, url_prefix="/diagnostic")
 
-@diagnostics_bp.route("/")
-def diagnostics():
-    return render_template("diagnostics.html")
+@diagnostic_bp.route("/")
+def diagnostic():
+    return render_template("diagnostic.html")
 
-@diagnostics_bp.route("/predict", methods=["POST"])
+@diagnostic_bp.route("/predict", methods=["POST"])
 def predict():
     data = request.get_json()
     symptoms = data.get('symptoms') if data else None

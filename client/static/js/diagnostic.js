@@ -30,7 +30,7 @@ form.addEventListener("submit", async (e) => {
     .map((s) => s.trim().toLowerCase())
     .filter((s) => s.length > 0);
   try {
-    const res = await fetch("/diagnostics/predict", {
+    const res = await fetch("/diagnostic/predict", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ symptoms: symptomsArray }),

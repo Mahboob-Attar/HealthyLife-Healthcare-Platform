@@ -16,40 +16,14 @@
         </div>
         <ul class="nav-links">
           <li><a href="/">HOME</a></li>
-          <li><a href="/diagnostics">DIAGNOSTICS</a></li>
+          <li><a href="/diagnostic">DIAGNOSTIC</a></li>
           <li><a href="/appointment">APPOINTMENT</a></li>
-          <li><a href="/dashboard" class="active">DASHBAORD</a></li>
+          <li><a href="/dashboard">DASHBAORD</a></li>
         </ul>
       </nav>
     </header>
 
-    <!-- Lab Test Section -->
-    <section class="labtest">
-      <h1>Blood Test Recommendations</h1>
-      <p>
-        Enter your details to know which tests are recommended for your disease.
-      </p>
 
-      <form id="labtestForm">
-        <label for="disease">Enter Disease:</label>
-        <input type="text" id="disease" placeholder="e.g. diabetes" required />
-
-        <label for="age">Select Age Group:</label>
-        <select id="age" required>
-          <option value="">-- Select --</option>
-          <option value="below18">Below 18</option>
-          <option value="18to60">18 to 60</option>
-          <option value="above60">Above 60</option>
-        </select>
-
-        <button type="submit" class="btn">Get Lab Tests</button>
-      </form>
-
-      <div id="labtestResult" class="result-box">
-        <h2>Recommended Lab Tests:</h2>
-        <ul id="testList"></ul>
-      </div>
-    </section>
 
     <script src="../static/js/dashboard.js" defer></script>
   </body>

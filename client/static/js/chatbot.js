@@ -1,5 +1,4 @@
 // chatbot.js
-
 document.addEventListener("DOMContentLoaded", () => {
   const chatbotIcon = document.getElementById("chatbotIcon");
   const chatPopup = document.getElementById("chatPopup");
