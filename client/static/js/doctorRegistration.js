@@ -1,6 +1,21 @@
 // ================== Doctor Registration FormData Script ================== //
 
-// Elements
+// Elements for doctor popup
+const doctorBtn = document.getElementById("doctorBtn");
+const doctorPopup = document.getElementById("doctorPopup");
+const closeDoctor = document.getElementById("closeDoctor");
+
+// Open Doctor Popup
+doctorBtn?.addEventListener("click", () => {
+  doctorPopup.classList.add("active");
+});
+
+// Close Doctor Popup (manual close)
+closeDoctor?.addEventListener("click", () => {
+  doctorPopup.classList.remove("active");
+});
+
+// Elements Form Submission and Success Popup
 const doctorForm = document.getElementById("doctorForm");
 const successPopup = document.getElementById("successPopup");
 const closeSuccess = document.getElementById("closeSuccess");
@@ -15,18 +30,28 @@ doctorForm?.addEventListener("submit", async (e) => {
   try {
     const response = await fetch("/register_doctor", {
       method: "POST",
-      body: formData, // Sends as multipart/form-data
+      body: formData,
     });
 
     const result = await response.json();
 
     if (result.success) {
       doctorForm.reset();
-      doctorPopup.classList.remove("active");
 
       successMessage.innerHTML =
         "✅ Successfully Registered! <br> If you need help or any changes, please visit the Support page.";
-      successPopup.classList.add("active");
+      successPopup.classList.add("show");
+
+      setTimeout(() => {
+        successPopup.classList.remove("show");
+        successPopup.classList.add("hide");
+      }, 10000);
+
+      
+      //  Auto-close Doctor Registration popup after 0.5s
+      setTimeout(() => {
+        doctorPopup.classList.remove("active");
+      }, 500);
     } else {
       alert(result.message || "⚠️ Registration failed. Please try again.");
     }
@@ -36,8 +61,7 @@ doctorForm?.addEventListener("submit", async (e) => {
   }
 });
 
-// Close Success Popup
+// Close Success Popup Manually
 closeSuccess?.addEventListener("click", () => {
-  successPopup.classList.remove("active");
+  successPopup.classList.remove("show");
 });
-

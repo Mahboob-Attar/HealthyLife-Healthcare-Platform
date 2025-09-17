@@ -105,10 +105,39 @@
   <!-- Success Popup -->
   <div id="successPopup" class="success-popup">
     <div class="success-content">
-      <span id="closeSuccess">&times;</span>
+      <span id="closeSuccess"></span>
       <p id="successMessage"></p>
     </div>
   </div>
+  <!---------------------------------------------------------------------->
+  <!------------------------ Info Popups -------------------------------->
+<div id="aboutPopup" class="info-popup">
+  <div class="info-content">
+    <span class="close-info" data-close="aboutPopup">&times;</span>
+    <h3>About Us</h3>
+    <h4><strong>Disclaimer:</strong> </h4>
+    <h6>This platform is for Educationale purposes only and does not replace professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.</h6>
+    <hr><br>
+     <p>HealthyLife is your AI-powered health assistant, designed to simplify diagnosis, appointments, and doctor support.</p>
+  </div>
+</div>
+
+<div id="faqPopup" class="info-popup">
+  <div class="info-content">
+    <span class="close-info" data-close="faqPopup">&times;</span>
+    <h3>Frequently Asked Questions</h3>
+    <p>Q: How does the platform work?<br>A: Enter your symptoms, get predictions, and connect with doctors instantly.</p>
+  </div>
+</div>
+
+<div id="supportPopup" class="info-popup">
+  <div class="info-content">
+    <span class="close-info" data-close="supportPopup">&times;</span>
+    <h3>Support</h3>
+    <p>If you face any issues, contact us at freespace.alltime@gmail.com or call +91-8088944535</p>
+  </div>
+</div>
+
 
   <!-- JS Files -->
   <script src="{{ url_for('static', filename='js/index.js') }}" defer></script>

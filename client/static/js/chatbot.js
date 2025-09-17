@@ -1,4 +1,16 @@
-// chatbot.js
+// Chatbot Popup Logic
+const chatbotIcon = document.getElementById("chatbotIcon");
+const chatPopup = document.getElementById("chatPopup");
+const closeChat = document.getElementById("closeChat");
+
+chatbotIcon?.addEventListener("click", () => {
+  chatPopup.classList.add("active");
+});
+
+closeChat?.addEventListener("click", () => {
+  chatPopup.classList.remove("active");
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   const chatbotIcon = document.getElementById("chatbotIcon");
   const chatPopup = document.getElementById("chatPopup");
