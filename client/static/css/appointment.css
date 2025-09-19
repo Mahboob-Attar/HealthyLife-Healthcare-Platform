@@ -54,78 +54,103 @@ body {
   color: #1da1f2;
 }
 
-/* Pharmacy Section */
-.pharmacy {
-  max-width: 600px;
-  margin: 60px auto;
-  padding: 30px;
+/* Filter Section */
+.filter-section {
+  max-width: 400px;
+  margin: 30px auto;
+  padding: 20px;
   background-color: rgba(255, 255, 255, 0.05);
-  border-radius: 15px;
+  border-radius: 12px;
   text-align: center;
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-  animation: fadeIn 0.4s ease-in-out;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.pharmacy h1 {
-  font-size: 28px;
-  margin-bottom: 10px;
-}
-
-.pharmacy p {
-  color: #ccc;
-  margin-bottom: 20px;
-}
-
-label {
+.filter-section label {
   display: block;
-  margin-top: 15px;
+  font-weight: bold;
+  margin-bottom: 8px;
   text-align: left;
 }
 
-input,
-select {
+.filter-section select {
   width: 100%;
   padding: 10px;
-  margin-top: 5px;
-  border: none;
   border-radius: 8px;
+  border: none;
   background-color: rgba(255, 255, 255, 0.1);
-  color: #000000;
+  color: #000;
+  font-weight: 500;
 }
 
-.btn {
-  margin-top: 20px;
-  padding: 12px 28px;
+/* Doctor Cards */
+.doctor-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+  padding: 20px;
+}
+
+.doctor-card {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 20px;
+  width: 260px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.doctor-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 0 25px rgba(29, 161, 242, 0.5);
+}
+
+.doctor-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+  border: 3px solid #1da1f2;
+}
+
+.doctor-card h3 {
+  margin-bottom: 5px;
+}
+
+.doctor-card p {
+  color: #ccc;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+/* Button */
+button {
+  margin-top: 10px;
+  padding: 10px 20px;
   border: none;
   border-radius: 25px;
-  background: #fff;
-  color: #1e3eff;
+  background: #1da1f2;
+  color: #fff;
   font-weight: bold;
   cursor: pointer;
   transition: 0.3s;
 }
-.btn:hover {
-  background: #1e3eff;
-  color: #fff;
+
+button:hover {
+  background: #fff;
+  color: #1e3eff;
 }
 
-/* Result */
-.result-box {
-  margin-top: 20px;
-  padding: 20px;
-  background-color: rgba(0, 255, 255, 0.1);
-  border-radius: 10px;
+/* Doctor Details */
+.doctor-details {
   display: none;
+  margin-top: 15px;
   text-align: left;
+  background-color: rgba(255, 255, 255, 0.08);
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #eee;
 }

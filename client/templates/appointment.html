@@ -1,28 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pharmacy - HealthyLife</title>
-    <link rel="stylesheet" href="../static/css/appointment.css" />
-  </head>
-  <body>
-    <!-- Navbar -->
-    <header>
-      <nav class="navbar">
-        <div class="nav-left">
-          <img src="../static/assets/logo.png" alt="Logo" class="logo-img" />
-          <div class="logo-text">HealthyLife</div>
-        </div>
-        <ul class="nav-links">
-          <li><a href="/">HOME</a></li>
-          <li><a href="/diagnostic">DIAGNOSTIC</a></li>
-          <li><a href="/appointment">APPOINTMENT</a></li>
-          <li><a href="/dashboard">DASHBOARD</a></li>
-        </ul>
-      </nav>
-    </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Appointment - HealthyLife</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/appointment.css') }}" />
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="nav-left">
+        <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Logo" class="logo-img" />
+        <div class="logo-text">HealthyLife</div>
+      </div>
+      <ul class="nav-links">
+        <li><a href="{{ url_for('home.index') }}">HOME</a></li>
+        <li><a href="{{ url_for('diagnostic.diagnostic') }}">DIAGNOSTIC</a></li>
+        <li><a href="{{ url_for('appointment.appointment') }}" class="active">APPOINTMENT</a></li>
+        <li><a href="{{ url_for('dashboard.dashboard') }}">DASHBOARD</a></li>
+      </ul>
+    </nav>
+  </header>
 
-    <script src="../static/js/appointment.js" defer></script>
-  </body>
+  <section class="filter-section">
+    <label for="cityFilter">Filter by City:</label>
+    <select id="cityFilter" onchange="filterByCity()">
+      <option value="">All Cities</option>
+      {% for city in cities %}
+        <option value="{{ city }}" {% if city == selected_city %}selected{% endif %}>{{ city }}</option>
+      {% endfor %}
+    </select>
+  </section>
+
+  <section class="doctor-container">
+    {% for doctor in doctors %}
+      <div class="doctor-card">
+        <!-- Uses the Flask route to serve images from doctors_upload_images -->
+        <img 
+          src="{{ url_for('doctor_bp.doctor_image', filename=doctor.photo_path or 'default.jpg') }}" 
+          alt="Doctor Photo" 
+          class="doctor-photo" 
+        />
+        <h3>{{ doctor.name }}</h3>
+        <p><b>{{ doctor.specialization }}</b></p>
+        <button onclick="toggleDetails({{ doctor.id }})">View Details</button>
+
+        <div class="doctor-details" id="details-{{ doctor.id }}" style="display:none;">
+          <p><b>Phone:</b> {{ doctor.phone }}</p>
+          <p><b>Email:</b> {{ doctor.email }}</p>
+          <p><b>Experience:</b> {{ doctor.experience }} years</p>
+          <p><b>Services:</b> {{ doctor.services }}</p>
+          <p><b>Clinic:</b> {{ doctor.clinic }}</p>
+          <p><b>Location:</b> {{ doctor.location }}</p>
+        </div>
+      </div>
+    {% endfor %}
+  </section>
+
+  <script src="{{ url_for('static', filename='js/appointment.js') }}" defer></script>
+  <script>
+    function toggleDetails(id) {
+      const details = document.getElementById(`details-${id}`);
+      if(details.style.display === "none" || details.style.display === "") {
+        details.style.display = "block";
+      } else {
+        details.style.display = "none";
+      }
+    }
+
+    function filterByCity() {
+      const city = document.getElementById('cityFilter').value;
+      let url = "{{ url_for('appointment.appointment') }}";
+      if(city) {
+        url += `?city=${city}`;
+      }
+      window.location.href = url;
+    }
+  </script>
+</body>
 </html>
