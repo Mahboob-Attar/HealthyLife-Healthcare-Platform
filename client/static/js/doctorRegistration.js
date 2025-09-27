@@ -28,7 +28,7 @@ doctorForm?.addEventListener("submit", async (e) => {
       successMessage.innerHTML =
         "✅ Successfully Registered! Visit Support page if needed.";
       successPopup.classList.add("show");
-      setTimeout(() => successPopup.classList.remove("show"), 10000);
+      setTimeout(() => successPopup.classList.remove("show"), 1000);
       setTimeout(() => doctorPopup.classList.remove("active"), 500);
     } else {
       alert(result.message || "⚠️ Registration failed.");

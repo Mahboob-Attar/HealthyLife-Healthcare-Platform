@@ -63,6 +63,7 @@ body {
   border-radius: 12px;
   text-align: center;
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+  position: relative;
 }
 
 .filter-section label {
@@ -72,7 +73,7 @@ body {
   text-align: left;
 }
 
-.filter-section select {
+.filter-section input {
   width: 100%;
   padding: 10px;
   border-radius: 8px;
@@ -80,6 +81,29 @@ body {
   background-color: rgba(255, 255, 255, 0.1);
   color: #000;
   font-weight: 500;
+}
+
+/* Suggestions dropdown */
+.suggestions {
+  border: 1px solid #ccc;
+  max-height: 150px;
+  overflow-y: auto;
+  background: white;
+  position: absolute;
+  z-index: 1000;
+  width: calc(100% - 40px);
+  margin-top: 5px;
+  border-radius: 8px;
+  color: #000;
+}
+
+.suggestion-item {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background: #f0f0f0;
 }
 
 /* Doctor Cards */

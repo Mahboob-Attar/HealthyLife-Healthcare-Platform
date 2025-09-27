@@ -22,20 +22,28 @@
     </nav>
   </header>
 
+  <!-- Search Bar -->
   <section class="filter-section">
-    <label for="cityFilter">Filter by City:</label>
-    <select id="cityFilter" onchange="filterByCity()">
-      <option value="">All Cities</option>
-      {% for city in cities %}
-        <option value="{{ city }}" {% if city == selected_city %}selected{% endif %}>{{ city }}</option>
-      {% endfor %}
-    </select>
+    <label for="citySearch">Search City:</label>
+    <input 
+      type="text" 
+      id="citySearch" 
+      placeholder="Type a city..." 
+      onkeyup="searchCity()" 
+      autocomplete="off"
+    />
+    <div id="suggestions" class="suggestions"></div>
   </section>
 
+  <!-- 🔹 Pass cities list to JS -->
+  <script id="citySearchData" type="application/json">
+    {{ cities|tojson }}
+  </script>
+
+  <!-- 🔹 Doctor Cards -->
   <section class="doctor-container">
     {% for doctor in doctors %}
       <div class="doctor-card">
-        <!-- Uses the Flask route to serve images from doctors_upload_images -->
         <img 
           src="{{ url_for('doctor_bp.doctor_image', filename=doctor.photo_path or 'default.jpg') }}" 
           alt="Doctor Photo" 
@@ -45,7 +53,7 @@
         <p><b>{{ doctor.specialization }}</b></p>
         <button onclick="toggleDetails({{ doctor.id }})">View Details</button>
 
-        <div class="doctor-details" id="details-{{ doctor.id }}" style="display:none;">
+        <div class="doctor-details" id="details-{{ doctor.id }}">
           <p><b>Phone:</b> {{ doctor.phone }}</p>
           <p><b>Email:</b> {{ doctor.email }}</p>
           <p><b>Experience:</b> {{ doctor.experience }} years</p>
@@ -58,24 +66,5 @@
   </section>
 
   <script src="{{ url_for('static', filename='js/appointment.js') }}" defer></script>
-  <script>
-    function toggleDetails(id) {
-      const details = document.getElementById(`details-${id}`);
-      if(details.style.display === "none" || details.style.display === "") {
-        details.style.display = "block";
-      } else {
-        details.style.display = "none";
-      }
-    }
-
-    function filterByCity() {
-      const city = document.getElementById('cityFilter').value;
-      let url = "{{ url_for('appointment.appointment') }}";
-      if(city) {
-        url += `?city=${city}`;
-      }
-      window.location.href = url;
-    }
-  </script>
 </body>
 </html>
