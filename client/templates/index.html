@@ -73,31 +73,41 @@
     <form id="doctorForm" class="doctor-form" enctype="multipart/form-data">
       <label>Full Name <span style="color:red">*</span></label>
       <input type="text" name="name" placeholder="Dr. John Doe" required />
-  
+
       <label>Phone Number <span style="color:red">*</span></label>
       <input type="tel" name="phone" placeholder="+91 9876543210" required />
-  
+
       <label>Email <span style="color:red">*</span></label>
       <input type="email" name="email" placeholder="doctor@example.com" required />
-  
+
       <label>Experience (Years) <span style="color:red">*</span></label>
       <input type="number" name="experience" placeholder="e.g. 10" min="0" required />
-  
+
       <label>Specialization <span style="color:red">*</span></label>
       <input type="text" name="specialization" placeholder="e.g. general surgeon" required />
-  
+
       <label>Services Provided <span style="color:red">*</span></label>
       <textarea name="services" placeholder="e.g. General Checkups, ECG, Surgery" required></textarea>
-  
+
       <label>Clinic/Hospital <span style="color:red">*</span></label>
       <input type="text" name="clinic" placeholder="e.g. Apollo Hospital" required />
-  
-      <label>Location <span style="color:red">*</span></label>
-      <input type="text" name="location" placeholder="City, State" required />
-  
+
+      <label>HOSPITAL Location <span style="color:red">*</span></label>
+      <select name="location" id="doctorLocation" required>
+        <option value="">Select City</option>
+        <option value="Bangalore South">Bangalore South</option>
+        <option value="Bangalore North">Bangalore North</option>
+        <option value="Bangalore Urban">Bangalore Urban</option>
+        <option value="Bangalore Rural">Bangalore Rural</option>
+      </select>
+
+      <label>Govt License Email <span style="color:red">*</span></label>
+      <input type="email" name="license" id="licenseInput" placeholder="ABC123@gov.ac.in" required />
+      <span id="licenseStatus"></span>
+
       <label>Passport Photo <span style="color:red">*</span></label>
       <input type="file" name="photo" accept="image/png, image/jpeg" required />
-  
+
       <button type="submit" class="btn">Register</button>
     </form>
   </div>
@@ -109,35 +119,34 @@
       <p id="successMessage"></p>
     </div>
   </div>
-  <!---------------------------------------------------------------------->
-  <!------------------------ Info Popups -------------------------------->
-<div id="aboutPopup" class="info-popup">
-  <div class="info-content">
-    <span class="close-info" data-close="aboutPopup">&times;</span>
-    <h3>About Us</h3>
-    <h4><strong>Disclaimer:</strong> </h4>
-    <h6>This platform is for Educationale purposes only and does not replace professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.</h6>
-    <hr><br>
-     <p>HealthyLife is your AI-powered health assistant, designed to simplify diagnosis, appointments, and doctor support.</p>
-  </div>
-</div>
 
-<div id="faqPopup" class="info-popup">
-  <div class="info-content">
-    <span class="close-info" data-close="faqPopup">&times;</span>
-    <h3>Frequently Asked Questions</h3>
-    <p>Q: How does the platform work?<br>A: Enter your symptoms, get predictions, and connect with doctors instantly.</p>
+  <!-- Info Popups -->
+  <div id="aboutPopup" class="info-popup">
+    <div class="info-content">
+      <span class="close-info" data-close="aboutPopup">&times;</span>
+      <h3>About Us</h3>
+      <h4><strong>Disclaimer:</strong> </h4>
+      <h6>This platform is for Educationale purposes only and does not replace professional medical advice.</h6>
+      <hr><br>
+      <p>HealthyLife is your AI-powered health assistant, designed to simplify diagnosis, appointments, and doctor support.</p>
+    </div>
   </div>
-</div>
 
-<div id="supportPopup" class="info-popup">
-  <div class="info-content">
-    <span class="close-info" data-close="supportPopup">&times;</span>
-    <h3>Support</h3>
-    <p>If you face any issues, contact us at freespace.alltime@gmail.com or call +91-8088944535</p>
+  <div id="faqPopup" class="info-popup">
+    <div class="info-content">
+      <span class="close-info" data-close="faqPopup">&times;</span>
+      <h3>Frequently Asked Questions</h3>
+      <p>Q: How does the platform work?<br>A: Enter your symptoms, get predictions, and connect with doctors instantly.</p>
+    </div>
   </div>
-</div>
 
+  <div id="supportPopup" class="info-popup">
+    <div class="info-content">
+      <span class="close-info" data-close="supportPopup">&times;</span>
+      <h3>Support</h3>
+      <p>If you face any issues, contact us at freespace.alltime@gmail.com or call +91-8088944535</p>
+    </div>
+  </div>
 
   <!-- JS Files -->
   <script src="{{ url_for('static', filename='js/index.js') }}" defer></script>

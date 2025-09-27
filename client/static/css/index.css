@@ -360,6 +360,13 @@ body {
   cursor: pointer;
 }
 
+/* License Status Indicator */
+#licenseStatus {
+  margin-left: 10px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
 @keyframes slideIn {
   from {
     transform: translateX(100%);
@@ -370,6 +377,23 @@ body {
     opacity: 1;
   }
 }
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 3px solid rgba(0,0,0,0.1);
+  border-top-color: #045fc0;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 
 
 /* ================= Success Popup ================= */

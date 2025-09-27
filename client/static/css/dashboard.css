@@ -54,78 +54,50 @@ body {
   color: #1da1f2;
 }
 
-/* Lab Test Section */
-.labtest {
-  max-width: 600px;
-  margin: 60px auto;
-  padding: 30px;
-  background-color: rgba(255, 255, 255, 0.05);
-  border-radius: 15px;
-  text-align: center;
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-  animation: fadeIn 0.4s ease-in-out;
+/* Dashboard Cards */
+.dashboard-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  padding: 40px;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.labtest h1 {
-  font-size: 28px;
-  margin-bottom: 10px;
-}
-
-.labtest p {
-  color: #ccc;
-  margin-bottom: 20px;
-}
-
-label {
-  display: block;
-  margin-top: 15px;
-  text-align: left;
-}
-
-input,
-select {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border: none;
-  border-radius: 8px;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #000000;
-}
-
-.btn {
-  margin-top: 20px;
-  padding: 12px 28px;
-  border: none;
-  border-radius: 25px;
-  background: #fff;
-  color: #1e3eff;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-}
-.btn:hover {
-  background: #1e3eff;
-  color: #fff;
-}
-
-/* Result */
-.result-box {
-  margin-top: 20px;
+.card {
+  background: rgba(255, 255, 255, 0.05);
   padding: 20px;
-  background-color: rgba(0, 255, 255, 0.1);
-  border-radius: 10px;
-  display: none;
-  text-align: left;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+  text-align: center;
+  transition: transform 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card h3 {
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #1da1f2;
+}
+
+/* Centered Count */
+.center-count {
+  font-size: 48px;
+  font-weight: bold;
+  color: #00ffcc;
+  margin-top: 20px;
+}
+
+/* Chart Styling */
+canvas {
+  width: 100% !important;
+  height: 250px !important;
+}
+
+@media screen and (max-width: 768px) {
+  .dashboard-container {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
 }
