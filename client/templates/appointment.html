@@ -17,52 +17,49 @@
         <li><a href="{{ url_for('home.index') }}">HOME</a></li>
         <li><a href="{{ url_for('diagnostic.diagnostic') }}">DIAGNOSTIC</a></li>
         <li><a href="{{ url_for('appointment.appointment') }}" class="active">APPOINTMENT</a></li>
-        <li><a href="{{ url_for('dashboard.dashboard') }}">DASHBOARD</a></li>
+        <!-- <li><a href="{{ url_for('dashboard.dashboard') }}">DASHBOARD</a></li> -->
       </ul>
     </nav>
   </header>
 
-  <!-- Search Bar -->
+  <!-- City Filter Section -->
   <section class="filter-section">
-    <label for="citySearch">Search City:</label>
-    <input 
-      type="text" 
-      id="citySearch" 
-      placeholder="Type a city..." 
-      onkeyup="searchCity()" 
-      autocomplete="off"
-    />
-    <div id="suggestions" class="suggestions"></div>
+    <label for="cityDropdown">Select City:</label>
+    <select id="cityDropdown" onchange="filterByCity()">
+      <option value="">-- Select a City --</option>
+      {% for city in cities %}
+        <option value="{{ city }}" {% if selected_city == city %}selected{% endif %}>{{ city }}</option>
+      {% endfor %}
+    </select>
   </section>
 
-  <!-- 🔹 Pass cities list to JS -->
-  <script id="citySearchData" type="application/json">
-    {{ cities|tojson }}
-  </script>
-
-  <!-- 🔹 Doctor Cards -->
+  <!-- Doctor Cards -->
   <section class="doctor-container">
-    {% for doctor in doctors %}
-      <div class="doctor-card">
-        <img 
-          src="{{ url_for('doctor_bp.doctor_image', filename=doctor.photo_path or 'default.jpg') }}" 
-          alt="Doctor Photo" 
-          class="doctor-photo" 
-        />
-        <h3>{{ doctor.name }}</h3>
-        <p><b>{{ doctor.specialization }}</b></p>
-        <button onclick="toggleDetails({{ doctor.id }})">View Details</button>
+    {% if doctors %}
+      {% for doctor in doctors %}
+        <div class="doctor-card">
+          <img 
+            src="{{ url_for('doctor_bp.doctor_image', filename=doctor.photo_path or 'default.jpg') }}" 
+            alt="Doctor Photo" 
+            class="doctor-photo" 
+          />
+          <h3>{{ doctor.name }}</h3>
+          <p><b>{{ doctor.specialization }}</b></p>
+          <button onclick="toggleDetails({{ doctor.id }})">View Details</button>
 
-        <div class="doctor-details" id="details-{{ doctor.id }}">
-          <p><b>Phone:</b> {{ doctor.phone }}</p>
-          <p><b>Email:</b> {{ doctor.email }}</p>
-          <p><b>Experience:</b> {{ doctor.experience }} years</p>
-          <p><b>Services:</b> {{ doctor.services }}</p>
-          <p><b>Clinic:</b> {{ doctor.clinic }}</p>
-          <p><b>Location:</b> {{ doctor.location }}</p>
+          <div class="doctor-details" id="details-{{ doctor.id }}">
+            <p><b>Phone:</b> {{ doctor.phone }}</p>
+            <p><b>Email:</b> {{ doctor.email }}</p>
+            <p><b>Experience:</b> {{ doctor.experience }} years</p>
+            <p><b>Services:</b> {{ doctor.services }}</p>
+            <p><b>Clinic:</b> {{ doctor.clinic }}</p>
+            <p><b>Location:</b> {{ doctor.location }}</p>
+          </div>
         </div>
-      </div>
-    {% endfor %}
+      {% endfor %}
+    {% else %}
+      <p style="text-align:center; margin-top: 50px;">No doctors found for this city.</p>
+    {% endif %}
   </section>
 
   <script src="{{ url_for('static', filename='js/appointment.js') }}" defer></script>

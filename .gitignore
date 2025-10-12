@@ -12,6 +12,9 @@ venv/
 ENV/
 .venv/
 
+#secret keys
+apikey.env
+
 # Packaging
 *.egg-info/
 dist/

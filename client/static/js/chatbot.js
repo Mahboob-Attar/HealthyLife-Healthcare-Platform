@@ -1,16 +1,3 @@
-// Chatbot Popup Logic
-const chatbotIcon = document.getElementById("chatbotIcon");
-const chatPopup = document.getElementById("chatPopup");
-const closeChat = document.getElementById("closeChat");
-
-chatbotIcon?.addEventListener("click", () => {
-  chatPopup.classList.add("active");
-});
-
-closeChat?.addEventListener("click", () => {
-  chatPopup.classList.remove("active");
-});
-
 document.addEventListener("DOMContentLoaded", () => {
   const chatbotIcon = document.getElementById("chatbotIcon");
   const chatPopup = document.getElementById("chatPopup");
@@ -19,16 +6,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const userInput = document.getElementById("userInput");
   const chatBody = document.getElementById("chatBody");
 
+  const API_URL = "/chatbot/get_response"; // Backend endpoint
+
   // Open chatbot popup
   chatbotIcon.addEventListener("click", () => {
     chatPopup.classList.add("active");
     userInput.focus();
-
-    // Show fresh welcome message when opening
     chatBody.innerHTML = `<p><b>Nurse:</b> Hi 👩‍⚕️ How can I help you today?</p>`;
   });
 
-  // Close chatbot popup and clear messages
+  // Close chatbot popup
   closeChat.addEventListener("click", () => {
     chatPopup.classList.remove("active");
     chatBody.innerHTML = "";
@@ -37,23 +24,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Send message on Enter key
   userInput.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") {
-      sendMessage();
-    }
+    if (e.key === "Enter") sendMessage();
   });
 
   // Send message on button click
   sendBtn.addEventListener("click", sendMessage);
 
-  // Send message function
   function sendMessage() {
     const message = userInput.value.trim();
-    if (message === "") return;
+    if (!message) return;
 
-    // Show user message
+    // Append user message
     appendMessage("You", message, "user");
-
-    // Clear input field
     userInput.value = "";
 
     // Show typing indicator
@@ -63,31 +45,28 @@ document.addEventListener("DOMContentLoaded", () => {
     chatBody.appendChild(typingIndicator);
     chatBody.scrollTop = chatBody.scrollHeight;
 
-    // Fetch Nurse response from Flask API
-    fetch("/chatbot", {
+    // Fetch response from Flask backend
+    fetch(API_URL, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: message }),
     })
       .then((res) => res.json())
       .then((data) => {
         typingIndicator.remove();
-        appendMessage("Nurse", data.reply, "nurse");
+        appendMessage("Nurse", data.response, "nurse");
       })
       .catch((err) => {
         typingIndicator.remove();
         appendMessage(
           "Nurse",
-          "⚠️ Sorry, something went wrong. Please try again.",
+          "⚠️ Something went wrong. Please try again.",
           "nurse"
         );
         console.error("Chatbot Error:", err);
       });
   }
 
-  // Append message to chat body
   function appendMessage(sender, message, type) {
     const msgDiv = document.createElement("div");
     msgDiv.classList.add(`${type}-msg`);

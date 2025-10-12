@@ -1,39 +1,26 @@
+// Toggle only the clicked doctor's details
 function toggleDetails(id) {
   const details = document.getElementById("details-" + id);
-  if (details.style.display === "block") {
-    details.style.display = "none";
-  } else {
-    details.style.display = "block";
-  }
-}
+  if (!details) return;
 
-// Cities passed from Flask template
-const cities = JSON.parse(
-  document.getElementById("citySearchData").textContent
-);
-
-function searchCity() {
-  const input = document.getElementById("citySearch").value.toLowerCase();
-  const suggestionsDiv = document.getElementById("suggestions");
-  suggestionsDiv.innerHTML = "";
-
-  if (input.length < 2) return; // show after 2+ characters
-
-  const filteredCities = cities.filter((city) =>
-    city.toLowerCase().includes(input)
-  );
-
-  filteredCities.forEach((city) => {
-    const div = document.createElement("div");
-    div.textContent = city;
-    div.classList.add("suggestion-item");
-    div.onclick = () => selectCity(city);
-    suggestionsDiv.appendChild(div);
+  // Optional: Close all other open doctor details
+  const allDetails = document.querySelectorAll(".doctor-details");
+  allDetails.forEach((d) => {
+    if (d !== details) {
+      d.style.display = "none";
+    }
   });
+
+  // Toggle this doctor's details
+  details.style.display = details.style.display === "block" ? "none" : "block";
 }
 
-function selectCity(city) {
-  document.getElementById("citySearch").value = city;
-  document.getElementById("suggestions").innerHTML = "";
-  window.location.href = "/appointment?city=" + encodeURIComponent(city);
+// Filter doctors by city from dropdown
+function filterByCity() {
+  const city = document.getElementById("cityDropdown").value;
+  if (city) {
+    window.location.href = "/appointment?city=" + encodeURIComponent(city);
+  } else {
+    window.location.href = "/appointment";
+  }
 }
