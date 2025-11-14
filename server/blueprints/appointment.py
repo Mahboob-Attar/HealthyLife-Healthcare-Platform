@@ -6,9 +6,9 @@ appointment_bp = Blueprint("appointment", __name__, url_prefix="/appointment")
 def get_connection():
     return pymysql.connect(
         host="localhost",
-        user="Healthylife",
-        password="Health@2025//",
-        database="healthylifedb",
+        user="attar",
+        password="Attar@2025",
+        database="healthydb",
         cursorclass=pymysql.cursors.DictCursor
     )
 
