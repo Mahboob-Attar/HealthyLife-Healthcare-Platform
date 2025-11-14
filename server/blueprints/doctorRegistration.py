@@ -6,7 +6,7 @@ import uuid
 
 doctor_bp = Blueprint("doctor_bp", __name__)
 
-# ---------------- DATABASE CONFIG ----------------
+#  DATABASE Configaration 
 DB_CONFIG = {
     "host": "localhost",
     "user": "attar",
@@ -19,7 +19,7 @@ def get_connection():
     return pymysql.connect(**DB_CONFIG)
 
 
-# ---------------- IMAGE UPLOAD CONFIG ----------------
+# IMAGE UPLOAD 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "..", "doctors_upload_images")
 
@@ -38,7 +38,7 @@ def doctor_image(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
 
 
-# ---------------- DOCTOR REGISTRATION ----------------
+# DOCTOR REGISTRATION
 @doctor_bp.route("/register_doctor", methods=["POST"])
 def register_doctor():
     conn = get_connection()
@@ -50,32 +50,32 @@ def register_doctor():
         email = request.form.get("email")
         experience = request.form.get("experience")
         specialization = request.form.get("specialization")
-        services = request.form.get("services")  # Example: "Lab, Pharmacy"
+        services = request.form.get("services")  
         clinic = request.form.get("clinic")
         location = request.form.get("location")
         photo = request.files.get("photo")
 
-        # ---- Validate inputs ----
+        # ---- Validate inputs 
         if not all([name, phone, email, specialization, photo]):
             return jsonify({"success": False, "message": "Missing required fields"}), 400
 
         if not allowed_file(photo.filename):
             return jsonify({"success": False, "message": "Invalid file type"}), 400
 
-        # ---- Check duplicate email ----
+        # ---- Check duplicate email
         cursor.execute("SELECT id FROM doctors WHERE email=%s", (email,))
         if cursor.fetchone():
             return jsonify({"success": False, "message": "Email already registered"}), 409
 
-        # ---- Save uploaded image with unique filename ----
+        # ---- Save uploaded image with unique filenames
         ext = photo.filename.rsplit(".", 1)[1].lower()
-        unique_name = f"{uuid.uuid4().hex}.{ext}"     # Example: 9ad2a6e001b5477ca1.jpg
+        unique_name = f"{uuid.uuid4().hex}.{ext}"     
         filename = secure_filename(unique_name)
 
         file_path = os.path.join(UPLOAD_FOLDER, filename)
         photo.save(file_path)
 
-        # ---- Insert database record ----
+        # ---- Insert database record
         sql = """
             INSERT INTO doctors
             (name, phone, email, experience, specialization, services, clinic, location, photo_path, created_at)

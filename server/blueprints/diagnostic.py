@@ -4,22 +4,17 @@ from flask import Blueprint, render_template, request, jsonify
 import numpy as np
 import pandas as pd
 
-# --------------------------------------------------------
-# 🧩 Path Setup — Use absolute paths to avoid "file not found" errors
-# --------------------------------------------------------
 
-# Get absolute path to the current file (diagnostic.py)
+# Path Setup
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-# Get base 'server' directory
 BASE_DIR = os.path.dirname(CURRENT_DIR)
 
 # Define dataset and model directories using absolute paths
 DATASET_DIR = os.path.join(BASE_DIR, "datasets")
 MODEL_DIR = os.path.join(BASE_DIR, "ml-models")
 
-# --------------------------------------------------------
-# 🧠 Load datasets
-# --------------------------------------------------------
+
+# Load datasets
 sym_des = pd.read_csv(os.path.join(DATASET_DIR, "symptoms_df.csv"))
 precautions = pd.read_csv(os.path.join(DATASET_DIR, "precautions_df.csv"))
 workout = pd.read_csv(os.path.join(DATASET_DIR, "workout_df.csv"))
@@ -27,15 +22,13 @@ description = pd.read_csv(os.path.join(DATASET_DIR, "description.csv"))
 medications = pd.read_csv(os.path.join(DATASET_DIR, "medications.csv"))
 diets = pd.read_csv(os.path.join(DATASET_DIR, "diets.csv"))
 
-# --------------------------------------------------------
-# 🧠 Load trained ML model
-# --------------------------------------------------------
+
+# Load trained ML model
 with open(os.path.join(MODEL_DIR, "svc.pkl"), "rb") as f:
     svc = pickle.load(f)
 
-# --------------------------------------------------------
-# 🩺 Symptom dictionary
-# --------------------------------------------------------
+
+# Symptom dictionary
 symptoms_dict = {
     'itching': 0, 'skin_rash': 1, 'nodal_skin_eruptions': 2, 'continuous_sneezing': 3, 'shivering': 4,
     'chills': 5, 'joint_pain': 6, 'stomach_pain': 7, 'acidity': 8, 'ulcers_on_tongue': 9,
@@ -72,9 +65,8 @@ symptoms_dict = {
     'inflammatory_nails': 128, 'blister': 129, 'red_sore_around_nose': 130, 'yellow_crust_ooze': 131
 }
 
-# --------------------------------------------------------
-# 🧠 Disease dictionary
-# --------------------------------------------------------
+
+# Disease dictionary
 diseases_list = {
     15: 'Fungal infection', 4: 'Allergy', 16: 'GERD', 9: 'Chronic cholestasis', 14: 'Drug Reaction',
     33: 'Peptic ulcer diseae', 1: 'AIDS', 12: 'Diabetes ', 17: 'Gastroenteritis', 6: 'Bronchial Asthma',
@@ -87,9 +79,8 @@ diseases_list = {
     38: 'Urinary tract infection', 35: 'Psoriasis', 27: 'Impetigo'
 }
 
-# --------------------------------------------------------
-# 🧩 Helper function to get disease details
-# --------------------------------------------------------
+
+#  Helper function to get disease details
 def helper(dis):
     desc = " ".join(description[description['Disease'] == dis]['Description'].values)
     pre = precautions[precautions['Disease'] == dis][['Precaution_1', 'Precaution_2', 'Precaution_3', 'Precaution_4']].values.tolist()
@@ -98,9 +89,7 @@ def helper(dis):
     wrkout = workout[workout['disease'] == dis]['workout'].tolist()
     return desc, pre[0] if pre else [], med, die, wrkout
 
-# --------------------------------------------------------
-# ⚙️ Prediction function
-# --------------------------------------------------------
+# Prediction function
 def get_predicted_value(symptoms):
     input_vector = np.zeros(len(symptoms_dict))
     for symptom in symptoms:
@@ -113,9 +102,7 @@ def get_predicted_value(symptoms):
     prediction_index = svc.predict(input_df)[0]
     return diseases_list.get(prediction_index, "Unknown disease")
 
-# --------------------------------------------------------
-# 🧩 Flask Blueprint
-# --------------------------------------------------------
+# Flask Blueprint
 diagnostic_bp = Blueprint("diagnostic", __name__, url_prefix="/diagnostic")
 
 @diagnostic_bp.route("/")
