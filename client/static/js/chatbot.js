@@ -12,7 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
   chatbotIcon.addEventListener("click", () => {
     chatPopup.classList.add("active");
     userInput.focus();
-    chatBody.innerHTML = `<p><b>Nurse:</b> Hi 👩‍⚕️ How can I help you today?</p>`;
+    chatBody.innerHTML = `<div class="nurse-msg"><b>Nurse:</b> Hi 👩‍⚕️ How can I help you today?</div>`;
+    scrollChatToBottom();
   });
 
   // Close chatbot popup
@@ -43,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
     typingIndicator.classList.add("nurse-msg");
     typingIndicator.innerHTML = `<b>Nurse:</b> <i>Typing...</i>`;
     chatBody.appendChild(typingIndicator);
-    chatBody.scrollTop = chatBody.scrollHeight;
+    scrollChatToBottom();
 
     // Fetch response from Flask backend
     fetch(API_URL, {
@@ -53,16 +54,12 @@ document.addEventListener("DOMContentLoaded", () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        typingIndicator.remove();
+        typingIndicator.remove(); // Remove typing indicator
         appendMessage("Nurse", data.response, "nurse");
       })
       .catch((err) => {
         typingIndicator.remove();
-        appendMessage(
-          "Nurse",
-          "⚠️ Something went wrong. Please try again.",
-          "nurse"
-        );
+        appendMessage("Nurse", "⚠️ Something went wrong. Please try again.", "nurse");
         console.error("Chatbot Error:", err);
       });
   }
@@ -72,6 +69,10 @@ document.addEventListener("DOMContentLoaded", () => {
     msgDiv.classList.add(`${type}-msg`);
     msgDiv.innerHTML = `<b>${sender}:</b> ${message}`;
     chatBody.appendChild(msgDiv);
+    scrollChatToBottom();
+  }
+
+  function scrollChatToBottom() {
     chatBody.scrollTop = chatBody.scrollHeight;
   }
 });

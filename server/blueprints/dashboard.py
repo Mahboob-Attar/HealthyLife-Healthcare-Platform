@@ -3,7 +3,7 @@ import pymysql
 
 dashboard_bp = Blueprint("dashboard", __name__, url_prefix="/dashboard")
 
-#Database Configaration
+# Database Configuration
 DB_CONFIG = {
     "host": "localhost",
     "user": "Healthylife",
@@ -20,7 +20,6 @@ def get_connection():
 def dashboard():
     return render_template("dashboard.html")
 
-
 @dashboard_bp.route("/data")
 def dashboard_data():
     try:
@@ -29,9 +28,11 @@ def dashboard_data():
 
         data = {}
      
+        # Total doctors
         cursor.execute("SELECT COUNT(*) AS total_doctors FROM doctors")
         data["total_doctors"] = cursor.fetchone()["total_doctors"]
 
+        # Specializations count
         cursor.execute("""
             SELECT specialization, COUNT(*) AS count 
             FROM doctors 
@@ -39,12 +40,6 @@ def dashboard_data():
         """)
         data["specializations"] = cursor.fetchall()
         
-        try:
-            cursor.execute("SELECT COUNT(*) AS total_users FROM users")
-            data["total_users"] = cursor.fetchone()["total_users"]
-        except:
-            data["total_users"] = 0
-
         # ML accuracy dummy data
         data["ml_accuracy"] = {
             "Disease A": 92,

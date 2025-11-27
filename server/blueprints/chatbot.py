@@ -1,30 +1,36 @@
 from flask import Blueprint, render_template, request, jsonify
-import requests
 import os
 from dotenv import load_dotenv
+from huggingface_hub import InferenceClient
 
-# Load the environment variables from your apikey.env
-dotenv_path = os.path.join(os.path.dirname(__file__), "apikey.env")
+# ================= Load Environment Variables =================
+dotenv_path = os.path.join(os.path.dirname(__file__), "..", "..", ".env")
 load_dotenv(dotenv_path)
 
-# Fetch API key and model name
-HF_API_KEY = os.getenv("HF_TOKEN")   # Must match HF_TOKEN in apikey.env
-HF_MODEL = os.getenv("HF_MODEL", "gpt2")
+HF_TOKEN = os.getenv("HF_TOKEN")
+MODEL_ID = os.getenv("HF_MODEL", "google/gemma-2-2b-it")
 
-print("HF_API_KEY loaded:", HF_API_KEY is not None)
-print("HF_MODEL:", HF_MODEL)
+if not HF_TOKEN:
+    raise ValueError("HF_TOKEN missing in .env")
 
-HF_API_URL = f"https://api-inference.huggingface.co/models/{HF_MODEL}"
-HEADERS = {"Authorization": f"Bearer {HF_API_KEY}"}
+# Create HF client
+client = InferenceClient(model=MODEL_ID, token=HF_TOKEN)
 
+# Blueprint
 chatbot_bp = Blueprint("chatbot", __name__, url_prefix="/chatbot")
 
-# Chatbot page
+# Chat history
+chat_history = [
+    {"role": "system", "content": "You are a helpful virtual nurse. Provide friendly, short medical advice."}
+]
+
+# Chat UI
 @chatbot_bp.route("/")
 def chatbot():
     return render_template("chatbot.html")
 
-# Chatbot API endpoint
+
+# API endpoint
 @chatbot_bp.route("/get_response", methods=["POST"])
 def get_response():
     try:
@@ -34,23 +40,23 @@ def get_response():
         if not user_msg:
             return jsonify({"response": "Please enter a message."})
 
-        payload = {"inputs": user_msg}
-        response = requests.post(HF_API_URL, headers=HEADERS, json=payload, timeout=30)
+        # Add user msg to history
+        chat_history.append({"role": "user", "content": user_msg})
 
-        try:
-            result = response.json()
-        except ValueError:
-            return jsonify({"response": "⚠️ API Error: Invalid response from Hugging Face"})
+        # HuggingFace conversation request
+        completion = client.chat.completions.create(
+            model=MODEL_ID,
+            messages=chat_history,
+            max_tokens=150
+        )
 
-        # Extract generated text
-        if isinstance(result, list) and "generated_text" in result[0]:
-            bot_reply = result[0]["generated_text"]
-        else:
-            bot_reply = str(result)
+        bot_reply = completion.choices[0].message["content"]
+
+        # Add assistant msg to history
+        chat_history.append({"role": "assistant", "content": bot_reply})
 
         return jsonify({"response": bot_reply})
 
-    except requests.exceptions.HTTPError as http_err:
-        return jsonify({"response": f"⚠️ HTTP Error: {http_err}"})
     except Exception as e:
-        return jsonify({"response": f"⚠️ Error: {str(e)}"})
+        print("\n❌ BACKEND ERROR:", e, "\n")
+        return jsonify({"response": "⚠️ Something went wrong. Please try again."})   

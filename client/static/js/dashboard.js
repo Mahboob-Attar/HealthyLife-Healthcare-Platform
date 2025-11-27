@@ -14,9 +14,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("totalDoctors").textContent =
       data.total_doctors || 0;
 
-    // Total Users
-    document.getElementById("totalUsers").textContent =
-      data.total_users || 0;
+    // Remove or comment out Total Users
+    // document.getElementById("totalUsers").textContent =
+    //   data.total_users || 0;
 
     // Specialization Chart
     const specCanvas = document.getElementById("specializationChart");
