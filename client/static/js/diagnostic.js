@@ -1,6 +1,3 @@
-// ================== Diagnostic Data Script ================== //
-
-//DOM Elements 
 const form = document.getElementById("predictForm"); 
 const resultBox = document.getElementById("result"); 
 const predictionText = document.getElementById("prediction"); 
@@ -28,7 +25,7 @@ const populateList = (ul, items) => {
   }
 };
 
-// ---------- Form Submit Handler ---------- //
+// orm Submit Handler
 form.addEventListener("submit", async (e) => {
   e.preventDefault(); 
 

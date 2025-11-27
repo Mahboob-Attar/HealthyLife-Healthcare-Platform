@@ -32,7 +32,44 @@
       <!-- Buttons -->
       <a href="{{ url_for('diagnostic.diagnostic') }}" class="btn">Predict Now</a>
       <a href="{{ url_for('appointment.appointment') }}" class="btn">Appointment Now</a>
+      <a href="{{ url_for('dashboard_bp.dashboard') }}" class="btn">DASHBOARD</a>
       <button class="btn" id="doctorBtn">Doctor's Register Here!</button>
+      <!-- Feedback Button -->
+<button class="btn" id="userBtn">Please provide your feedback here</button>
+
+<!-- Feedback Popup -->
+<div id="feedbackPopup" class="feedback-popup">
+  <div class="feedback-content">
+    <span class="close-feedback" id="closeFeedback">&times;</span>
+    <h3>Submit Your Feedback</h3>
+    <form id="feedbackForm">
+      <label for="username">Name:</label>
+      <input type="text" id="username" name="username" placeholder="Enter your name" required>
+      
+      <label for="rating">Rating:</label>
+      <div class="stars">
+        <span class="star" data-value="1">&#9733;</span>
+        <span class="star" data-value="2">&#9733;</span>
+        <span class="star" data-value="3">&#9733;</span>
+        <span class="star" data-value="4">&#9733;</span>
+        <span class="star" data-value="5">&#9733;</span>
+      </div>
+
+      <label for="review">Review:</label>
+      <textarea id="review" name="review" placeholder="Write your feedback..." required></textarea>
+
+      <button type="submit" class="btn">Submit Feedback</button>
+    </form>
+  </div>
+</div>
+<!-- Thank You Popup -->
+<div id="thankYouPopup" class="thankyou-popup">
+  <div class="thankyou-content">
+    <span class="close-thankyou" id="closeThankYou">&times;</span>
+    <h3>Thank You!</h3>
+    <p>Your feedback has been submitted successfully.</p>
+  </div>
+</div>
 
       <!-- Chatbot Icon -->
       <div class="chatbot-container" id="chatbotIcon">
@@ -120,37 +157,79 @@
     </div>
   </div>
 
-  <!-- Info Popups -->
-  <div id="aboutPopup" class="info-popup">
-    <div class="info-content">
-      <span class="close-info" data-close="aboutPopup">&times;</span>
-      <h3>About Us</h3>
-      <h4><strong>Disclaimer:</strong> </h4>
-      <h6>This platform is for Educationale purposes only and does not replace professional medical advice.</h6>
-      <hr><br>
-      <p>HealthyLife is your AI-powered health assistant, designed to simplify diagnosis, appointments, and doctor support.</p>
-    </div>
+ <!-- Info Popups -->
+<div id="aboutPopup" class="info-popup">
+  <div class="info-content">
+    <span class="close-info" data-close="aboutPopup">&times;</span>
+    <h3>About Us</h3>
+    <h4><strong>Disclaimer:</strong></h4>
+    <h6>This platform is for educational and informational purposes only and does not replace professional medical advice, diagnosis, or treatment. Always consult a licensed healthcare provider for medical concerns.</h6>
+    <hr><br>
+    <p>
+      HealthyLife is your AI-powered health assistant, designed to simplify your healthcare journey. With AI-enabled symptom analysis, instant doctor consultations, pharmacy support, laboratory services, and wellness guidance, we make healthcare accessible and convenient. 
+    </p>
+    <p>
+      Our goal is to provide accurate health insights and connect patients with verified healthcare professionals, ensuring safe and efficient support. HealthyLife continuously updates its database to include new treatments, medications, and medical practices.
+    </p>
   </div>
+</div>
 
-  <div id="faqPopup" class="info-popup">
-    <div class="info-content">
-      <span class="close-info" data-close="faqPopup">&times;</span>
-      <h3>Frequently Asked Questions</h3>
-      <p>Q: How does the platform work?<br>A: Enter your symptoms, get predictions, and connect with doctors instantly.</p>
-    </div>
-  </div>
+<div id="faqPopup" class="info-popup">
+  <div class="info-content">
+    <span class="close-info" data-close="faqPopup">&times;</span>
+    <h3>Frequently Asked Questions</h3>
+    
+    <p>
+      <strong>Q1: How does HealthyLife work?</strong><br>
+      A: Enter your symptoms, and our AI-powered system provides possible health predictions. You can then consult verified doctors directly through the platform.
+    </p>
 
-  <div id="supportPopup" class="info-popup">
-    <div class="info-content">
-      <span class="close-info" data-close="supportPopup">&times;</span>
-      <h3>Support</h3>
-      <p>If you face any issues, contact us at freespace.alltime@gmail.com or call +91-8088944535</p>
-    </div>
+    <p>
+      <strong>Q2: Is my personal and medical information secure?</strong><br>
+      A: Yes. We use encrypted databases and follow strict data privacy regulations to ensure your health information is safe and confidential.
+    </p>
+
+    <p>
+      <strong>Q3: Can I book appointments with doctors directly?</strong><br>
+      A: Yes. After receiving AI-based predictions, you can choose a suitable doctor and schedule consultations seamlessly.
+    </p>
+
+    <p>
+      <strong>Q4: Can doctors register on the platform?</strong><br>
+      A: Yes, verified healthcare professionals can register to offer services in their city. Contact us via email or phone for registration details.
+    </p>
+
+    <p>
+      <strong>Q5: How can I suggest improvements or report issues?</strong><br>
+      A: You can reach out to us via <a href="mailto:freespace.alltime@gmail.com">freespace.alltime@gmail.com</a> or call +91-8088944535. We value user feedback and continuously work to improve the platform.
+    </p>
+    
+    <p>
+      <strong>Q6: Is HealthyLife a substitute for professional medical care?</strong><br>
+      A: No. HealthyLife is designed for educational and guidance purposes. Always consult a licensed healthcare provider for diagnosis and treatment.
+    </p>
   </div>
+</div>
+
+
+<div id="supportPopup" class="info-popup">
+  <div class="info-content">
+    <span class="close-info" data-close="supportPopup">&times;</span>
+    <h3>Support</h3>
+    <p>
+      If you face any issues, contact us at <a href="mailto:freespace.alltime@gmail.com">freespace.alltime@gmail.com</a> or call +91-8088944535.
+    </p>
+    <br><hr><br>
+    <p>
+      <b>If you want to register your city, add local doctors, or have suggestions for platform improvement, please contact us through the same email or phone number. We welcome collaborations to expand our healthcare network.</b>
+    </p>
+  </div>
+</div>
 
   <!-- JS Files -->
   <script src="{{ url_for('static', filename='js/index.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/chatbot.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/doctorRegistration.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/feedback.js') }}" defer></script>
 </body>
 </html>

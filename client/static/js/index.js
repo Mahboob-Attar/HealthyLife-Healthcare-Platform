@@ -1,4 +1,3 @@
-// ================== General Index Script ================== //
 // Popup Triggers
 document.querySelector('a[href="#about"]').addEventListener('click', (e) => {
   e.preventDefault();
@@ -22,3 +21,5 @@ document.querySelectorAll('.close-info').forEach(btn => {
     document.getElementById(target).classList.remove('active');
   });
 });
+
+

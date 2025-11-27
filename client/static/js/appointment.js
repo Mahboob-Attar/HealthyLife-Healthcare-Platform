@@ -1,18 +1,25 @@
-// Toggle only the clicked doctor's details
-function toggleDetails(id) {
-  const details = document.getElementById("details-" + id);
+function toggleDetails(button) {
+  const card = button.closest(".doctor-card");
+  if (!card) return;
+  const details = card.querySelector(".doctor-details");
   if (!details) return;
+  const modalDetails = document.getElementById("modal-details");
+  modalDetails.innerHTML = details.innerHTML;
+  const modal = document.getElementById("doctorModal");
+  modal.style.display = "block";
+}
 
-  // Optional: Close all other open doctor details
-  const allDetails = document.querySelectorAll(".doctor-details");
-  allDetails.forEach((d) => {
-    if (d !== details) {
-      d.style.display = "none";
-    }
-  });
+function closeModal() {
+  const modal = document.getElementById("doctorModal");
+  modal.style.display = "none";
+}
 
-  // Toggle this doctor's details
-  details.style.display = details.style.display === "block" ? "none" : "block";
+// Close modal when clicking outside modal content
+window.onclick = function(event) {
+  const modal = document.getElementById("doctorModal");
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
 }
 
 // Filter doctors by city from dropdown

@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 from huggingface_hub import InferenceClient
 
-# ================= Load Environment Variables =================
+# Load Environment Variables
 dotenv_path = os.path.join(os.path.dirname(__file__), "..", "..", ".env")
 load_dotenv(dotenv_path)
 
@@ -13,18 +13,18 @@ MODEL_ID = os.getenv("HF_MODEL", "google/gemma-2-2b-it")
 if not HF_TOKEN:
     raise ValueError("HF_TOKEN missing in .env")
 
-# Create HF client
+
 client = InferenceClient(model=MODEL_ID, token=HF_TOKEN)
 
-# Blueprint
+
 chatbot_bp = Blueprint("chatbot", __name__, url_prefix="/chatbot")
 
-# Chat history
+
 chat_history = [
     {"role": "system", "content": "You are a helpful virtual nurse. Provide friendly, short medical advice."}
 ]
 
-# Chat UI
+
 @chatbot_bp.route("/")
 def chatbot():
     return render_template("chatbot.html")
@@ -40,10 +40,10 @@ def get_response():
         if not user_msg:
             return jsonify({"response": "Please enter a message."})
 
-        # Add user msg to history
+       
         chat_history.append({"role": "user", "content": user_msg})
 
-        # HuggingFace conversation request
+       
         completion = client.chat.completions.create(
             model=MODEL_ID,
             messages=chat_history,
@@ -52,7 +52,7 @@ def get_response():
 
         bot_reply = completion.choices[0].message["content"]
 
-        # Add assistant msg to history
+       
         chat_history.append({"role": "assistant", "content": bot_reply})
 
         return jsonify({"response": bot_reply})

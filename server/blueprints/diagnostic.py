@@ -5,11 +5,9 @@ import numpy as np
 import pandas as pd
 
 
-# Path Setup
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(CURRENT_DIR)
 
-# Define dataset and model directories using absolute paths
 DATASET_DIR = os.path.join(BASE_DIR, "datasets")
 MODEL_DIR = os.path.join(BASE_DIR, "ml-models")
 

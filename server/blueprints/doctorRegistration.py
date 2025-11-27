@@ -32,13 +32,13 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXT
 
 
-# Route to serve uploaded images
+# Route uploaded images
 @doctor_bp.route('/doctor_image/<filename>')
 def doctor_image(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
 
 
-# DOCTOR REGISTRATION
+# Route Doctor register
 @doctor_bp.route("/register_doctor", methods=["POST"])
 def register_doctor():
     conn = get_connection()
@@ -55,19 +55,18 @@ def register_doctor():
         location = request.form.get("location")
         photo = request.files.get("photo")
 
-        # ---- Validate inputs 
         if not all([name, phone, email, specialization, photo]):
             return jsonify({"success": False, "message": "Missing required fields"}), 400
 
         if not allowed_file(photo.filename):
             return jsonify({"success": False, "message": "Invalid file type"}), 400
 
-        # ---- Check duplicate email
+        # Check duplicate email
         cursor.execute("SELECT id FROM doctors WHERE email=%s", (email,))
         if cursor.fetchone():
             return jsonify({"success": False, "message": "Email already registered"}), 409
 
-        # ---- Save uploaded image with unique filenames
+        # Save uploaded image with unique filenames
         ext = photo.filename.rsplit(".", 1)[1].lower()
         unique_name = f"{uuid.uuid4().hex}.{ext}"     
         filename = secure_filename(unique_name)
@@ -75,7 +74,7 @@ def register_doctor():
         file_path = os.path.join(UPLOAD_FOLDER, filename)
         photo.save(file_path)
 
-        # ---- Insert database record
+        # Insert database record
         sql = """
             INSERT INTO doctors
             (name, phone, email, experience, specialization, services, clinic, location, photo_path, created_at)
@@ -98,7 +97,7 @@ def register_doctor():
         conn.close()
 
 
-# ---------------- FETCH ALL DOCTORS ----------------
+# FETCH ALL DOCTORS 
 @doctor_bp.route("/get_doctors", methods=["GET"])
 def get_doctors():
     conn = get_connection()

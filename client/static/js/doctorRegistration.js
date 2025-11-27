@@ -9,10 +9,8 @@ const successMessage = document.getElementById("successMessage");
 const licenseInput = document.getElementById("licenseInput");
 const licenseStatus = document.getElementById("licenseStatus");
 
-// Open popup
 doctorBtn?.addEventListener("click", () => doctorPopup.classList.add("active"));
 
-// Close popup
 closeDoctor?.addEventListener("click", () =>
   doctorPopup.classList.remove("active")
 );
@@ -64,13 +62,11 @@ doctorForm?.addEventListener("submit", async (e) => {
     formData.set("location", capitalizeFirstLetter(locationValue));
   }
 
-  // Validate license before submitting
   if (!validateLicense(formData.get("license"))) {
     alert("⚠️ Invalid Govt License Email. Please check.");
     return;
   }
 
-  // Basic validation for numeric fields
   const experience = formData.get("experience");
   const phone = formData.get("phone");
   if (isNaN(experience) || experience < 0) {
@@ -107,7 +103,7 @@ doctorForm?.addEventListener("submit", async (e) => {
   }
 });
 
-// Close success popup manually
+
 closeSuccess?.addEventListener("click", () =>
   successPopup.classList.remove("show")
 );

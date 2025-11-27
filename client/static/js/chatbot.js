@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const userInput = document.getElementById("userInput");
   const chatBody = document.getElementById("chatBody");
 
-  const API_URL = "/chatbot/get_response"; // Backend endpoint
+  const API_URL = "/chatbot/get_response"; 
 
   // Open chatbot popup
   chatbotIcon.addEventListener("click", () => {
@@ -35,11 +35,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const message = userInput.value.trim();
     if (!message) return;
 
-    // Append user message
     appendMessage("You", message, "user");
     userInput.value = "";
 
-    // Show typing indicator
     const typingIndicator = document.createElement("div");
     typingIndicator.classList.add("nurse-msg");
     typingIndicator.innerHTML = `<b>Nurse:</b> <i>Typing...</i>`;
@@ -54,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        typingIndicator.remove(); // Remove typing indicator
+        typingIndicator.remove(); 
         appendMessage("Nurse", data.response, "nurse");
       })
       .catch((err) => {
