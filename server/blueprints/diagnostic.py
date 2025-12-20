@@ -101,3 +101,5 @@ def predict():
         "diets": details["diets"],
         "workouts": details["workouts"]
     })
+    
+    
