@@ -1,0 +1,19 @@
+Disease,Medication
+Flu,Paracetamol
+Flu,Ibuprofen
+Common Cold,Antihistamines
+Common Cold,Decongestants
+Typhoid,Azithromycin
+Typhoid,Cefixime
+Allergy,Cetirizine
+Allergy,Loratadine
+Dengue,Paracetamol
+COVID-19,Paracetamol
+COVID-19,Antiviral drugs (if prescribed)
+Sore Throat,Lozenges
+Sore Throat,Pain relievers
+Gastroenteritis,ORS
+Gastroenteritis,Anti-emetic drugs
+Heart Disease,Beta blockers
+Heart Disease,Statins
+Viral Fever,Paracetamol
