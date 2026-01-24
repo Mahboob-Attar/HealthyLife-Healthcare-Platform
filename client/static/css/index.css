@@ -264,25 +264,43 @@ body {
   background-color: #0056b3;
 }
 
-/* Doctor Registration Popup */
+/* Doctor Registration Popup (Center Modal) */
 .doctor-popup {
   position: fixed;
-  top: 0;
-  right: -100%; /* hidden initially */
-  width: 600px;
-  height: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  width: 900px;              
+  max-height: 90vh;
+  overflow-y: auto;
   background: #fff;
   color: #333;
-  box-shadow: -3px 0 15px rgba(0, 0, 0, 0.3);
-  transition: right 0.6s ease-in-out;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.25s ease;
   z-index: 3000;
   display: flex;
   flex-direction: column;
-  border-radius: 10px 0 0 10px;
 }
 
+/* When active → show popup */
 .doctor-popup.active {
-  right: 0; /* slide in */
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Dim background when popup is active */
+body.popup-open::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(2px);
+  z-index: 2999;
 }
 
 .doctor-header {
@@ -390,6 +408,7 @@ body {
   margin-right: 5px;
   vertical-align: middle;
 }
+
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
@@ -570,7 +589,7 @@ h6{
 }
 
 .thankyou-content {
-  background: #4CAF50; /* Green */
+  background: #4CAF50; 
   color: white;
   max-width: 350px;
   margin: 150px auto;
@@ -586,4 +605,82 @@ h6{
   right: 15px;
   font-size: 25px;
   cursor: pointer;
+}
+
+.auth-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.auth-box {
+  background: #0b1233;
+  border: 2px solid #3d6bff;
+  padding: 25px;
+  border-radius: 10px;
+  width: 340px;
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  color: white;
+  text-align: center;
+}
+
+.auth-btn {
+  background: #3d6bff;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 6px;
+}
+
+.auth-btn:hover {
+  background: #345bdb;
+}
+
+.auth-small {
+  font-size: 13px;
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.auth-small span {
+  color: #3d6bff;
+}
+
+.otp-row {
+  display: flex;
+  gap: 5px;
+}
+
+.auth-box input {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #3d6bff;
+  background: #091124;
+  color: white;
+}
+.menu-icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 18px;
+  width: 24px;
+  cursor: pointer;
+  margin-left: 15px;
+}
+
+.menu-icon span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background: #fff;
+  border-radius: 2px;
 }

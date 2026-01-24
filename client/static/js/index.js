@@ -1,25 +1,32 @@
 // Popup Triggers
-document.querySelector('a[href="#about"]').addEventListener('click', (e) => {
-  e.preventDefault();
-  document.getElementById('aboutPopup').classList.add('active');
-});
+const aboutLink = document.querySelector('a[href="#about"]');
+if (aboutLink) {
+  aboutLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('aboutPopup')?.classList.add('active');
+  });
+}
 
-document.querySelector('a[href="#faq"]').addEventListener('click', (e) => {
-  e.preventDefault();
-  document.getElementById('faqPopup').classList.add('active');
-});
+const faqLink = document.querySelector('a[href="#faq"]');
+if (faqLink) {
+  faqLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('faqPopup')?.classList.add('active');
+  });
+}
 
-document.querySelector('a[href="#contact"]').addEventListener('click', (e) => {
-  e.preventDefault();
-  document.getElementById('supportPopup').classList.add('active');
-});
+const supportLink = document.querySelector('a[href="#contact"]');
+if (supportLink) {
+  supportLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('supportPopup')?.classList.add('active');
+  });
+}
 
 // Close Popups
 document.querySelectorAll('.close-info').forEach(btn => {
   btn.addEventListener('click', () => {
-    const target = btn.getAttribute('data-close');
-    document.getElementById(target).classList.remove('active');
+    const popupId = btn.getAttribute('data-close');
+    document.getElementById(popupId)?.classList.remove('active');
   });
 });
-
-

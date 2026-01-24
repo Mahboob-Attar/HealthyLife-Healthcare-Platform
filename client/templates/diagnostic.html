@@ -15,10 +15,10 @@
           <div class="logo-text">HealthyLife</div>
         </div>
         <ul class="nav-links">
-          <li><a href="/">HOME</a></li>
-          <li><a href="/diagnostic">DIAGNOSTIC</a></li>
-          <li><a href="/appointment">APPOINTMENT</a></li>
-          <li><a href="/dashboard">DASHBOARD</a></li>
+        <li><a href="{{ url_for('home.index') }}">HOME</a></li>
+        <li><a href="{{ url_for('diagnostic_bp.page') }}">DIAGNOSTIC</a></li>
+        <li><a href="{{ url_for('appointments_bp.appointment_page') }}">APPOINTMENT</a></li>
+        <li><a href="{{ url_for('admin_bp.dashboard_page') }}" class="active">DASHBOARD</a></li>
         </ul>
       </nav>
     </header>

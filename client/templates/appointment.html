@@ -15,14 +15,13 @@
       </div>
       <ul class="nav-links">
         <li><a href="{{ url_for('home.index') }}">HOME</a></li>
-        <li><a href="{{ url_for('diagnostic.diagnostic') }}">DIAGNOSTIC</a></li>
-        <li><a href="{{ url_for('appointment.appointment') }}" class="active">APPOINTMENT</a></li>
-        <li><a href="{{ url_for('dashboard_bp.dashboard') }}">DASHBOARD</a></li> 
+        <li><a href="{{ url_for('diagnostic_bp.page') }}">DIAGNOSTIC</a></li>
+        <li><a href="{{ url_for('appointments_bp.appointment_page') }}" class="active">APPOINTMENT</a></li>
+        <li><a href="{{ url_for('admin_bp.dashboard_page') }}">DASHBOARD</a></li> 
       </ul>
     </nav>
   </header>
 
-  <!-- City Filter Section -->
   <section class="filter-section">
     <label for="cityDropdown">Select City:</label>
     <select id="cityDropdown" onchange="filterByCity()">
@@ -33,21 +32,20 @@
     </select>
   </section>
 
-  <!-- Doctor Cards -->
   <section class="doctor-container">
     {% if doctors %}
       {% for doctor in doctors %}
         <div class="doctor-card">
           <img 
-            src="{{ url_for('doctor_bp.doctor_image', filename=doctor.photo_path or 'default.jpg') }}" 
+            src="{{ url_for('doctors_bp.doctor_image', filename=doctor.photo_path or 'default.jpg') }}" 
             alt="Doctor Photo" 
             class="doctor-photo" 
           />
           <h3>{{ doctor.name }}</h3>
           <p><b>{{ doctor.specialization }}</b></p>
-         <button onclick="toggleDetails(this)">View Details</button>
+          <button onclick="toggleDetails(this)">View Details</button>
 
-          <div class="doctor-details" id="details-{{ doctor.id }}">
+          <div class="doctor-details" id="details-{{ doctor.id }}" style="display:none;">
             <p><b>Phone:</b> {{ doctor.phone }}</p>
             <p><b>Email:</b> {{ doctor.email }}</p>
             <p><b>Experience:</b> {{ doctor.experience }} years</p>
@@ -62,13 +60,13 @@
     {% endif %}
   </section>
 
-  <!-- Doctor Details Modal -->
-<div id="doctorModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <div id="modal-details"></div>
+  <!-- Modal -->
+  <div id="doctorModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <div id="modal-details"></div>
+    </div>
   </div>
-</div>
 
   <script src="{{ url_for('static', filename='js/appointment.js') }}" defer></script>
 </body>

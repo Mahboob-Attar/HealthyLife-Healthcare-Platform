@@ -2,7 +2,6 @@ from flask import Flask
 from blueprints import init_blueprints
 
 def create_app():
-    # Initialize Flask app
     app = Flask(
         __name__,
         template_folder="../client/templates",
@@ -12,10 +11,12 @@ def create_app():
     # Register all blueprints
     init_blueprints(app)
 
+    # Print URL map
+    #print("\n📌 Registered Routes & Endpoints:\n", app.url_map, "\n")
+
     return app
 
 
-# Run Flask app
 if __name__ == "__main__":
     app = create_app()
     app.run(debug=True)

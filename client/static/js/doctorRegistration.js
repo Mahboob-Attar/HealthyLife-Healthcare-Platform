@@ -1,109 +1,176 @@
-const doctorBtn = document.getElementById("doctorBtn");
-const doctorPopup = document.getElementById("doctorPopup");
-const closeDoctor = document.getElementById("closeDoctor");
+// ============================
+// Doctor Registration System
+// ============================
+
+// DOM Elements
 const doctorForm = document.getElementById("doctorForm");
-const successPopup = document.getElementById("successPopup");
-const closeSuccess = document.getElementById("closeSuccess");
-const successMessage = document.getElementById("successMessage");
-
-const licenseInput = document.getElementById("licenseInput");
 const licenseStatus = document.getElementById("licenseStatus");
+const successPopup = document.getElementById("successPopup");
+const successMessage = document.getElementById("successMessage");
+const doctorPopup = document.getElementById("doctorPopup");
 
-doctorBtn?.addEventListener("click", () => doctorPopup.classList.add("active"));
 
-closeDoctor?.addEventListener("click", () =>
-  doctorPopup.classList.remove("active")
-);
-
-// Helper function to capitalize first letter
-function capitalizeFirstLetter(str) {
-  if (!str) return "";
-  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-}
-
-// Validate govt license email (ABC123@gov.ac.in)
+// ============================
+// 1. License Email Validation
+// ============================
 function validateLicense(email) {
-  const licenseRegex = /^[A-Z]{3}[0-9]{3}@gov\.ac\.in$/;
-  return licenseRegex.test(email);
+  // Format: ABC123@gov.ac.in
+  const pattern = /^[A-Z0-9]{3,}@gov\.ac\.in$/i;
+  return pattern.test(email);
 }
 
-// Live validation of license with 2.5s spinner
-licenseInput?.addEventListener("input", () => {
-  const value = licenseInput.value.trim();
 
-  licenseStatus.textContent = "";
-  licenseStatus.style.color = "black";
+// ============================
+// 2. Capitalize Utility
+// ============================
+function capitalizeFirstLetter(text) {
+  return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+}
 
-  if (!value) return;
 
-  // Show spinner while "verifying"
-  licenseStatus.innerHTML = '<span class="spinner"></span> Verifying...';
-  licenseStatus.style.color = "orange";
+// ============================
+// 3. Check if Email Exists
+// ============================
+async function checkEmailExists(email) {
+  try {
+    const res = await fetch(`/doctors/check-email?email=${encodeURIComponent(email)}`);
+    const data = await res.json();
+    return data.exists === true;
+  } catch (err) {
+    console.error("Email check error:", err);
+    return false;
+  }
+}
 
+
+// ============================
+// 4. Check if Phone Exists
+// ============================
+async function checkPhoneExists(phone) {
+  try {
+    const res = await fetch(`/doctors/check-phone?phone=${encodeURIComponent(phone)}`);
+    const data = await res.json();
+    return data.exists === true;
+  } catch (err) {
+    console.error("Phone check error:", err);
+    return false;
+  }
+}
+
+
+// ============================
+// 5. Show Success Popup
+// ============================
+function showSuccess(message) {
+  successMessage.innerHTML = message;
+  successPopup.classList.add("show");
+
+  // Hide popup smoothly
   setTimeout(() => {
-    if (validateLicense(value)) {
-      licenseStatus.textContent = "✔ Verified";
-      licenseStatus.style.color = "green";
-    } else {
-      licenseStatus.textContent = "✖ Invalid";
-      licenseStatus.style.color = "red";
-    }
-  }, 2500);
-});
+    successPopup.classList.remove("show");
+  }, 3500);
+}
 
-// Form submission
+
+// ============================
+// 6. Handle Form Submit
+// ============================
 doctorForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
+
   const formData = new FormData(doctorForm);
 
   // Capitalize location
   if (formData.has("location")) {
-    const locationValue = formData.get("location");
-    formData.set("location", capitalizeFirstLetter(locationValue));
+    formData.set("location", capitalizeFirstLetter(formData.get("location")));
   }
 
-  if (!validateLicense(formData.get("license"))) {
-    alert("⚠️ Invalid Govt License Email. Please check.");
-    return;
-  }
-
-  const experience = formData.get("experience");
+  const email = formData.get("email");
   const phone = formData.get("phone");
+
+  // Validate License Format
+  if (!validateLicense(formData.get("license"))) {
+    alert("⚠️ Invalid Govt License (Format: ABC123@gov.ac.in)");
+    return;
+  }
+
+  // Validate Experience
+  const experience = formData.get("experience");
   if (isNaN(experience) || experience < 0) {
-    alert("⚠️ Please enter a valid number for Experience.");
+    alert("⚠️ Experience must be a positive number");
     return;
   }
 
+  // Validate Phone
   if (!/^\+?\d{10,15}$/.test(phone)) {
-    alert("⚠️ Please enter a valid phone number.");
+    alert("⚠️ Invalid phone number (10–15 digits allowed)");
     return;
   }
 
+  // Check Phone in Backend
+  if (await checkPhoneExists(phone)) {
+    alert("⚠️ Phone already registered!");
+    return;
+  }
+
+  // === Submit to Backend ===
   try {
-    const response = await fetch("/register_doctor", {
+    const response = await fetch("/doctors/register", {
       method: "POST",
       body: formData,
     });
+
     const result = await response.json();
 
     if (result.success) {
       doctorForm.reset();
       licenseStatus.textContent = "";
-      successMessage.innerHTML =
-        "✅ Successfully Registered! Visit Support page if needed.";
-      successPopup.classList.add("show");
-      setTimeout(() => successPopup.classList.remove("show"), 5000);
-      setTimeout(() => doctorPopup.classList.remove("active"), 500);
+
+      showSuccess("✅ Doctor Registered Successfully!");
+      setTimeout(() => {
+        doctorPopup.classList.remove("active");
+      }, 800);
+
     } else {
       alert(result.message || "⚠️ Registration failed.");
     }
+
   } catch (err) {
     console.error(err);
-    alert("⚠️ Server error. Please contact support.");
+    alert("⚠️ Server error — try again later.");
   }
 });
 
 
-closeSuccess?.addEventListener("click", () =>
-  successPopup.classList.remove("show")
-);
+// ============================
+// 7. License Input Live Check
+// ============================
+const licenseInput = document.getElementById("licenseInput");
+
+licenseInput?.addEventListener("input", () => {
+  const val = licenseInput.value.trim();
+  const spinner = document.getElementById("licenseSpinner");
+
+  licenseStatus.textContent = "";
+  
+  if (!val) {
+    spinner.style.display = "none";
+    return;
+  }
+
+  // Show spinner while validating
+  spinner.style.display = "inline-block";
+
+  setTimeout(() => {
+    spinner.style.display = "none";
+
+    if (validateLicense(val)) {
+      licenseStatus.textContent = "✔ Valid License";
+      licenseStatus.className = "valid-check";
+    } else {
+      licenseStatus.textContent = "✖ Invalid Format";
+      licenseStatus.className = "invalid-check";
+    }
+
+  }, 800); // delay for realistic UX
+});
