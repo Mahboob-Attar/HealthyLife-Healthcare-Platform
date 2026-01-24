@@ -1,48 +1,34 @@
-from flask import Blueprint, request, jsonify, send_from_directory
-import pymysql, os
-from datetime import datetime
-from werkzeug.utils import secure_filename
+import os
 import uuid
+from datetime import datetime
+from flask import Blueprint, request, jsonify, send_from_directory
+from werkzeug.utils import secure_filename
+from dotenv import load_dotenv
+from db import get_connection  # <— using shared connection pool
+
+load_dotenv()
 
 doctor_bp = Blueprint("doctor_bp", __name__)
 
-#  DATABASE Configaration 
-DB_CONFIG = {
-    "host": "localhost",
-    "user": "attar",
-    "password": "Attar@2025",
-    "database": "healthydb",
-    "charset": "utf8mb4"
-}
-
-def get_connection():
-    return pymysql.connect(**DB_CONFIG)
-
-
-# IMAGE UPLOAD 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-UPLOAD_FOLDER = os.path.join(BASE_DIR, "..", "doctors_upload_images")
-
+# ---- Upload Settings ----
+UPLOAD_FOLDER = os.getenv("UPLOAD_PATH", "uploads/doctors")
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 ALLOWED_EXT = {"png", "jpg", "jpeg", "gif"}
 
-
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXT
 
-
-# Route uploaded images
+# Serve doctor images
 @doctor_bp.route('/doctor_image/<filename>')
 def doctor_image(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
 
-
-# Route Doctor register
+# ---- Register Doctor ----
 @doctor_bp.route("/register_doctor", methods=["POST"])
 def register_doctor():
-    conn = get_connection()
-    cursor = conn.cursor()
+    conn = None
+    cursor = None
 
     try:
         name = request.form.get("name")
@@ -50,77 +36,81 @@ def register_doctor():
         email = request.form.get("email")
         experience = request.form.get("experience")
         specialization = request.form.get("specialization")
-        services = request.form.get("services")  
+        services = request.form.get("services")
         clinic = request.form.get("clinic")
         location = request.form.get("location")
         photo = request.files.get("photo")
 
+        # Validate required fields
         if not all([name, phone, email, specialization, photo]):
             return jsonify({"success": False, "message": "Missing required fields"}), 400
 
         if not allowed_file(photo.filename):
             return jsonify({"success": False, "message": "Invalid file type"}), 400
 
-        # Check duplicate email
+        conn = get_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        # Duplicate email check
         cursor.execute("SELECT id FROM doctors WHERE email=%s", (email,))
         if cursor.fetchone():
             return jsonify({"success": False, "message": "Email already registered"}), 409
 
-        # Save uploaded image with unique filenames
+        # Save image
         ext = photo.filename.rsplit(".", 1)[1].lower()
-        unique_name = f"{uuid.uuid4().hex}.{ext}"     
+        unique_name = f"{uuid.uuid4().hex}.{ext}"
         filename = secure_filename(unique_name)
+        photo.save(os.path.join(UPLOAD_FOLDER, filename))
 
-        file_path = os.path.join(UPLOAD_FOLDER, filename)
-        photo.save(file_path)
-
-        # Insert database record
+        # Insert record
         sql = """
             INSERT INTO doctors
             (name, phone, email, experience, specialization, services, clinic, location, photo_path, created_at)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
-        values = (name, phone, email, experience, specialization, services,
-                  clinic, location, filename, datetime.utcnow())
 
-        cursor.execute(sql, values)
+        cursor.execute(sql, (
+            name, phone, email, experience, specialization, services,
+            clinic, location, filename, datetime.utcnow()
+        ))
+
         conn.commit()
-
         return jsonify({"success": True, "message": "Doctor registered successfully."})
 
     except Exception as e:
-        print("❌ Error in register_doctor:", e)
+        print("❌ register_doctor Error:", e)
         return jsonify({"success": False, "message": "Server error"}), 500
 
     finally:
-        cursor.close()
-        conn.close()
+        if cursor: cursor.close()
+        if conn: conn.close()
 
-
-# FETCH ALL DOCTORS 
+# ---- Get All Doctors ----
 @doctor_bp.route("/get_doctors", methods=["GET"])
 def get_doctors():
-    conn = get_connection()
-    cursor = conn.cursor(pymysql.cursors.DictCursor)
-
+    conn = None
+    cursor = None
     try:
+        conn = get_connection()
+        cursor = conn.cursor(dictionary=True)
+
         cursor.execute("""
             SELECT id, name, specialization, photo_path, clinic, location
             FROM doctors ORDER BY created_at DESC
         """)
+
         doctors = cursor.fetchall()
 
-        # Add image fallback
-        for doctor in doctors:
-            if not doctor.get("photo_path"):
-                doctor["photo_path"] = "default.jpg"
+        # Assign default images
+        for doc in doctors:
+            doc["photo_path"] = doc.get("photo_path") or "default.jpg"
 
         return jsonify({"success": True, "doctors": doctors})
 
     except Exception as e:
-        print("❌ Error in get_doctors:", e)
+        print("❌ get_doctors Error:", e)
         return jsonify({"success": False, "message": "Server error"}), 500
 
     finally:
-        cursor.close()
-        conn.close()
+        if cursor: cursor.close()
+        if conn: conn.close()
