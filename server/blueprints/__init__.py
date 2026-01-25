@@ -5,6 +5,7 @@ from server.blueprints.services.feedback.routes import feedback_bp
 from server.blueprints.services.aiml.diagnostic.routes import diagnostic_bp
 from server.blueprints.services.aiml.chatbot.routes import chatbot_bp
 from server.blueprints.services.admin.routes import admin_bp
+from server.blueprints.services.auth.routes import auth_bp
 
 def init_blueprints(app):
     app.register_blueprint(home_bp)
@@ -14,3 +15,4 @@ def init_blueprints(app):
     app.register_blueprint(diagnostic_bp)
     app.register_blueprint(chatbot_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(auth_bp)

@@ -2,9 +2,7 @@
    GLOBAL DOM HELPERS
 ========================== */
 function showBox(boxId) {
-  document
-    .querySelectorAll(".auth-box")
-    .forEach((b) => (b.style.display = "none"));
+  document.querySelectorAll(".auth-box").forEach(b => (b.style.display = "none"));
   document.getElementById(boxId).style.display = "flex";
 }
 
@@ -16,32 +14,17 @@ function closeAuthPopup() {
    ROLE SELECTION
 ========================== */
 function selectRole(role) {
-  if (role === "patient") {
-    showBox("patientSignupBox");
-  } else if (role === "doctor") {
-    showBox("doctorSignupBox");
-  }
+  if (role === "patient") showBox("patientSignupBox");
+  if (role === "doctor") showBox("doctorSignupBox");
 }
 
-function openLogin() {
-  // Default to patient login, user can switch
-  showBox("patientLoginBox");
-}
-
-function openForgotPassword() {
-  showBox("forgotBox");
-}
-
-function openAdminLogin() {
-  showBox("adminLoginBox");
-}
-
-function showRoleBox() {
-  showBox("roleBox");
-}
+function openLogin() { showBox("patientLoginBox"); }
+function openForgotPassword() { showBox("forgotBox"); }
+function openAdminLogin() { showBox("adminLoginBox"); }
+function showRoleBox() { showBox("roleBox"); }
 
 /* ==========================
-   POPUP TRIGGER (3-bar menu)
+   POPUP TRIGGER
 ========================== */
 document.addEventListener("DOMContentLoaded", () => {
   const menuIcon = document.querySelector(".menu-icon");
@@ -53,15 +36,39 @@ document.addEventListener("DOMContentLoaded", () => {
       showRoleBox();
     });
 
-    // Close when clicking outside
-    authPopup.addEventListener("click", (e) => {
+    authPopup.addEventListener("click", e => {
       if (e.target === authPopup) closeAuthPopup();
     });
   }
+
+  setupOtpField("p_email", "p_send_btn");
+  setupOtpField("d_email", "d_send_btn");
+  setupOtpField("fp_email", "fp_send_btn");
 });
 
 /* ==========================
-   BACKEND API CALL (HELPER)
+   EMAIL VALIDATION
+========================== */
+function validateEmail(email) {
+  return /\S+@\S+\.\S+/.test(email);
+}
+
+function setupOtpField(emailId, buttonId) {
+  const emailInput = document.getElementById(emailId);
+  const sendBtn = document.getElementById(buttonId);
+
+  if (!emailInput || !sendBtn) return;
+
+  sendBtn.disabled = true; // disable initially
+
+  emailInput.addEventListener("input", () => {
+    const val = emailInput.value.trim();
+    sendBtn.disabled = !validateEmail(val);
+  });
+}
+
+/* ==========================
+   API WRAPPER
 ========================== */
 async function api(url, method = "POST", data = {}) {
   try {
@@ -76,12 +83,42 @@ async function api(url, method = "POST", data = {}) {
   }
 }
 
+/* ===================================
+   OTP TIMER + RESEND HANDLER
+=================================== */
+let otpTimers = {};
+
+function startOtpTimer(role) {
+  let timerSpan = document.getElementById(`${role}_timer`);
+  let sendBtn = document.getElementById(`${role}_send_btn`);
+  let resendBtn = document.getElementById(`${role}_resend_btn`);
+
+  if (otpTimers[role]) clearInterval(otpTimers[role]);
+
+  let remaining = 120; // 2 minutes
+
+  sendBtn.style.display = "none";
+  resendBtn.style.display = "none";
+  timerSpan.style.display = "inline-block";
+  timerSpan.innerText = `(${remaining}s)`;
+
+  otpTimers[role] = setInterval(() => {
+    remaining--;
+    timerSpan.innerText = `(${remaining}s)`;
+
+    if (remaining <= 0) {
+      clearInterval(otpTimers[role]);
+      timerSpan.innerText = "";
+      resendBtn.style.display = "inline-block";
+    }
+  }, 1000);
+}
+
 /* ==========================
-   SEND OTP (Patient / Doctor / Forgot)
+   SEND OTP
 ========================== */
 async function sendOTP(type) {
-  let email = null;
-  let purpose = null;
+  let email = "", purpose = "";
 
   if (type === "patient") {
     email = document.getElementById("p_email").value;
@@ -96,64 +133,48 @@ async function sendOTP(type) {
     purpose = "forgot";
   }
 
-  if (!email) return alert("Please enter email");
+  if (!validateEmail(email)) return alert("Enter valid email!");
 
   const res = await api("/auth/send-otp", "POST", { email, purpose });
 
-  alert(res.msg || (res.status === "success" ? "OTP sent!" : "Failed"));
+  alert(res.msg);
+
+  if (res.status === "success") startOtpTimer(type);
 }
 
 /* ==========================
    PATIENT SIGNUP
 ========================== */
 async function patientSignup() {
-  const name = document.getElementById("p_name").value;
-  const email = document.getElementById("p_email").value;
-  const otp = document.getElementById("p_otp").value;
-  const pass = document.getElementById("p_pass").value;
+  const name = p_name.value, email = p_email.value, otp = p_otp.value, pass = p_pass.value;
 
   if (!name || !email || !otp || !pass) return alert("All fields required");
 
   const verify = await api("/auth/verify-otp", "POST", { email, otp });
   if (verify.status !== "success") return alert(verify.msg);
 
-  const signup = await api("/auth/signup", "POST", {
-    name,
-    email,
-    password: pass,
-    role: "patient",
-  });
+  const signup = await api("/auth/signup", "POST", { name, email, password: pass, role: "patient" });
 
   alert(signup.msg);
-
   if (signup.status === "success") openLogin();
 }
 
 /* ==========================
-   DOCTOR SIGNUP (only base user)
+   DOCTOR SIGNUP
 ========================== */
 async function doctorSignup() {
-  const name = document.getElementById("d_name").value;
-  const email = document.getElementById("d_email").value;
-  const otp = document.getElementById("d_otp").value;
-  const pass = document.getElementById("d_pass").value;
+  const name = d_name.value, email = d_email.value, otp = d_otp.value, pass = d_pass.value;
 
   if (!name || !email || !otp || !pass) return alert("All fields required");
 
   const verify = await api("/auth/verify-otp", "POST", { email, otp });
   if (verify.status !== "success") return alert(verify.msg);
 
-  const signup = await api("/auth/signup", "POST", {
-    name,
-    email,
-    password: pass,
-    role: "doctor",
-  });
+  const signup = await api("/auth/signup", "POST", { name, email, password: pass, role: "doctor" });
 
   alert(signup.msg);
-
   if (signup.status === "success") {
-    alert("Account created. Please login and complete registration.");
+    alert("Account created. Please login & complete registration.");
     openLogin();
   }
 }
@@ -162,16 +183,12 @@ async function doctorSignup() {
    PATIENT LOGIN
 ========================== */
 async function patientLogin() {
-  const email = document.getElementById("pl_email").value;
-  const pass = document.getElementById("pl_pass").value;
-
-  if (!email || !pass) return alert("Email and password required");
+  const email = pl_email.value, pass = pl_pass.value;
+  if (!email || !pass) return alert("Email & password required");
 
   const res = await api("/auth/login", "POST", { email, password: pass });
-
   if (res.status !== "success") return alert(res.msg);
 
-  alert("Login success!");
   window.location.reload();
 }
 
@@ -179,16 +196,10 @@ async function patientLogin() {
    DOCTOR LOGIN
 ========================== */
 async function doctorLogin() {
-  const email = document.getElementById("dl_email").value;
-  const pass = document.getElementById("dl_pass").value;
-
+  const email = dl_email.value, pass = dl_pass.value;
   const res = await api("/auth/login", "POST", { email, password: pass });
 
   if (res.status !== "success") return alert(res.msg);
-
-  alert("Doctor login success!");
-
-  // redirect doctor to profile completion or status check later
   window.location.reload();
 }
 
@@ -196,57 +207,23 @@ async function doctorLogin() {
    ADMIN LOGIN
 ========================== */
 async function adminLogin() {
-  const email = document.getElementById("a_email").value;
-  const pass = document.getElementById("a_pass").value;
-
+  const email = a_email.value, pass = a_pass.value;
   const res = await api("/admin/login", "POST", { email, password: pass });
 
   if (res.status !== "success") return alert(res.msg);
-
-  alert("Admin login success!");
-  window.location.href = "/admin/dashboard"; // later update
+  window.location.href = "/admin/dashboard";
 }
 
 /* ==========================
    RESET PASSWORD
 ========================== */
 async function resetPassword() {
-  const email = document.getElementById("fp_email").value;
-  const otp = document.getElementById("fp_otp").value;
-  const pass = document.getElementById("fp_pass").value;
+  const email = fp_email.value, otp = fp_otp.value, pass = fp_pass.value;
 
   if (!email || !otp || !pass) return alert("All fields required");
 
   const res = await api("/auth/reset", "POST", { email, otp, password: pass });
 
   alert(res.msg);
-
   if (res.status === "success") openLogin();
-}
-
-async function sendOTP(role) {
-  let email = "";
-
-  if (role === "patient") {
-    email = document.getElementById("p_email").value;
-  } else if (role === "doctor") {
-    email = document.getElementById("d_email").value;
-  } else {
-    alert("Invalid role");
-    return;
-  }
-
-  if (!email) {
-    alert("Please enter email first");
-    return;
-  }
-
-  let res = await fetch("/auth/send-otp", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email: email }),
-  });
-
-  let data = await res.json();
-  alert(data.msg);
 }

@@ -667,7 +667,9 @@ h6{
 
 .otp-row {
   display: flex;
-  gap: 5px;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
 }
 
 .auth-box input {

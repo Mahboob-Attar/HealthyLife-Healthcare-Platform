@@ -3,87 +3,74 @@
 // Popup Triggers
 const aboutLink = document.querySelector('a[href="#about"]');
 if (aboutLink) {
-  aboutLink.addEventListener('click', (e) => {
+  aboutLink.addEventListener("click", (e) => {
     e.preventDefault();
-    document.getElementById('aboutPopup')?.classList.add('active');
+    document.getElementById("aboutPopup")?.classList.add("active");
   });
 }
 
 const faqLink = document.querySelector('a[href="#faq"]');
 if (faqLink) {
-  faqLink.addEventListener('click', (e) => {
+  faqLink.addEventListener("click", (e) => {
     e.preventDefault();
-    document.getElementById('faqPopup')?.classList.add('active');
+    document.getElementById("faqPopup")?.classList.add("active");
   });
 }
 
 const supportLink = document.querySelector('a[href="#contact"]');
 if (supportLink) {
-  supportLink.addEventListener('click', (e) => {
+  supportLink.addEventListener("click", (e) => {
     e.preventDefault();
-    document.getElementById('supportPopup')?.classList.add('active');
+    document.getElementById("supportPopup")?.classList.add("active");
   });
 }
 
 // Close Info Popups
-document.querySelectorAll('.close-info').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const popupId = btn.getAttribute('data-close');
-    document.getElementById(popupId)?.classList.remove('active');
+document.querySelectorAll(".close-info").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const popupId = btn.getAttribute("data-close");
+    document.getElementById(popupId)?.classList.remove("active");
   });
 });
 
-// ===================== AUTH POPUP =====================
+// ===================== AUTH POPUP HANDLING =====================
 
 function showRoleBox() {
-  // Hide all boxes first
-  document.querySelectorAll(".auth-box").forEach(box => {
-    box.style.display = "none";
-  });
-  
-  // Show role selector box
-  const roleBox = document.getElementById("roleBox");
-  if (roleBox) roleBox.style.display = "flex";
+  document
+    .querySelectorAll(".auth-box")
+    .forEach((box) => (box.style.display = "none"));
+  document.getElementById("roleBox").style.display = "flex";
+}
+
+function closeAuthPopup() {
+  const authPopup = document.getElementById("authMasterPopup");
+  if (authPopup) authPopup.style.display = "none";
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   const menuIcon = document.querySelector(".menu-icon");
   const authPopup = document.getElementById("authMasterPopup");
 
-  // OPEN POPUP
   if (menuIcon && authPopup) {
     menuIcon.addEventListener("click", () => {
       authPopup.style.display = "flex";
-      showRoleBox(); // always reset to role selection
+      showRoleBox();
     });
 
-    // CLOSE ON CLICK OUTSIDE
     authPopup.addEventListener("click", (e) => {
-      if (e.target === authPopup) {
-        closeAuthPopup();
-      }
+      if (e.target === authPopup) closeAuthPopup();
     });
   }
 });
 
-function closeAuthPopup() {
-  const authPopup = document.getElementById("authMasterPopup");
-  if (authPopup) {
-    authPopup.style.display = "none";
-  }
-}
-// ===================== AUTH VIEW SWITCHING =====================
+// ===================== AUTH SWITCH VIEW =====================
 
-// Hide all forms
 function hideAllAuthBoxes() {
-  document.querySelectorAll(".auth-box").forEach(box => {
-    box.style.display = "none";
-  });
+  document
+    .querySelectorAll(".auth-box")
+    .forEach((box) => (box.style.display = "none"));
 }
 
-// Already have function showRoleBox() from above — we reuse it
-
-// Select Role
 function selectRole(role) {
   hideAllAuthBoxes();
   if (role === "patient") {
@@ -93,51 +80,42 @@ function selectRole(role) {
   }
 }
 
-// Open Login Box
 function openLogin() {
   hideAllAuthBoxes();
-  // default go to patient login
   document.getElementById("patientLoginBox").style.display = "flex";
 }
 
-// Open Forgot Password
 function openForgotPassword() {
   hideAllAuthBoxes();
   document.getElementById("forgotBox").style.display = "flex";
 }
 
-// Open Admin Login
 function openAdminLogin() {
   hideAllAuthBoxes();
   document.getElementById("adminLoginBox").style.display = "flex";
 }
 
-// ===================== TEST BUTTON STUBS =====================
+// ===================== EMAIL VALIDATION FOR OTP =====================
 
-function sendOTP(type) {
-  alert("Send OTP for: " + type);
+function setupOtpField(emailInputId, sendBtnId) {
+  const emailInput = document.getElementById(emailInputId);
+  const sendBtn = document.getElementById(sendBtnId);
+
+  if (!emailInput || !sendBtn) return;
+
+  sendBtn.disabled = true;
+
+  emailInput.addEventListener("input", () => {
+    const val = emailInput.value.trim();
+    sendBtn.disabled = !validateEmail(val);
+  });
 }
 
-function patientSignup() {
-  alert("Patient Signup clicked");
+function validateEmail(email) {
+  return /\S+@\S+\.\S+/.test(email);
 }
 
-function patientLogin() {
-  alert("Patient Login clicked");
-}
+setupOtpField("p_email", "p_send_btn");
+setupOtpField("d_email", "d_send_btn");
+setupOtpField("fp_email", "fp_send_btn");
 
-function doctorSignup() {
-  alert("Doctor Signup clicked");
-}
-
-function doctorLogin() {
-  alert("Doctor Login clicked");
-}
-
-function adminLogin() {
-  alert("Admin Login clicked");
-}
-
-function resetPassword() {
-  alert("Reset Password clicked");
-}

@@ -1,0 +1,64 @@
+from flask import Blueprint, request, jsonify
+from .otp_service import create_and_send_otp, verify_otp
+from .service import auth_signup, auth_login, reset_password
+
+auth_bp = Blueprint("auth_bp", __name__, url_prefix="/auth")
+
+# ==========================
+# SEND OTP
+# ==========================
+@auth_bp.route("/send-otp", methods=["POST"])
+def send_otp():
+    data = request.get_json()
+    email = data.get("email")
+    purpose = data.get("purpose", "signup")
+
+    if not email:
+        return jsonify({"status": "error", "msg": "Email required"}), 400
+
+    result = create_and_send_otp(email, purpose)
+    return jsonify(result)
+
+
+# ==========================
+# VERIFY OTP
+# ==========================
+@auth_bp.route("/verify-otp", methods=["POST"])
+def verify_otp_route():
+    data = request.get_json()
+    email = data.get("email")
+    otp = data.get("otp")
+    purpose = data.get("purpose", "signup")
+
+    if not email or not otp:
+        return jsonify({"status": "error", "msg": "Email and OTP required"}), 400
+
+    result = verify_otp(email, otp, purpose)
+    return jsonify(result)
+
+
+# ==========================
+# SIGNUP
+# ==========================
+@auth_bp.route("/signup", methods=["POST"])
+def signup():
+    data = request.get_json()
+    return auth_signup(data)
+
+
+# ==========================
+# LOGIN
+# ==========================
+@auth_bp.route("/login", methods=["POST"])
+def login():
+    data = request.get_json()
+    return auth_login(data)
+
+
+# ==========================
+# RESET PASSWORD
+# ==========================
+@auth_bp.route("/reset", methods=["POST"])
+def reset():
+    data = request.get_json()
+    return reset_password(data)
