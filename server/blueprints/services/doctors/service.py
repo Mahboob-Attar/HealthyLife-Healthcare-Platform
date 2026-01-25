@@ -2,7 +2,7 @@ import os
 import uuid
 from datetime import datetime
 from werkzeug.utils import secure_filename
-from services.doctors.model import DoctorModel
+from server.blueprints.services.doctors.model import DoctorModel
 
 UPLOAD_FOLDER = "uploads/doctors"
 ALLOWED_EXT = {"png", "jpg", "jpeg", "gif"}

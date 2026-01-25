@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, jsonify
-from services.admin.service import AdminService
+from server.blueprints.services.admin.service import AdminService
 
 admin_bp = Blueprint("admin_bp", __name__, url_prefix="/admin")
 

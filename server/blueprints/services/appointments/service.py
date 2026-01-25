@@ -1,4 +1,4 @@
-from services.appointments.model import AppointmentModel
+from server.blueprints.services.appointments.model import AppointmentModel
 
 class AppointmentService:
 

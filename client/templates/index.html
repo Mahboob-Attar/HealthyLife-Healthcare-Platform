@@ -67,16 +67,7 @@
           <div class="feedback-content">
             <span class="close-feedback" id="closeFeedback">&times;</span>
             <h3>Submit Your Feedback</h3>
-            <form id="feedbackForm">
-              <label for="username">Name:</label>
-              <input
-                type="text"
-                id="username"
-                name="username"
-                placeholder="Enter your name"
-                required
-              />
-
+                <h5 class="fb-title">How Much Do You Rate Our Platform?</h5>
               <label for="rating">Rating:</label>
               <div class="stars">
                 <span class="star" data-value="1">&#9733;</span>
@@ -87,12 +78,12 @@
               </div>
 
               <label for="review">Review:</label>
-              <textarea
-                id="review"
-                name="review"
-                placeholder="Write your feedback..."
-                required
-              ></textarea>
+            <textarea
+              id="review"
+              name="review"
+              placeholder="Where do we need to improve? (Eg: Prediction, Appointments, Specialist Doctors etc.)"
+              required
+            ></textarea>
 
               <button type="submit" class="btn">Submit Feedback</button>
             </form>
@@ -420,7 +411,7 @@
       <!-- ADMIN LOGIN BOX -->
       <div class="auth-box" id="adminLoginBox">
         <h2>Admin Login</h2>
-        <input type="email" id="a_email" placeholder="Admin Email" />
+        <input type="email" id="a_email" placeholder="Admin Id" />
         <input type="password" id="a_pass" placeholder="Password" />
         <button class="auth-btn" onclick="adminLogin()">Login</button>
         <p class="auth-small">

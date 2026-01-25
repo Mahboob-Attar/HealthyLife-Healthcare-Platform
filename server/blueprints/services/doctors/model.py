@@ -1,5 +1,4 @@
-from db import get_connection
-
+from server.config.db import get_connection
 
 class DoctorModel:
 

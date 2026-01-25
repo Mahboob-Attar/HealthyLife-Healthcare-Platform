@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify, send_from_directory
-from services.doctors.service import DoctorService
+from server.blueprints.services.doctors.service import DoctorService
+
 
 doctors_bp = Blueprint("doctors_bp", __name__, url_prefix="/doctors")
 

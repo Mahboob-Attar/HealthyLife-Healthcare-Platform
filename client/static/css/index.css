@@ -555,9 +555,19 @@ h6{
   border-radius: 6px;
   border: 1px solid #ccc;
 }
+.fb-title {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333; /* ensures visible on white background */
+  display: block;
+  text-align: center;
+}
 
 .stars {
-  margin: 10px 0;
+  margin: 8px 0 12px 0;
+  text-align: center;
 }
 
 .star {

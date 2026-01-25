@@ -5,7 +5,7 @@ import pickle
 class DiagnosticModel:
 
     # ---- PATH SETUP ----
-    PROJECT_ROOT = Path(__file__).resolve().parents[4]
+    PROJECT_ROOT = Path(__file__).resolve().parents[5]
     DATASET_DIR = PROJECT_ROOT / "datasets"
     MODEL_DIR = PROJECT_ROOT / "server" / "ml-models"
 
