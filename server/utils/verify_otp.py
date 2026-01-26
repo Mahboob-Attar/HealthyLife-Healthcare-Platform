@@ -6,10 +6,10 @@ def verify_otp(email, otp, purpose="signup"):
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
 
-    # Remove expired OTPs first
+    # Clean expired
     cur.execute("DELETE FROM otp_verification WHERE expires_at < NOW()")
 
-    # Check OTP
+    # Check OTP match
     cur.execute("""
         SELECT * FROM otp_verification 
         WHERE email=%s AND otp=%s AND purpose=%s AND used=0
@@ -19,11 +19,17 @@ def verify_otp(email, otp, purpose="signup"):
     row = cur.fetchone()
 
     if not row:
-        return jsonify({"status": "error", "msg": "Invalid or expired OTP"}), 400
+        cur.close()
+        conn.close()
+        return jsonify({"status": "error", "msg": "OTP is incorrect or has expired"}), 400
 
-    # Mark as used
-    cur.execute("UPDATE otp_verification SET used=1 WHERE id=%s", (row['id'],))
+    # Mark used
+    cur.execute("UPDATE otp_verification SET used=1 WHERE id=%s", (row["id"],))
     conn.commit()
+
+    # Cleanup optional
+    cur.execute("DELETE FROM otp_verification WHERE used=1 AND expires_at < NOW()")
+
     cur.close()
     conn.close()
 

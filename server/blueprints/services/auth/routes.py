@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from .otp_service import create_and_send_otp, verify_otp
+from .otp_service import create_and_send_otp, verify_otp as verify_otp_service
 from .service import auth_signup, auth_login, reset_password
 
 auth_bp = Blueprint("auth_bp", __name__, url_prefix="/auth")
@@ -33,7 +33,7 @@ def verify_otp_route():
     if not email or not otp:
         return jsonify({"status": "error", "msg": "Email and OTP required"}), 400
 
-    result = verify_otp(email, otp, purpose)
+    result = verify_otp_service(email, otp, purpose)
     return jsonify(result)
 
 

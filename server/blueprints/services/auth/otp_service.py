@@ -1,14 +1,12 @@
 from datetime import datetime, timedelta
 import random
+from flask import render_template
 from server.config.db import get_connection
-from server.config.email import send_email
-
+from server.config.email import send_email_html  # changed
 
 def generate_otp():
     return str(random.randint(100000, 999999))
 
-
-# Create & store OTP
 def create_and_send_otp(email, purpose="signup"):
     try:
         otp = generate_otp()
@@ -17,10 +15,8 @@ def create_and_send_otp(email, purpose="signup"):
         conn = get_connection()
         cur = conn.cursor()
 
-        # Clean old OTPs
         cur.execute("DELETE FROM otp_verification WHERE expires_at < NOW() OR used = 1")
 
-        # Insert new OTP
         cur.execute("""
             INSERT INTO otp_verification (email, otp, purpose, expires_at, used)
             VALUES (%s, %s, %s, %s, 0)
@@ -30,8 +26,9 @@ def create_and_send_otp(email, purpose="signup"):
         cur.close()
         conn.close()
 
-        # Send email
-        send_email(email, "HealthyLife OTP", f"Your OTP is: {otp}")
+        html_body = render_template("emails/otp_email.html", otp=otp)
+
+        send_email_html(email, "HealthyLife Verification OTP", html_body)
 
         return {"status": "success", "msg": "OTP sent"}
 
@@ -39,15 +36,14 @@ def create_and_send_otp(email, purpose="signup"):
         return {"status": "error", "msg": f"Failed to send OTP: {str(e)}"}
 
 
-# Validate OTP
+
 def verify_otp(email, otp, purpose="signup"):
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
 
-    # Remove expired
+    # Remove expired OTPs
     cur.execute("DELETE FROM otp_verification WHERE expires_at < NOW()")
 
-    # Check OTP
     cur.execute("""
         SELECT * FROM otp_verification
         WHERE email=%s AND otp=%s AND purpose=%s AND used=0
@@ -61,7 +57,7 @@ def verify_otp(email, otp, purpose="signup"):
         conn.close()
         return {"status": "error", "msg": "Invalid or expired OTP"}
 
-    # Mark used
+    # Mark as used
     cur.execute("UPDATE otp_verification SET used=1 WHERE id=%s", (row['id'],))
     conn.commit()
 

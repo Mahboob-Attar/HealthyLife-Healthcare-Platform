@@ -1,7 +1,7 @@
 import random
 from datetime import datetime, timedelta
 from server.config.db import get_connection
-from server.config.email import send_email
+from server.config.email import send_email, render_email_template
 
 
 def generate_otp():
@@ -11,7 +11,7 @@ def generate_otp():
 
 def store_otp_and_send_email(email, purpose="signup"):
     otp = generate_otp()
-    expires = datetime.now() + timedelta(minutes=2)  # OTP valid for 2 minutes
+    expires = datetime.now() + timedelta(minutes=2)
 
     try:
         conn = get_connection()
@@ -30,18 +30,22 @@ def store_otp_and_send_email(email, purpose="signup"):
         cur.close()
         conn.close()
 
-        # Updated Email Message
-        message = (
-            f"Hello,\n\n"
-            f"Your HealthyLife OTP is: {otp}\n\n"
-            f"⏳ Validity: 2 minutes\n"
-            f"⚠️ Action: Please complete the signup as early as possible before OTP expires.\n\n"
-            f"If you did not request this OTP, please ignore this email.\n\n"
-            f"Regards,\n"
-            f"HealthyLife Team"
+        # Build email HTML from template
+        html = render_email_template(
+            "otp_email.html",
+            otp=otp,
+            validity="2 minutes"
         )
 
-        send_email(email, "HealthyLife Verification OTP", message)
+        # Fallback text message
+        text = f"Your HealthyLife OTP is {otp}. Valid for 2 minutes."
+
+        send_email(
+            to=email,
+            subject="HealthyLife Verification OTP",
+            html_content=html,
+            text_content=text
+        )
 
         return True, "OTP sent successfully"
 
