@@ -4,7 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HealthyLife</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/index.css') }}"
+    />
   </head>
 
   <body>
@@ -12,7 +15,11 @@
     <header>
       <nav class="navbar">
         <div class="nav-left">
-          <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Logo" class="logo-img"/>
+          <img
+            src="{{ url_for('static', filename='assets/logo.png') }}"
+            alt="Logo"
+            class="logo-img"
+          />
           <div class="logo-text">HealthyLife</div>
         </div>
 
@@ -21,10 +28,20 @@
           <li><a href="#about">ABOUT</a></li>
           <li><a href="#faq">FAQ</a></li>
           <li><a href="#contact">SUPPORT</a></li>
-          <li class="menu-icon" onclick="document.getElementById('authMasterPopup').style.display='flex'">
-            <span></span><span></span><span></span>
-          </li>
+            <li id="menuIcon" class="menu-icon"
+              onclick="document.getElementById('authMasterPopup').style.display = 'flex'">
+              <span></span><span></span><span></span>
+            </li>
         </ul>
+        
+        <div id="navUserContainer" style="position: relative; display: none;">
+        <div id="navUserAvatar" class="user-avatar"></div>
+        <div id="userDropdown" class="user-dropdown">
+          <div class="dropdown-item" onclick="openProfile()">Profile Settings</div>
+          <div class="dropdown-item" onclick="logoutUser()">Logout</div>
+        </div>
+      </div>
+      
       </nav>
     </header>
 
@@ -32,127 +49,200 @@
     <section class="hero">
       <div class="hero-text">
         <h1>The Future Medical Ways</h1>
-        <p>Predict multiple diseases quickly and accurately with our advanced platform — your health, simplified!</p>
+        <p>
+          Predict multiple diseases quickly and accurately with our advanced
+          platform — your health, simplified!
+        </p>
 
-        <a href="{{ url_for('diagnostic_bp.page') }}" class="btn">Predict Now</a>
-        <a href="{{ url_for('appointments_bp.appointment_page') }}" class="btn">Appointment Now</a>
-        <a href="{{ url_for('admin_bp.dashboard_page') }}" class="btn">DASHBOARD</a>
+        <a href="{{ url_for('diagnostic_bp.page') }}" class="btn"
+          >Predict Now</a
+        >
+        <a href="{{ url_for('appointments_bp.appointment_page') }}" class="btn"
+          >Appointment Now</a
+        >
+        <a href="{{ url_for('admin_bp.dashboard_page') }}" class="btn"
+          >DASHBOARD</a
+        >
         <button class="btn" id="doctorBtn">Doctor's Register Here!</button>
-        <button class="btn" id="userBtn">Please provide your feedback here</button>
+        <button class="btn" id="userBtn">
+          Please provide your feedback here
+        </button>
 
         <!-- Chatbot Icon -->
         <div class="chatbot-container" id="chatbotIcon">
-          <img src="{{ url_for('static', filename='assets/chatbot.png') }}" alt="Chatbot" class="chatbot-img"/>
+          <img
+            src="{{ url_for('static', filename='assets/chatbot.png') }}"
+            alt="Chatbot"
+            class="chatbot-img"
+          />
           <div class="chatbot-label">Ask Me!!</div>
         </div>
       </div>
 
       <div class="hero-images">
-        <img id="img1" src="{{ url_for('static', filename='assets/homepageImage.png') }}" alt="Doctor Illustration"/>
+        <img
+          id="img1"
+          src="{{ url_for('static', filename='assets/homepageImage.png') }}"
+          alt="Doctor Illustration"
+        />
       </div>
     </section>
 
     <!-- AUTH POPUP OVERLAY -->
-    <div id="authMasterPopup" class="auth-overlay" style="display:none;">
-      
+    <div id="authMasterPopup" class="auth-overlay" style="display: none">
       <!-- ROLE SELECTION -->
       <div class="auth-box" id="roleBox">
         <h2>Select Role</h2>
-        <button class="auth-btn" onclick="selectRole('patient')">Patient</button>
+        <button class="auth-btn" onclick="selectRole('patient')">
+          Patient
+        </button>
         <button class="auth-btn" onclick="selectRole('doctor')">Doctor</button>
         <button class="auth-btn" onclick="openAdminLogin()">Admin</button>
-        <p class="auth-small">Already have an account? <span onclick="openLogin()">Login</span></p>
+        <p class="auth-small">
+          Already have an account? <span onclick="openLogin()">Login</span>
+        </p>
       </div>
 
       <!-- PATIENT SIGNUP -->
-      <div class="auth-box" id="patientSignupBox" style="display:none;">
+      <div class="auth-box" id="patientSignupBox" style="display: none">
         <h2>Patient Signup</h2>
-        <input type="text" id="p_name" placeholder="Full Name"/>
+        <input type="text" id="p_name" placeholder="Full Name" />
 
-        <input type="email" id="p_email" placeholder="Email"/>
+        <input type="email" id="p_email" placeholder="Email" />
         <div class="otp-row">
-          <input type="text" id="p_otp" placeholder="OTP"/>
-          <button id="p_send_btn" disabled onclick="sendOTP('patient')">Send OTP</button>
-          <button id="p_resend_btn" style="display:none;" onclick="sendOTP('patient')">Resend</button>
+          <input type="text" id="p_otp" placeholder="OTP" />
+          <button id="p_send_btn" disabled onclick="sendOTP('patient')">
+            Send OTP
+          </button>
+          <button
+            id="p_resend_btn"
+            style="display: none"
+            onclick="sendOTP('patient')"
+          >
+            Resend
+          </button>
           <span id="p_timer" class="otp-timer"></span>
         </div>
 
-        <input type="password" id="p_pass" placeholder="Password"/>
+        <input type="password" id="p_pass" placeholder="Password" />
         <button class="auth-btn" onclick="patientSignup()">Signup</button>
-        <p class="auth-small">Switch Role? <span onclick="showRoleBox()">Click here</span></p>
+        <p class="auth-small">
+          Switch Role? <span onclick="showRoleBox()">Click here</span>
+        </p>
       </div>
 
       <!-- PATIENT LOGIN -->
-      <div class="auth-box" id="patientLoginBox" style="display:none;">
+      <div class="auth-box" id="patientLoginBox" style="display: none">
         <h2>User Login</h2>
-        <input type="email" id="pl_email" placeholder="Email"/>
-        <input type="password" id="pl_pass" placeholder="Password"/>
+        <input type="email" id="pl_email" placeholder="Email" />
+        <input type="password" id="pl_pass" placeholder="Password" />
         <button class="auth-btn" onclick="patientLogin()">Login</button>
-        <p class="auth-small" onclick="openForgotPassword()">Forgot Password?</p>
-        <p class="auth-small">Switch Role? <span onclick="showRoleBox()">Click here</span></p>
+        <p class="auth-small" onclick="openForgotPassword()">
+          Forgot Password?
+        </p>
+        <p class="auth-small">
+          Switch Role? <span onclick="showRoleBox()">Click here</span>
+        </p>
       </div>
 
       <!-- DOCTOR SIGNUP -->
-      <div class="auth-box" id="doctorSignupBox" style="display:none;">
+      <div class="auth-box" id="doctorSignupBox" style="display: none">
         <h2>Doctor Signup</h2>
-        <input type="text" id="d_name" placeholder="Full Name"/>
-        <input type="email" id="d_email" placeholder="Email"/>
+        <input type="text" id="d_name" placeholder="Full Name" />
+        <input type="email" id="d_email" placeholder="Email" />
 
         <div class="otp-row">
-          <input type="text" id="d_otp" placeholder="OTP"/>
-          <button id="d_send_btn" disabled onclick="sendOTP('doctor')">Send OTP</button>
-          <button id="d_resend_btn" style="display:none;" onclick="sendOTP('doctor')">Resend</button>
+          <input type="text" id="d_otp" placeholder="OTP" />
+          <button id="d_send_btn" disabled onclick="sendOTP('doctor')">
+            Send OTP
+          </button>
+          <button
+            id="d_resend_btn"
+            style="display: none"
+            onclick="sendOTP('doctor')"
+          >
+            Resend
+          </button>
           <span id="d_timer" class="otp-timer"></span>
         </div>
 
-        <input type="password" id="d_pass" placeholder="Password"/>
+        <input type="password" id="d_pass" placeholder="Password" />
         <button class="auth-btn" onclick="doctorSignup()">Signup</button>
-        <p class="auth-small">Switch Role? <span onclick="showRoleBox()">Click here</span></p>
+        <p class="auth-small">
+          Switch Role? <span onclick="showRoleBox()">Click here</span>
+        </p>
       </div>
 
       <!-- DOCTOR LOGIN -->
-      <div class="auth-box" id="doctorLoginBox" style="display:none;">
+      <div class="auth-box" id="doctorLoginBox" style="display: none">
         <h2>Doctor Login</h2>
-        <input type="email" id="dl_email" placeholder="Email"/>
-        <input type="password" id="dl_pass" placeholder="Password"/>
+        <input type="email" id="dl_email" placeholder="Email" />
+        <input type="password" id="dl_pass" placeholder="Password" />
         <button class="auth-btn" onclick="doctorLogin()">Login</button>
-        <p class="auth-small" onclick="openForgotPassword()">Forgot Password?</p>
-        <p class="auth-small">Switch Role? <span onclick="showRoleBox()">Click here</span></p>
+        <p class="auth-small" onclick="openForgotPassword()">
+          Forgot Password?
+        </p>
+        <p class="auth-small">
+          Switch Role? <span onclick="showRoleBox()">Click here</span>
+        </p>
       </div>
 
       <!-- ADMIN LOGIN -->
-      <div class="auth-box" id="adminLoginBox" style="display:none;">
+      <div class="auth-box" id="adminLoginBox" style="display: none">
         <h2>Admin Login</h2>
-        <input type="email" id="a_email" placeholder="Admin Email"/>
-        <input type="password" id="a_pass" placeholder="Password"/>
+        <input type="email" id="a_email" placeholder="Admin Email" />
+        <input type="password" id="a_pass" placeholder="Password" />
         <button class="auth-btn" onclick="adminLogin()">Login</button>
-        <p class="auth-small">Switch Role? <span onclick="showRoleBox()">Click here</span></p>
+        <p class="auth-small">
+          Switch Role? <span onclick="showRoleBox()">Click here</span>
+        </p>
       </div>
 
       <!-- FORGOT PASSWORD -->
-      <div class="auth-box" id="forgotBox" style="display:none;">
+      <div class="auth-box" id="forgotBox" style="display: none">
         <h2>Reset Password</h2>
-        <input type="email" id="fp_email" placeholder="Email"/>
-        
+        <input type="email" id="fp_email" placeholder="Email" />
+
         <div class="otp-row">
-          <input type="text" id="fp_otp" placeholder="OTP"/>
-          <button id="fp_send_btn" disabled onclick="sendOTP('forgot')">Send OTP</button>
-          <button id="fp_resend_btn" style="display:none;" onclick="sendOTP('forgot')">Resend</button>
+          <input type="text" id="fp_otp" placeholder="OTP" />
+          <button id="fp_send_btn" disabled onclick="sendOTP('forgot')">
+            Send OTP
+          </button>
+          <button
+            id="fp_resend_btn"
+            style="display: none"
+            onclick="sendOTP('forgot')"
+          >
+            Resend
+          </button>
           <span id="fp_timer" class="otp-timer"></span>
         </div>
 
-        <input type="password" id="fp_pass" placeholder="New Password"/>
-        <button class="auth-btn" onclick="resetPassword()">Reset Password</button>
+        <input type="password" id="fp_pass" placeholder="New Password" />
+        <button class="auth-btn" onclick="resetPassword()">
+          Reset Password
+        </button>
         <p class="auth-small" onclick="showRoleBox()">Back</p>
       </div>
     </div>
 
     <!-- JS FILES -->
-    <script src="{{ url_for('static', filename='js/index.js') }}" defer></script>
+    <script
+      src="{{ url_for('static', filename='js/index.js') }}"
+      defer
+    ></script>
     <script src="{{ url_for('static', filename='js/auth.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='js/chatbot.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='js/doctorRegistration.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='js/feedback.js') }}" defer></script>
-
+    <script
+      src="{{ url_for('static', filename='js/chatbot.js') }}"
+      defer
+    ></script>
+    <script
+      src="{{ url_for('static', filename='js/doctorRegistration.js') }}"
+      defer
+    ></script>
+    <script
+      src="{{ url_for('static', filename='js/feedback.js') }}"
+      defer
+    ></script>
   </body>
 </html>

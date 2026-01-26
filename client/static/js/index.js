@@ -94,28 +94,3 @@ function openAdminLogin() {
   hideAllAuthBoxes();
   document.getElementById("adminLoginBox").style.display = "flex";
 }
-
-// ===================== EMAIL VALIDATION FOR OTP =====================
-
-function setupOtpField(emailInputId, sendBtnId) {
-  const emailInput = document.getElementById(emailInputId);
-  const sendBtn = document.getElementById(sendBtnId);
-
-  if (!emailInput || !sendBtn) return;
-
-  sendBtn.disabled = true;
-
-  emailInput.addEventListener("input", () => {
-    const val = emailInput.value.trim();
-    sendBtn.disabled = !validateEmail(val);
-  });
-}
-
-function validateEmail(email) {
-  return /\S+@\S+\.\S+/.test(email);
-}
-
-setupOtpField("p_email", "p_send_btn");
-setupOtpField("d_email", "d_send_btn");
-setupOtpField("fp_email", "fp_send_btn");
-
