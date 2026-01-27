@@ -270,8 +270,8 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0.95);
-  width: 900px;              
-  max-height: 90vh;
+  width: 700px;              
+  max-height: 95vh;
   overflow-y: auto;
   background: #fff;
   color: #333;
@@ -717,13 +717,14 @@ h6{
   top: 45px;
   right: 0;
   width: 150px;
-  background: rgb(1, 139, 225);
+  background: rgb(2, 130, 209);
   border: 1px solid rgb(2, 27, 51);
-  border-radius: 6px;
+  border-radius: 8px;
   display: none;
   flex-direction: column;
   box-shadow: 0px 3px 10px rgba(0,0,0,0.2);
   z-index: 999;
+  text-align: center;
 }
 
 .dropdown-item {
@@ -733,5 +734,6 @@ h6{
 }
 
 .dropdown-item:hover {
-  background: #000000;
+  background: #af0303;
+  border-radius: 8px;
 }

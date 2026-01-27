@@ -2,12 +2,12 @@ from flask import Blueprint, request, jsonify
 from .otp_service import create_and_send_otp, verify_otp as verify_otp_service
 from .service import auth_signup, auth_login, reset_password
 
-auth_bp = Blueprint("auth_bp", __name__, url_prefix="/auth")
+auth = Blueprint("auth_bp", __name__, url_prefix="/auth")
 
 # ==========================
 # SEND OTP
 # ==========================
-@auth_bp.route("/send-otp", methods=["POST"])
+@auth.route("/send-otp", methods=["POST"])
 def send_otp():
     data = request.get_json()
     email = data.get("email")
@@ -23,7 +23,7 @@ def send_otp():
 # ==========================
 # VERIFY OTP
 # ==========================
-@auth_bp.route("/verify-otp", methods=["POST"])
+@auth.route("/verify-otp", methods=["POST"])
 def verify_otp_route():
     data = request.get_json()
     email = data.get("email")
@@ -40,7 +40,7 @@ def verify_otp_route():
 # ==========================
 # SIGNUP
 # ==========================
-@auth_bp.route("/signup", methods=["POST"])
+@auth.route("/signup", methods=["POST"])
 def signup():
     data = request.get_json()
     return auth_signup(data)
@@ -49,7 +49,7 @@ def signup():
 # ==========================
 # LOGIN
 # ==========================
-@auth_bp.route("/login", methods=["POST"])
+@auth.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
     return auth_login(data)
@@ -58,7 +58,7 @@ def login():
 # ==========================
 # RESET PASSWORD
 # ==========================
-@auth_bp.route("/reset", methods=["POST"])
+@auth.route("/reset", methods=["POST"])
 def reset():
     data = request.get_json()
     return reset_password(data)

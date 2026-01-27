@@ -1,5 +1,5 @@
 /* ==========================
-   GLOBAL DOM HELPERS
+    GLOBAL HELPERS
 ========================== */
 function showBox(boxId) {
   document.querySelectorAll(".auth-box").forEach(b => b.style.display = "none");
@@ -11,47 +11,27 @@ function closeAuthPopup() {
 }
 
 /* ==========================
-   ROLE SWITCHERS
+    ROLE SWITCHING
 ========================== */
 function selectRole(role) {
   showBox(role === "patient" ? "patientSignupBox" : "doctorSignupBox");
 }
+
 function openLogin() { showBox("patientLoginBox"); }
 function openForgotPassword() { showBox("forgotBox"); }
 function openAdminLogin() { showBox("adminLoginBox"); }
 function showRoleBox() { showBox("roleBox"); }
 
 /* ==========================
-   POPUP TRIGGER
-========================== */
-document.addEventListener("DOMContentLoaded", () => {
-  const menuIcon = document.querySelector(".menu-icon");
-  const authPopup = document.getElementById("authMasterPopup");
-
-  if (menuIcon && authPopup) {
-    menuIcon.addEventListener("click", () => {
-      authPopup.style.display = "flex";
-      showRoleBox();
-    });
-
-    authPopup.addEventListener("click", e => {
-      if (e.target === authPopup) closeAuthPopup();
-    });
-  }
-
-  setupOtpField("p_email", "p_send_btn");
-  setupOtpField("d_email", "d_send_btn");
-  setupOtpField("fp_email", "fp_send_btn");
-
-  initUserNavbar();
-});
-
-/* ==========================
-   EMAIL VALIDATION
+    EMAIL VALIDATION
 ========================== */
 function validateEmail(email) {
   return /\S+@\S+\.\S+/.test(email);
 }
+
+/* ==========================
+    SETUP OTP FIELD
+========================== */
 function setupOtpField(emailId, buttonId) {
   const emailInput = document.getElementById(emailId);
   const sendBtn = document.getElementById(buttonId);
@@ -64,7 +44,7 @@ function setupOtpField(emailId, buttonId) {
 }
 
 /* ==========================
-   API HELPER
+    API HELPER
 ========================== */
 async function api(url, method = "POST", data = {}) {
   try {
@@ -80,12 +60,12 @@ async function api(url, method = "POST", data = {}) {
 }
 
 /* ==========================
-   OTP VERIFY STATE
+    OTP STATE
 ========================== */
 let otpVerified = { patient: false, doctor: false };
 
 /* ==========================
-   SHOW VERIFIED GREEN
+    SHOW VERIFIED
 ========================== */
 function showVerified(type) {
   otpVerified[type] = true;
@@ -96,61 +76,23 @@ function showVerified(type) {
 }
 
 /* ==========================
-   OTP TIMER
-========================== */
-let otpTimers = {};
-
-function startOtpTimer(role) {
-  let timerSpan = document.getElementById(`${role}_timer`);
-  let sendBtn = document.getElementById(`${role}_send_btn`);
-  let resendBtn = document.getElementById(`${role}_resend_btn`);
-
-  if (otpTimers[role]) clearInterval(otpTimers[role]);
-
-  let remaining = 120;
-  sendBtn.style.display = "none";
-  resendBtn.style.display = "none";
-  timerSpan.style.display = "inline-block";
-  timerSpan.innerText = `(${remaining}s)`;
-
-  otpTimers[role] = setInterval(() => {
-    remaining--;
-    timerSpan.innerText = `(${remaining}s)`;
-    if (remaining <= 0) {
-      clearInterval(otpTimers[role]);
-      timerSpan.innerText = "";
-      resendBtn.style.display = "inline-block";
-    }
-  }, 1000);
-}
-
-/* ==========================
-   SEND OTP
+    SEND OTP
 ========================== */
 async function sendOTP(type) {
-  let email = "", purpose = "";
+  let email = "";
 
-  if (type === "patient") { email = p_email.value; purpose = "signup"; }
-  if (type === "doctor") { email = d_email.value; purpose = "signup"; }
-  if (type === "forgot") { email = fp_email.value; purpose = "forgot"; }
+  if (type === "patient") email = p_email.value;
+  if (type === "doctor") email = d_email.value;
+  if (type === "forgot") email = fp_email.value;
 
   if (!validateEmail(email)) return alert("Enter valid email!");
 
-  const res = await api("/auth/send-otp", "POST", { email, purpose });
-
-  // Email already exists -> direct login
-  if (res.status === "exists") {
-    alert("Email already registered! Please login.");
-    openLogin();
-    return;
-  }
-
+  const res = await api("/auth/send-otp", "POST", { email, purpose: "signup" });
   alert(res.msg);
-  if (res.status === "success") startOtpTimer(type);
 }
 
 /* ==========================
-   PATIENT SIGNUP
+    SIGNUP
 ========================== */
 async function patientSignup() {
   const name = p_name.value, email = p_email.value, otp = p_otp.value, pass = p_pass.value;
@@ -158,44 +100,37 @@ async function patientSignup() {
   if (!name || !email || !otp || !pass) return alert("All fields required!");
 
   if (!otpVerified.patient) {
-    const verify = await api("/auth/verify-otp", "POST", { email, otp });
-    if (verify.status !== "success") return alert(verify.msg);
+    const v = await api("/auth/verify-otp", "POST", { email, otp });
+    if (v.status !== "success") return alert(v.msg);
     showVerified("patient");
   }
 
-  const signup = await api("/auth/signup", "POST", { name, email, password: pass, role: "patient" });
-
-  alert(signup.msg);
-  if (signup.status === "success") openLogin();
+  const res = await api("/auth/signup", "POST", { name, email, password: pass, role: "patient" });
+  alert(res.msg);
+  if (res.status === "success") openLogin();
 }
 
-/* ==========================
-   DOCTOR SIGNUP
-========================== */
 async function doctorSignup() {
   const name = d_name.value, email = d_email.value, otp = d_otp.value, pass = d_pass.value;
 
   if (!name || !email || !otp || !pass) return alert("All fields required!");
 
   if (!otpVerified.doctor) {
-    const verify = await api("/auth/verify-otp", "POST", { email, otp });
-    if (verify.status !== "success") return alert(verify.msg);
+    const v = await api("/auth/verify-otp", "POST", { email, otp });
+    if (v.status !== "success") return alert(v.msg);
     showVerified("doctor");
   }
 
-  const signup = await api("/auth/signup", "POST", { name, email, password: pass, role: "doctor" });
-
-  alert(signup.msg);
-  if (signup.status === "success") openLogin();
+  const res = await api("/auth/signup", "POST", { name, email, password: pass, role: "doctor" });
+  alert(res.msg);
+  if (res.status === "success") openLogin();
 }
 
 /* ==========================
-   LOGIN
+    LOGIN
 ========================== */
 async function patientLogin() {
   const email = pl_email.value, pass = pl_pass.value;
-  if (!email || !pass) return alert("Email & password required");
-
   const res = await api("/auth/login", "POST", { email, password: pass });
 
   if (res.status !== "success") return alert(res.msg);
@@ -203,7 +138,7 @@ async function patientLogin() {
   localStorage.setItem("user_name", res.name);
   localStorage.setItem("user_role", res.role);
 
-  window.location.reload();
+  window.location.href = "/";
 }
 
 async function doctorLogin() {
@@ -215,31 +150,19 @@ async function doctorLogin() {
   localStorage.setItem("user_name", res.name);
   localStorage.setItem("user_role", res.role);
 
-  window.location.reload();
+  window.location.href = "/";
 }
 
 async function adminLogin() {
   const res = await api("/admin/login", "POST", { email: a_email.value, password: a_pass.value });
+
   if (res.status !== "success") return alert(res.msg);
+
   window.location.href = "/admin/dashboard";
 }
 
 /* ==========================
-   RESET PASSWORD
-========================== */
-async function resetPassword() {
-  const res = await api("/auth/reset", "POST", {
-    email: fp_email.value,
-    otp: fp_otp.value,
-    password: fp_pass.value
-  });
-
-  alert(res.msg);
-  if (res.status === "success") openLogin();
-}
-
-/* ==========================
-   NAVBAR AVATAR
+    NAVBAR USER AVATAR
 ========================== */
 function initUserNavbar() {
   const user = localStorage.getItem("user_name");
@@ -264,10 +187,20 @@ function initUserNavbar() {
 }
 
 /* ==========================
-   LOGOUT
+    LOGOUT
 ========================== */
 function logoutUser() {
   localStorage.removeItem("user_name");
   localStorage.removeItem("user_role");
-  window.location.reload();
+  window.location.href = "/";
 }
+
+/* ==========================
+    INIT ON PAGE LOAD
+========================== */
+document.addEventListener("DOMContentLoaded", () => {
+  setupOtpField("p_email", "p_send_btn");
+  setupOtpField("d_email", "d_send_btn");
+  setupOtpField("fp_email", "fp_send_btn");
+  initUserNavbar();
+});
