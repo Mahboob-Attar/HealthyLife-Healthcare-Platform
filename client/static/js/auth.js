@@ -1,8 +1,8 @@
-/* ==========================
-    GLOBAL HELPERS
-========================== */
+/*  GLOBAL HELPERS*/
 function showBox(boxId) {
-  document.querySelectorAll(".auth-box").forEach(b => b.style.display = "none");
+  document
+    .querySelectorAll(".auth-box")
+    .forEach((b) => (b.style.display = "none"));
   document.getElementById(boxId).style.display = "flex";
 }
 
@@ -10,28 +10,30 @@ function closeAuthPopup() {
   document.getElementById("authMasterPopup").style.display = "none";
 }
 
-/* ==========================
-    ROLE SWITCHING
-========================== */
+/*ROLE SWITCHING */
 function selectRole(role) {
   showBox(role === "patient" ? "patientSignupBox" : "doctorSignupBox");
 }
 
-function openLogin() { showBox("patientLoginBox"); }
-function openForgotPassword() { showBox("forgotBox"); }
-function openAdminLogin() { showBox("adminLoginBox"); }
-function showRoleBox() { showBox("roleBox"); }
+function openLogin() {
+  showBox("patientLoginBox");
+}
+function openForgotPassword() {
+  showBox("forgotBox");
+}
+function openAdminLogin() {
+  showBox("adminLoginBox");
+}
+function showRoleBox() {
+  showBox("roleBox");
+}
 
-/* ==========================
-    EMAIL VALIDATION
-========================== */
+/* EMAIL VALIDATION*/
 function validateEmail(email) {
   return /\S+@\S+\.\S+/.test(email);
 }
 
-/* ==========================
-    SETUP OTP FIELD
-========================== */
+/* SETUP OTP FIELD*/
 function setupOtpField(emailId, buttonId) {
   const emailInput = document.getElementById(emailId);
   const sendBtn = document.getElementById(buttonId);
@@ -43,9 +45,7 @@ function setupOtpField(emailId, buttonId) {
   });
 }
 
-/* ==========================
-    API HELPER
-========================== */
+/* API HELPER*/
 async function api(url, method = "POST", data = {}) {
   try {
     const res = await fetch(url, {
@@ -59,14 +59,10 @@ async function api(url, method = "POST", data = {}) {
   }
 }
 
-/* ==========================
-    OTP STATE
-========================== */
+/* OTP STATE*/
 let otpVerified = { patient: false, doctor: false };
 
-/* ==========================
-    SHOW VERIFIED
-========================== */
+/* SHOW VERIFIED*/
 function showVerified(type) {
   otpVerified[type] = true;
   const input = document.getElementById(type === "patient" ? "p_otp" : "d_otp");
@@ -75,9 +71,7 @@ function showVerified(type) {
   input.style.fontWeight = "bold";
 }
 
-/* ==========================
-    SEND OTP
-========================== */
+/* SEND OTP*/
 async function sendOTP(type) {
   let email = "";
 
@@ -91,11 +85,12 @@ async function sendOTP(type) {
   alert(res.msg);
 }
 
-/* ==========================
-    SIGNUP
-========================== */
+/* SIGNUP*/
 async function patientSignup() {
-  const name = p_name.value, email = p_email.value, otp = p_otp.value, pass = p_pass.value;
+  const name = p_name.value,
+    email = p_email.value,
+    otp = p_otp.value,
+    pass = p_pass.value;
 
   if (!name || !email || !otp || !pass) return alert("All fields required!");
 
@@ -105,13 +100,21 @@ async function patientSignup() {
     showVerified("patient");
   }
 
-  const res = await api("/auth/signup", "POST", { name, email, password: pass, role: "patient" });
+  const res = await api("/auth/signup", "POST", {
+    name,
+    email,
+    password: pass,
+    role: "patient",
+  });
   alert(res.msg);
   if (res.status === "success") openLogin();
 }
 
 async function doctorSignup() {
-  const name = d_name.value, email = d_email.value, otp = d_otp.value, pass = d_pass.value;
+  const name = d_name.value,
+    email = d_email.value,
+    otp = d_otp.value,
+    pass = d_pass.value;
 
   if (!name || !email || !otp || !pass) return alert("All fields required!");
 
@@ -121,16 +124,20 @@ async function doctorSignup() {
     showVerified("doctor");
   }
 
-  const res = await api("/auth/signup", "POST", { name, email, password: pass, role: "doctor" });
+  const res = await api("/auth/signup", "POST", {
+    name,
+    email,
+    password: pass,
+    role: "doctor",
+  });
   alert(res.msg);
   if (res.status === "success") openLogin();
 }
 
-/* ==========================
-    LOGIN
-========================== */
+/* LOGIN*/
 async function patientLogin() {
-  const email = pl_email.value, pass = pl_pass.value;
+  const email = pl_email.value,
+    pass = pl_pass.value;
   const res = await api("/auth/login", "POST", { email, password: pass });
 
   if (res.status !== "success") return alert(res.msg);
@@ -142,7 +149,8 @@ async function patientLogin() {
 }
 
 async function doctorLogin() {
-  const email = dl_email.value, pass = dl_pass.value;
+  const email = dl_email.value,
+    pass = dl_pass.value;
   const res = await api("/auth/login", "POST", { email, password: pass });
 
   if (res.status !== "success") return alert(res.msg);
@@ -154,16 +162,17 @@ async function doctorLogin() {
 }
 
 async function adminLogin() {
-  const res = await api("/admin/login", "POST", { email: a_email.value, password: a_pass.value });
+  const res = await api("/admin/login", "POST", {
+    email: a_email.value,
+    password: a_pass.value,
+  });
 
   if (res.status !== "success") return alert(res.msg);
 
   window.location.href = "/admin/dashboard";
 }
 
-/* ==========================
-    NAVBAR USER AVATAR
-========================== */
+/*NAVBAR USER AVATAR*/
 function initUserNavbar() {
   const user = localStorage.getItem("user_name");
   const menuIcon = document.getElementById("menuIcon");
@@ -178,7 +187,8 @@ function initUserNavbar() {
   }
 
   avatar.onclick = () => {
-    dropdown.style.display = dropdown.style.display === "flex" ? "none" : "flex";
+    dropdown.style.display =
+      dropdown.style.display === "flex" ? "none" : "flex";
   };
 
   document.addEventListener("click", (e) => {
@@ -186,18 +196,14 @@ function initUserNavbar() {
   });
 }
 
-/* ==========================
-    LOGOUT
-========================== */
+/* LOGOUT*/
 function logoutUser() {
   localStorage.removeItem("user_name");
   localStorage.removeItem("user_role");
   window.location.href = "/";
 }
 
-/* ==========================
-    INIT ON PAGE LOAD
-========================== */
+/* INIT ON PAGE LOAD*/
 document.addEventListener("DOMContentLoaded", () => {
   setupOtpField("p_email", "p_send_btn");
   setupOtpField("d_email", "d_send_btn");
