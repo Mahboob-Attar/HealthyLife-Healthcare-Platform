@@ -1,4 +1,4 @@
-/*  GLOBAL HELPERS*/
+/* GLOBAL HELPERS*/
 function showBox(boxId) {
   document
     .querySelectorAll(".auth-box")
@@ -10,13 +10,9 @@ function closeAuthPopup() {
   document.getElementById("authMasterPopup").style.display = "none";
 }
 
-/*ROLE SWITCHING */
-function selectRole(role) {
-  showBox(role === "patient" ? "patientSignupBox" : "doctorSignupBox");
-}
-
+/* NAVIGATION*/
 function openLogin() {
-  showBox("patientLoginBox");
+  showBox("userLoginBox");
 }
 function openForgotPassword() {
   showBox("forgotBox");
@@ -24,8 +20,8 @@ function openForgotPassword() {
 function openAdminLogin() {
   showBox("adminLoginBox");
 }
-function showRoleBox() {
-  showBox("roleBox");
+function openSignup() {
+  showBox("userSignupBox");
 }
 
 /* EMAIL VALIDATION*/
@@ -33,7 +29,7 @@ function validateEmail(email) {
   return /\S+@\S+\.\S+/.test(email);
 }
 
-/* SETUP OTP FIELD*/
+/* OTP FIELD SETUP*/
 function setupOtpField(emailId, buttonId) {
   const emailInput = document.getElementById(emailId);
   const sendBtn = document.getElementById(buttonId);
@@ -59,108 +55,72 @@ async function api(url, method = "POST", data = {}) {
   }
 }
 
-/* OTP STATE*/
-let otpVerified = { patient: false, doctor: false };
+/* OTP STATE */
+let otpVerified = false;
 
-/* SHOW VERIFIED*/
-function showVerified(type) {
-  otpVerified[type] = true;
-  const input = document.getElementById(type === "patient" ? "p_otp" : "d_otp");
+function showVerified() {
+  otpVerified = true;
+  const input = document.getElementById("u_otp");
   input.style.border = "2px solid #28a745";
   input.style.color = "#28a745";
   input.style.fontWeight = "bold";
 }
 
-/* SEND OTP*/
-async function sendOTP(type) {
-  let email = "";
-
-  if (type === "patient") email = p_email.value;
-  if (type === "doctor") email = d_email.value;
-  if (type === "forgot") email = fp_email.value;
-
+/* SEND OTP */
+async function sendOTP() {
+  const email = u_email.value;
   if (!validateEmail(email)) return alert("Enter valid email!");
 
-  const res = await api("/auth/send-otp", "POST", { email, purpose: "signup" });
+  const res = await api("/auth/send-otp", "POST", {
+    email,
+    purpose: "signup",
+  });
   alert(res.msg);
 }
 
-/* SIGNUP*/
-async function patientSignup() {
-  const name = p_name.value,
-    email = p_email.value,
-    otp = p_otp.value,
-    pass = p_pass.value;
+/* USER SIGNUP */
+async function userSignup() {
+  const name = u_name.value;
+  const email = u_email.value;
+  const otp = u_otp.value;
+  const pass = u_pass.value;
 
-  if (!name || !email || !otp || !pass) return alert("All fields required!");
+  if (!name || !email || !otp || !pass)
+    return alert("All fields required!");
 
-  if (!otpVerified.patient) {
+  if (!otpVerified) {
     const v = await api("/auth/verify-otp", "POST", { email, otp });
     if (v.status !== "success") return alert(v.msg);
-    showVerified("patient");
+    showVerified();
   }
 
   const res = await api("/auth/signup", "POST", {
     name,
     email,
     password: pass,
-    role: "patient",
   });
+
   alert(res.msg);
   if (res.status === "success") openLogin();
 }
 
-async function doctorSignup() {
-  const name = d_name.value,
-    email = d_email.value,
-    otp = d_otp.value,
-    pass = d_pass.value;
+/* USER LOGIN */
+async function userLogin() {
+  const email = ul_email.value;
+  const pass = ul_pass.value;
 
-  if (!name || !email || !otp || !pass) return alert("All fields required!");
-
-  if (!otpVerified.doctor) {
-    const v = await api("/auth/verify-otp", "POST", { email, otp });
-    if (v.status !== "success") return alert(v.msg);
-    showVerified("doctor");
-  }
-
-  const res = await api("/auth/signup", "POST", {
-    name,
+  const res = await api("/auth/login", "POST", {
     email,
     password: pass,
-    role: "doctor",
   });
-  alert(res.msg);
-  if (res.status === "success") openLogin();
-}
-
-/* LOGIN*/
-async function patientLogin() {
-  const email = pl_email.value,
-    pass = pl_pass.value;
-  const res = await api("/auth/login", "POST", { email, password: pass });
 
   if (res.status !== "success") return alert(res.msg);
 
   localStorage.setItem("user_name", res.name);
-  localStorage.setItem("user_role", res.role);
-
   window.location.href = "/";
 }
 
-async function doctorLogin() {
-  const email = dl_email.value,
-    pass = dl_pass.value;
-  const res = await api("/auth/login", "POST", { email, password: pass });
-
-  if (res.status !== "success") return alert(res.msg);
-
-  localStorage.setItem("user_name", res.name);
-  localStorage.setItem("user_role", res.role);
-
-  window.location.href = "/";
-}
-
+/* ADMIN LOGIN*/
 async function adminLogin() {
   const res = await api("/admin/login", "POST", {
     email: a_email.value,
@@ -168,11 +128,10 @@ async function adminLogin() {
   });
 
   if (res.status !== "success") return alert(res.msg);
-
   window.location.href = "/admin/dashboard";
 }
 
-/*NAVBAR USER AVATAR*/
+/* NAVBAR USER AVATAR*/
 function initUserNavbar() {
   const user = localStorage.getItem("user_name");
   const menuIcon = document.getElementById("menuIcon");
@@ -199,14 +158,12 @@ function initUserNavbar() {
 /* LOGOUT*/
 function logoutUser() {
   localStorage.removeItem("user_name");
-  localStorage.removeItem("user_role");
   window.location.href = "/";
 }
 
-/* INIT ON PAGE LOAD*/
+/* INIT */
 document.addEventListener("DOMContentLoaded", () => {
-  setupOtpField("p_email", "p_send_btn");
-  setupOtpField("d_email", "d_send_btn");
+  setupOtpField("u_email", "u_send_btn");
   setupOtpField("fp_email", "fp_send_btn");
   initUserNavbar();
 });

@@ -1,26 +1,23 @@
-from datetime import datetime
 from server.blueprints.services.feedback.model import FeedbackModel
+
 
 class FeedbackService:
 
     @staticmethod
-    def submit(data: dict):
-        username = data.get("username")
-        rating = data.get("rating")
-        review = data.get("review")
+    def store(user_id: int, rating: int, review: str):
+        if not user_id:
+            raise ValueError("User not authenticated")
 
-        # Validate required fields
-        if not username or not rating or not review:
-            return {"success": False, "message": "Invalid data", "status": 400}
+        if not rating or not review:
+            raise ValueError("Invalid feedback data")
 
-        # Prepare record for DB
-        record = {
-            "username": username,
-            "rating": rating,
-            "review": review,
-            "created_at": datetime.utcnow()
-        }
+        if len(review) > 60:
+            raise ValueError("Review exceeds 60 characters")
 
-        FeedbackModel.create(record)
+        FeedbackModel.create(
+            user_id=user_id,
+            rating=rating,
+            review=review
+        )
 
-        return {"success": True, "message": "Feedback submitted successfully", "status": 200}
+        return True

@@ -1,38 +1,36 @@
 from server.config.db import get_connection
 
+
 class FeedbackModel:
 
     @staticmethod
-    def create(data: dict):
+    def create(user_id: int, rating: int, review: str):
         conn = get_connection()
         cur = conn.cursor()
-
-        sql = """
-            INSERT INTO feedback (username, rating, review, created_at)
-            VALUES (%s, %s, %s, %s)
-        """
-
-        cur.execute(sql, (
-            data["username"],
-            data["rating"],
-            data["review"],
-            data["created_at"]
-        ))
-
-        conn.commit()
-        cur.close()
-        conn.close()
-        return True
-
+        try:
+            sql = """
+                INSERT INTO feedback (user_id, rating, review)
+                VALUES (%s, %s, %s)
+            """
+            cur.execute(sql, (user_id, rating, review))
+            conn.commit()
+            return True
+        finally:
+            cur.close()
+            conn.close()
 
     @staticmethod
     def get_all():
         conn = get_connection()
         cur = conn.cursor(dictionary=True)
-
-        cur.execute("SELECT * FROM feedback ORDER BY created_at DESC")
-        rows = cur.fetchall()
-
-        cur.close()
-        conn.close()
-        return rows
+        try:
+            cur.execute("""
+                SELECT f.id, u.name, f.rating, f.review, f.created_at
+                FROM feedback f
+                JOIN users u ON f.user_id = u.id
+                ORDER BY f.created_at DESC
+            """)
+            return cur.fetchall()
+        finally:
+            cur.close()
+            conn.close()

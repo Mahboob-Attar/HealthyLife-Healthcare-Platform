@@ -6,15 +6,14 @@ from datetime import datetime
 
 
 # ==========================
-# SIGNUP
+# SIGNUP (USER ONLY)
 # ==========================
 def auth_signup(data):
     name = data.get("name")
     email = data.get("email")
     password = data.get("password")
-    role = data.get("role")
 
-    if not name or not email or not password or not role:
+    if not name or not email or not password:
         return jsonify({"status": "error", "msg": "All fields required"}), 400
 
     email = email.strip().lower()
@@ -31,28 +30,33 @@ def auth_signup(data):
 
     hashed_pass = generate_password_hash(password)
 
-    # Insert user with correct field name
+    # Insert normal user (not admin)
     cur.execute("""
-        INSERT INTO users (name, email, password_hash, role)
-        VALUES (%s, %s, %s, %s)
-    """, (name, email, hashed_pass, role))
+        INSERT INTO users (name, email, password_hash, is_admin)
+        VALUES (%s, %s, %s, 0)
+    """, (name, email, hashed_pass))
 
     conn.commit()
     cur.close()
     conn.close()
 
-    # Send Account Created Email
-    html = render_template("emails/accountcreated_email.html",
-                           user_name=name,
-                           year=datetime.now().year)
+    # Send account created email
+    html = render_template(
+        "emails/accountcreated_email.html",
+        user_name=name,
+        year=datetime.now().year
+    )
 
-    send_email_html(email, "Account Created Successfully", html)
+    send_email_html(email, "Welcome to HealthyLife", html)
 
-    return jsonify({"status": "success", "msg": "Account created successfully!"}), 200
+    return jsonify({
+        "status": "success",
+        "msg": "Account created successfully"
+    }), 200
 
 
 # ==========================
-# LOGIN
+# LOGIN (USER / ADMIN)
 # ==========================
 def auth_login(data):
     email = data.get("email")
@@ -74,7 +78,6 @@ def auth_login(data):
         conn.close()
         return jsonify({"status": "error", "msg": "User not found"}), 404
 
-    # Check hash using correct column
     if not check_password_hash(user["password_hash"], password):
         cur.close()
         conn.close()
@@ -83,13 +86,19 @@ def auth_login(data):
     cur.close()
     conn.close()
 
-    # Set session
+    # Set session (STATEFUL)
+    session.clear()
     session["logged_in"] = True
     session["user_id"] = user["id"]
-    session["role"] = user["role"]
     session["user_name"] = user["name"]
+    session["is_admin"] = bool(user["is_admin"])
 
-    return jsonify({"status": "success", "msg": "Login successful", "role": user["role"], "name": user["name"]}), 200
+    return jsonify({
+        "status": "success",
+        "msg": "Login successful",
+        "name": user["name"],
+        "is_admin": bool(user["is_admin"])
+    }), 200
 
 
 # ==========================
@@ -118,11 +127,16 @@ def reset_password(data):
 
     hashed_pass = generate_password_hash(password)
 
-    # Update correct field
-    cur.execute("UPDATE users SET password_hash=%s WHERE email=%s", (hashed_pass, email))
+    cur.execute(
+        "UPDATE users SET password_hash=%s WHERE email=%s",
+        (hashed_pass, email)
+    )
     conn.commit()
 
     cur.close()
     conn.close()
 
-    return jsonify({"status": "success", "msg": "Password reset complete"}), 200
+    return jsonify({
+        "status": "success",
+        "msg": "Password reset successful"
+    }), 200

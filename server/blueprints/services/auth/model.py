@@ -5,16 +5,18 @@ from werkzeug.security import generate_password_hash, check_password_hash
 class UserModel:
 
     @staticmethod
-    def create_user(name, email, password, role):
-        """Create user with hashed password."""
+    def create_user(name, email, password, is_admin=0):
+        """
+        Create a new user (User by default, admin if is_admin=1)
+        """
         conn = get_connection()
         cur = conn.cursor()
         try:
             hashed = generate_password_hash(password)
             cur.execute("""
-                INSERT INTO users (name, email, password, role)
+                INSERT INTO users (name, email, password_hash, is_admin)
                 VALUES (%s, %s, %s, %s)
-            """, (name, email, hashed, role))
+            """, (name, email, hashed, is_admin))
             conn.commit()
             return True
         finally:
@@ -23,7 +25,9 @@ class UserModel:
 
     @staticmethod
     def get_user_by_email(email):
-        """Fetch full user object"""
+        """
+        Fetch full user record by email
+        """
         conn = get_connection()
         cur = conn.cursor(dictionary=True)
         try:
@@ -35,7 +39,9 @@ class UserModel:
 
     @staticmethod
     def user_exists(email):
-        """Check if user exists by email"""
+        """
+        Check if user exists
+        """
         conn = get_connection()
         cur = conn.cursor()
         try:
@@ -47,12 +53,17 @@ class UserModel:
 
     @staticmethod
     def update_password(email, new_password):
-        """Reset / Update password"""
+        """
+        Reset / update user password
+        """
         conn = get_connection()
         cur = conn.cursor()
         try:
             hashed = generate_password_hash(new_password)
-            cur.execute("UPDATE users SET password=%s WHERE email=%s", (hashed, email))
+            cur.execute(
+                "UPDATE users SET password_hash=%s WHERE email=%s",
+                (hashed, email)
+            )
             conn.commit()
             return True
         finally:
@@ -60,6 +71,8 @@ class UserModel:
             conn.close()
 
     @staticmethod
-    def verify_password(hashed, plain):
-        """Check plain text vs hashed"""
-        return check_password_hash(hashed, plain)
+    def verify_password(hashed_password, plain_password):
+        """
+        Verify plain password against hash
+        """
+        return check_password_hash(hashed_password, plain_password)

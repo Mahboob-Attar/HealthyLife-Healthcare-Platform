@@ -10,33 +10,29 @@ const licenseInput = document.getElementById("licenseInput");
 const licenseStatus = document.getElementById("licenseStatus");
 
 doctorBtn?.addEventListener("click", () => doctorPopup.classList.add("active"));
-
 closeDoctor?.addEventListener("click", () =>
-  doctorPopup.classList.remove("active"),
+  doctorPopup.classList.remove("active")
 );
 
-// Helper function to capitalize first letter
+// Capitalize helper
 function capitalizeFirstLetter(str) {
   if (!str) return "";
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
 
-// Validate govt license email (ABC123@gov.ac.in)
+// Govt license validation
 function validateLicense(email) {
   const licenseRegex = /^[A-Z]{3}[0-9]{3}@gov\.ac\.in$/;
   return licenseRegex.test(email);
 }
 
-// Live validation of license with 2.5s spinner
+// Live license check
 licenseInput?.addEventListener("input", () => {
   const value = licenseInput.value.trim();
-
   licenseStatus.textContent = "";
-  licenseStatus.style.color = "black";
 
   if (!value) return;
 
-  // Show spinner while "verifying"
   licenseStatus.innerHTML = '<span class="spinner"></span> Verifying...';
   licenseStatus.style.color = "orange";
 
@@ -51,58 +47,64 @@ licenseInput?.addEventListener("input", () => {
   }, 2500);
 });
 
-// Form submission
+// =======================
+// FORM SUBMIT (FIXED URL)
+// =======================
 doctorForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const formData = new FormData(doctorForm);
 
-  // Capitalize location
   if (formData.has("location")) {
-    const locationValue = formData.get("location");
-    formData.set("location", capitalizeFirstLetter(locationValue));
+    formData.set(
+      "location",
+      capitalizeFirstLetter(formData.get("location"))
+    );
   }
 
   if (!validateLicense(formData.get("license"))) {
-    alert("⚠️ Invalid Govt License Email. Please check.");
+    alert("⚠️ Invalid Govt License Email.");
     return;
   }
 
   const experience = formData.get("experience");
   const phone = formData.get("phone");
+
   if (isNaN(experience) || experience < 0) {
-    alert("⚠️ Please enter a valid number for Experience.");
+    alert("⚠️ Invalid experience");
     return;
   }
 
   if (!/^\+?\d{10,15}$/.test(phone)) {
-    alert("⚠️ Please enter a valid phone number.");
+    alert("⚠️ Invalid phone number");
     return;
   }
 
   try {
-    const response = await fetch("/register_doctor", {
+    const response = await fetch("/doctors/register", {   // ✅ FIX HERE
       method: "POST",
       body: formData,
     });
+
     const result = await response.json();
 
     if (result.success) {
       doctorForm.reset();
       licenseStatus.textContent = "";
       successMessage.innerHTML =
-        "✅ Request Send Successfully! Visit Support page if needed.";
+        "✅ Request sent successfully! Our team will verify your details for more update Active in your Inbox.";
       successPopup.classList.add("show");
-      setTimeout(() => successPopup.classList.remove("show"), 5000);
+
+      setTimeout(() => successPopup.classList.remove("show"), 7000);
       setTimeout(() => doctorPopup.classList.remove("active"), 500);
     } else {
       alert(result.message || "⚠️ Registration failed.");
     }
   } catch (err) {
-    console.error(err);
-    alert("⚠️ Server error. Please contact support.");
+    console.error("Doctor Register Error:", err);
+    alert("⚠️ Server error. Please try again.");
   }
 });
 
 closeSuccess?.addEventListener("click", () =>
-  successPopup.classList.remove("show"),
+  successPopup.classList.remove("show")
 );

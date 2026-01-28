@@ -6,33 +6,36 @@ const closeThankYou = document.getElementById("closeThankYou");
 const feedbackForm = document.getElementById("feedbackForm");
 
 const stars = document.querySelectorAll(".star");
-let selectedRating = 0;
+const reviewInput = document.getElementById("review");
+const charCount = document.getElementById("charCount");
 
-// Open Popup
+let selectedRating = 0;
+const MAX_CHARS = 60;
+
+/* OPEN FEEDBACK POPUP */
 userBtn?.addEventListener("click", () => {
   togglePopup(feedbackPopup, true);
 });
 
-// Close Popup
+/* CLOSE POPUPS */
 closeFeedback?.addEventListener("click", () => {
   togglePopup(feedbackPopup, false);
 });
 
-// Close Thank You popup
 closeThankYou?.addEventListener("click", () => {
   togglePopup(thankYouPopup, false);
 });
 
-// Close on background click
+/* CLICK OUTSIDE TO CLOSE */
 window.addEventListener("click", (e) => {
   if (e.target === feedbackPopup) togglePopup(feedbackPopup, false);
   if (e.target === thankYouPopup) togglePopup(thankYouPopup, false);
 });
 
-// Star Rating System
+/* STAR RATING */
 stars.forEach((star, index) => {
   star.addEventListener("mouseover", () => highlightStars(index));
-  star.addEventListener("mouseout", () => resetStars());
+  star.addEventListener("mouseout", resetStars);
   star.addEventListener("click", () => {
     selectedRating = index + 1;
     highlightStars(index);
@@ -51,15 +54,32 @@ function resetStars() {
   });
 }
 
-// Submit Feedback
+/* CHARACTER COUNTER */
+reviewInput?.addEventListener("input", () => {
+  const length = reviewInput.value.length;
+
+  if (length > MAX_CHARS) {
+    reviewInput.value = reviewInput.value.slice(0, MAX_CHARS);
+  }
+
+  if (charCount) {
+    charCount.textContent = `${reviewInput.value.length} / ${MAX_CHARS}`;
+  }
+});
+
+/* SUBMIT FEEDBACK */
 feedbackForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const username = document.getElementById("username").value.trim();
-  const review = document.getElementById("review").value.trim();
+  const review = reviewInput.value.trim();
 
   if (!selectedRating) {
-    alert("Please select a rating!");
+    alert("Please select a rating");
+    return;
+  }
+
+  if (!review) {
+    alert("Please write your feedback");
     return;
   }
 
@@ -68,37 +88,36 @@ feedbackForm?.addEventListener("submit", async (e) => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        username,
         rating: selectedRating,
-        review
+        review: review
       })
     });
 
-    const result = await response.json().catch(() => null);
+    const result = await response.json();
 
-    if (result?.success) {
+    if (result.success) {
       resetForm();
       togglePopup(feedbackPopup, false);
       togglePopup(thankYouPopup, true);
 
-      setTimeout(() => togglePopup(thankYouPopup, false), 2200);
+      setTimeout(() => togglePopup(thankYouPopup, false), 6000);
     } else {
-      alert(result?.message || "Error submitting feedback!");
+      alert(result.message || "Failed to submit feedback");
     }
-
   } catch (err) {
     console.error(err);
     alert("Server error. Please try again later.");
   }
 });
 
-// Helpers
+/* HELPERS */
 function togglePopup(el, show = true) {
-  el.style.display = show ? "block" : "none";
+  el.style.display = show ? "flex" : "none";
 }
 
 function resetForm() {
   feedbackForm.reset();
   selectedRating = 0;
   stars.forEach((star) => star.classList.remove("selected"));
+  if (charCount) charCount.textContent = `0 / ${MAX_CHARS}`;
 }

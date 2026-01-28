@@ -1,14 +1,53 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session
 from server.blueprints.services.feedback.service import FeedbackService
 
 feedback_bp = Blueprint("feedback_bp", __name__, url_prefix="/feedback")
 
+
 @feedback_bp.route("/submit", methods=["POST"])
 def submit_feedback():
     try:
-        data = request.json
-        result = FeedbackService.store(data)
-        return jsonify({"success": True, "message": "Feedback stored"}), 200
+        # 🔒 User must be logged in
+        if not session.get("logged_in"):
+            return jsonify({
+                "success": False,
+                "message": "Please login to submit feedback"
+            }), 401
+
+        data = request.get_json()
+        rating = data.get("rating")
+        review = data.get("review", "").strip()
+
+        # ✅ Basic validation
+        if not rating or not review:
+            return jsonify({
+                "success": False,
+                "message": "Rating and review are required"
+            }), 400
+
+        if len(review) > 60:
+            return jsonify({
+                "success": False,
+                "message": "Review must be within 60 characters"
+            }), 400
+
+        # 🔐 Session-based identity
+        user_id = session.get("user_id")
+
+        FeedbackService.store(
+            user_id=user_id,
+            rating=rating,
+            review=review
+        )
+
+        return jsonify({
+            "success": True,
+            "message": "Feedback submitted successfully"
+        }), 200
+
     except Exception as e:
         print("❌ Feedback Error:", e)
-        return jsonify({"success": False, "message": "Server Error"}), 500
+        return jsonify({
+            "success": False,
+            "message": "Server error"
+        }), 500

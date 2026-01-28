@@ -73,8 +73,8 @@ function hideAllAuthBoxes() {
 
 function selectRole(role) {
   hideAllAuthBoxes();
-  if (role === "patient") {
-    document.getElementById("patientSignupBox").style.display = "flex";
+  if (role === "user") {
+    document.getElementById("userSignupBox").style.display = "flex";
   } else if (role === "doctor") {
     document.getElementById("doctorSignupBox").style.display = "flex";
   }
@@ -82,7 +82,7 @@ function selectRole(role) {
 
 function openLogin() {
   hideAllAuthBoxes();
-  document.getElementById("patientLoginBox").style.display = "flex";
+  document.getElementById("userLoginBox").style.display = "flex";
 }
 
 function openForgotPassword() {

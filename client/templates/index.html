@@ -65,9 +65,7 @@
           >DASHBOARD</a
         >
         <button class="btn" id="doctorBtn">Doctor's Registration form!</button>
-        <button class="btn" id="userBtn">
-          Please provide feedback!!
-        </button>
+        <button class="btn" id="userBtn">Please provide feedback!!</button>
 
         <!-- Chatbot Icon -->
         <div class="chatbot-container" id="chatbotIcon">
@@ -90,317 +88,367 @@
     </section>
 
     <!-- Chat Popup -->
-  <div id="chatPopup" class="chat-popup">
-    <div class="chat-header">
-      <h3>AI Virtual Nurse</h3>
-      <span id="closeChat">&times;</span>
+    <div id="chatPopup" class="chat-popup">
+      <div class="chat-header">
+        <h3>AI Virtual Nurse</h3>
+        <span id="closeChat">&times;</span>
+      </div>
+      <div class="chat-body" id="chatBody">
+        <p><b>Bot:</b> Hi 👋 How can I help you today?</p>
+      </div>
+      <div class="chat-footer">
+        <input type="text" id="userInput" placeholder="Type a message..." />
+        <button id="sendBtn">Send</button>
+      </div>
     </div>
-    <div class="chat-body" id="chatBody">
-      <p><b>Bot:</b> Hi 👋 How can I help you today?</p>
-    </div>
-    <div class="chat-footer">
-      <input type="text" id="userInput" placeholder="Type a message..." />
-      <button id="sendBtn">Send</button>
-    </div>
+
+   <!-- AUTH POPUP OVERLAY -->
+<div id="authMasterPopup" class="auth-overlay" style="display: none">
+
+  <!-- ROLE SELECTION -->
+  <div class="auth-box" id="roleBox">
+    <h2>Select Role</h2>
+    <button class="auth-btn" onclick="selectRole('user')">User</button>
+    <button class="auth-btn" onclick="openAdminLogin()">Admin</button>
+    <p class="auth-small">
+      Already have an account? <span onclick="openLogin()">Login</span>
+    </p>
   </div>
 
+  <!-- USER SIGNUP -->
+  <div class="auth-box" id="userSignupBox" style="display: none">
+    <h2>User Signup</h2>
+    <input type="text" id="u_name" placeholder="Full Name" />
 
-    <!-- AUTH POPUP OVERLAY -->
-    <div id="authMasterPopup" class="auth-overlay" style="display: none">
-      <!-- ROLE SELECTION -->
-      <div class="auth-box" id="roleBox">
-        <h2>Select Role</h2>
-        <button class="auth-btn" onclick="selectRole('patient')">
-          Patient
-        </button>
-        <button class="auth-btn" onclick="selectRole('doctor')">Doctor</button>
-        <button class="auth-btn" onclick="openAdminLogin()">Admin</button>
-        <p class="auth-small">
-          Already have an account? <span onclick="openLogin()">Login</span>
-        </p>
-      </div>
-
-      <!-- PATIENT SIGNUP -->
-      <div class="auth-box" id="patientSignupBox" style="display: none">
-        <h2>Patient Signup</h2>
-        <input type="text" id="p_name" placeholder="Full Name" />
-
-        <input type="email" id="p_email" placeholder="Email" />
-        <div class="otp-row">
-          <input type="text" id="p_otp" placeholder="OTP" />
-          <button id="p_send_btn" disabled onclick="sendOTP('patient')">
-            Send OTP
-          </button>
-          <button
-            id="p_resend_btn"
-            style="display: none"
-            onclick="sendOTP('patient')"
-          >
-            Resend
-          </button>
-          <span id="p_timer" class="otp-timer"></span>
-        </div>
-
-        <input type="password" id="p_pass" placeholder="Password" />
-        <button class="auth-btn" onclick="patientSignup()">Signup</button>
-        <p class="auth-small">
-          Switch Role? <span onclick="showRoleBox()">Click here</span>
-        </p>
-      </div>
-
-      <!-- PATIENT LOGIN -->
-      <div class="auth-box" id="patientLoginBox" style="display: none">
-        <h2>User Login</h2>
-        <input type="email" id="pl_email" placeholder="Email" />
-        <input type="password" id="pl_pass" placeholder="Password" />
-        <button class="auth-btn" onclick="patientLogin()">Login</button>
-        <p class="auth-small" onclick="openForgotPassword()">
-          Forgot Password?
-        </p>
-        <p class="auth-small">
-          Switch Role? <span onclick="showRoleBox()">Click here</span>
-        </p>
-      </div>
-
-      <!-- DOCTOR SIGNUP -->
-      <div class="auth-box" id="doctorSignupBox" style="display: none">
-        <h2>Doctor Signup</h2>
-        <input type="text" id="d_name" placeholder="Full Name" />
-        <input type="email" id="d_email" placeholder="Email" />
-
-        <div class="otp-row">
-          <input type="text" id="d_otp" placeholder="OTP" />
-          <button id="d_send_btn" disabled onclick="sendOTP('doctor')">
-            Send OTP
-          </button>
-          <button
-            id="d_resend_btn"
-            style="display: none"
-            onclick="sendOTP('doctor')"
-          >
-            Resend
-          </button>
-          <span id="d_timer" class="otp-timer"></span>
-        </div>
-
-        <input type="password" id="d_pass" placeholder="Password" />
-        <button class="auth-btn" onclick="doctorSignup()">Signup</button>
-        <p class="auth-small">
-          Switch Role? <span onclick="showRoleBox()">Click here</span>
-        </p>
-      </div>
-
-      <!-- DOCTOR LOGIN -->
-      <div class="auth-box" id="doctorLoginBox" style="display: none">
-        <h2>Doctor Login</h2>
-        <input type="email" id="dl_email" placeholder="Email" />
-        <input type="password" id="dl_pass" placeholder="Password" />
-        <button class="auth-btn" onclick="doctorLogin()">Login</button>
-        <p class="auth-small" onclick="openForgotPassword()">
-          Forgot Password?
-        </p>
-        <p class="auth-small">
-          Switch Role? <span onclick="showRoleBox()">Click here</span>
-        </p>
-      </div>
-
-      <!-- ADMIN LOGIN -->
-      <div class="auth-box" id="adminLoginBox" style="display: none">
-        <h2>Admin Login</h2>
-        <input type="email" id="a_email" placeholder="Admin Email" />
-        <input type="password" id="a_pass" placeholder="Password" />
-        <button class="auth-btn" onclick="adminLogin()">Login</button>
-        <p class="auth-small">
-          Switch Role? <span onclick="showRoleBox()">Click here</span>
-        </p>
-      </div>
-
-      <!-- FORGOT PASSWORD -->
-      <div class="auth-box" id="forgotBox" style="display: none">
-        <h2>Reset Password</h2>
-        <input type="email" id="fp_email" placeholder="Email" />
-
-        <div class="otp-row">
-          <input type="text" id="fp_otp" placeholder="OTP" />
-          <button id="fp_send_btn" disabled onclick="sendOTP('forgot')">
-            Send OTP
-          </button>
-          <button
-            id="fp_resend_btn"
-            style="display: none"
-            onclick="sendOTP('forgot')"
-          >
-            Resend
-          </button>
-          <span id="fp_timer" class="otp-timer"></span>
-        </div>
-
-        <input type="password" id="fp_pass" placeholder="New Password" />
-        <button class="auth-btn" onclick="resetPassword()">
-          Reset Password
-        </button>
-        <p class="auth-small" onclick="showRoleBox()">Back</p>
-      </div>
+    <input type="email" id="u_email" placeholder="Email" />
+    <div class="otp-row">
+      <input type="text" id="u_otp" placeholder="OTP" />
+      <button id="u_send_btn" disabled onclick="sendOTP()">
+        Send OTP
+      </button>
+      <button
+        id="u_resend_btn"
+        style="display: none"
+        onclick="sendOTP()"
+      >
+        Resend
+      </button>
+      <span id="u_timer" class="otp-timer"></span>
     </div>
 
-
-     <!-- Doctor Registration Popup -->
-  <div id="doctorPopup" class="doctor-popup">
-    <div class="doctor-header">
-      <h3>Doctor Registration Form</h3>
-      <span id="closeDoctor">&times;</span>
-    </div>
-  
-    <form id="doctorForm" class="doctor-form" enctype="multipart/form-data">
-      <label>Full Name <span style="color:red">*</span></label>
-      <input type="text" name="name" placeholder="Dr. John Doe" required />
-
-      <label>Phone Number <span style="color:red">*</span></label>
-      <input type="tel" name="phone" placeholder="+91 9876543210" required />
-
-      <label>Experience (Years) <span style="color:red">*</span></label>
-      <input type="number" name="experience" placeholder="e.g. 10" min="0" required />
-
-      <label>Specialization <span style="color:red">*</span></label>
-      <input type="text" name="specialization" placeholder="e.g. general surgeon" required />
-
-      <label>Services Provided <span style="color:red">*</span></label>
-      <textarea name="services" placeholder="e.g. General Checkups, ECG, Surgery" required></textarea>
-
-      <label>Clinic/Hospital <span style="color:red">*</span></label>
-      <input type="text" name="clinic" placeholder="e.g. Apollo Hospital" required />
-
-      <label>HOSPITAL Location <span style="color:red">*</span></label>
-      <select name="location" id="doctorLocation" required>
-        <option value="">Select City</option>
-        <option value="Bangalore South">Bangalore South</option>
-        <option value="Bangalore North">Bangalore North</option>
-        <option value="Bangalore Urban">Bangalore Urban</option>
-        <option value="Bangalore Rural">Bangalore Rural</option>
-      </select>
-
-      <label>Govt License Email <span style="color:red">*</span></label>
-      <input type="email" name="license" id="licenseInput" placeholder="ABC123@gov.ac.in" required />
-      <span id="licenseStatus"></span>
-
-      <label>Passport Photo <span style="color:red">*</span></label>
-      <input type="file" name="photo" accept="image/png, image/jpeg" required />
-
-      <button type="submit" class="btn">Send Registration Request</button>
-    </form>
+    <input type="password" id="u_pass" placeholder="Password" />
+    <button class="auth-btn" onclick="userSignup()">Signup</button>
+    <p class="auth-small">
+      Switch Role? <span onclick="showRoleBox()">Click here</span>
+    </p>
   </div>
 
-  <!-- Success Popup -->
-  <div id="successPopup" class="success-popup">
-    <div class="success-content">
-      <span id="closeSuccess"></span>
-      <p id="successMessage"></p>
-    </div>
+  <!-- USER LOGIN -->
+  <div class="auth-box" id="userLoginBox" style="display: none">
+    <h2>User Login</h2>
+    <input type="email" id="ul_email" placeholder="Email" />
+    <input type="password" id="ul_pass" placeholder="Password" />
+    <button class="auth-btn" onclick="userLogin()">Login</button>
+    <p class="auth-small" onclick="openForgotPassword()">
+      Forgot Password?
+    </p>
+    <p class="auth-small">
+      Switch Role? <span onclick="showRoleBox()">Click here</span>
+    </p>
   </div>
+
+  <!-- ADMIN LOGIN -->
+  <div class="auth-box" id="adminLoginBox" style="display: none">
+    <h2>Admin Login</h2>
+    <input type="email" id="a_email" placeholder="Admin Email" />
+    <input type="password" id="a_pass" placeholder="Password" />
+    <button class="auth-btn" onclick="adminLogin()">Login</button>
+    <p class="auth-small">
+      Switch Role? <span onclick="showRoleBox()">Click here</span>
+    </p>
+  </div>
+
+  <!-- FORGOT PASSWORD -->
+  <div class="auth-box" id="forgotBox" style="display: none">
+    <h2>Reset Password</h2>
+    <input type="email" id="fp_email" placeholder="Email" />
+
+    <div class="otp-row">
+      <input type="text" id="fp_otp" placeholder="OTP" />
+      <button id="fp_send_btn" disabled onclick="sendOTP()">
+        Send OTP
+      </button>
+      <button
+        id="fp_resend_btn"
+        style="display: none"
+        onclick="sendOTP()"
+      >
+        Resend
+      </button>
+      <span id="fp_timer" class="otp-timer"></span>
+    </div>
+
+    <input type="password" id="fp_pass" placeholder="New Password" />
+    <button class="auth-btn" onclick="resetPassword()">
+      Reset Password
+    </button>
+    <p class="auth-small" onclick="showRoleBox()">Back</p>
+  </div>
+
+</div>
+
+    <!-- Doctor Registration Popup -->
+    <div id="doctorPopup" class="doctor-popup">
+      <div class="doctor-header">
+        <h3>Doctor Registration Form</h3>
+        <span id="closeDoctor">&times;</span>
+      </div>
+
+      <form id="doctorForm" class="doctor-form" enctype="multipart/form-data">
+        <label>Full Name <span style="color: red">*</span></label>
+        <input type="text" name="name" placeholder="Dr. John Doe" required />
+
+        <label>Phone Number <span style="color: red">*</span></label>
+        <input type="tel" name="phone" placeholder="+91 9876543210" required />
+
+        <label>Email <span style="color: red">*</span></label>
+        <input
+          type="email"
+          name="email"
+          placeholder="doctor@example.com"
+          required
+        />
+
+        <label>Experience (Years) <span style="color: red">*</span></label>
+        <input
+          type="number"
+          name="experience"
+          placeholder="e.g. 10"
+          min="0"
+          required
+        />
+
+        <label>Specialization <span style="color: red">*</span></label>
+        <input
+          type="text"
+          name="specialization"
+          placeholder="e.g. general surgeon"
+          required
+        />
+
+        <label>Services Provided <span style="color: red">*</span></label>
+        <textarea
+          name="services"
+          placeholder="e.g. General Checkups, ECG, Surgery"
+          required
+        ></textarea>
+
+        <label>Clinic/Hospital <span style="color: red">*</span></label>
+        <input
+          type="text"
+          name="clinic"
+          placeholder="e.g. Apollo Hospital"
+          required
+        />
+
+        <label>HOSPITAL Location <span style="color: red">*</span></label>
+        <select name="location" id="doctorLocation" required>
+          <option value="">Select City</option>
+          <option value="Bangalore South">Bangalore South</option>
+          <option value="Bangalore North">Bangalore North</option>
+          <option value="Bangalore Urban">Bangalore Urban</option>
+          <option value="Bangalore Rural">Bangalore Rural</option>
+        </select>
+
+        <label>Govt License Email <span style="color: red">*</span></label>
+        <input
+          type="email"
+          name="license"
+          id="licenseInput"
+          placeholder="ABC123@gov.ac.in"
+          required
+        />
+        <span id="licenseStatus"></span>
+
+        <label>Passport Photo <span style="color: red">*</span></label>
+        <input
+          type="file"
+          name="photo"
+          accept="image/png, image/jpeg"
+          required
+        />
+
+        <button type="submit" class="btn">Send Registration Request</button>
+      </form>
+    </div>
+
+    <!-- Success Popup -->
+    <div id="successPopup" class="success-popup">
+      <div class="success-content">
+        <span id="closeSuccess"></span>
+        <p id="successMessage"></p>
+      </div>
+    </div>
 
     <!-- Feedback Popup -->
-<div id="feedbackPopup" class="feedback-popup">
-  <div class="feedback-content">
-    <span class="close-feedback" id="closeFeedback">&times;</span>
-    <h3>Submit Your Feedback</h3>
-    <form id="feedbackForm">
-      <label for="username">Name:</label>
-      <input type="text" id="username" name="username" placeholder="Enter your name" required>
-      
-      <label for="rating">Rating:</label>
-      <div class="stars">
-        <span class="star" data-value="1">&#9733;</span>
-        <span class="star" data-value="2">&#9733;</span>
-        <span class="star" data-value="3">&#9733;</span>
-        <span class="star" data-value="4">&#9733;</span>
-        <span class="star" data-value="5">&#9733;</span>
+    <div id="feedbackPopup" class="feedback-popup">
+      <div class="feedback-content">
+        <span class="close-feedback" id="closeFeedback">&times;</span>
+
+        <h3>Submit Your Feedback</h3>
+        <br />
+        <form id="feedbackForm">
+          <label>Rating:</label>
+          <div class="stars" aria-label="Rating">
+            <span class="star" data-value="1">&#9733;</span>
+            <span class="star" data-value="2">&#9733;</span>
+            <span class="star" data-value="3">&#9733;</span>
+            <span class="star" data-value="4">&#9733;</span>
+            <span class="star" data-value="5">&#9733;</span>
+          </div>
+
+          <p class="feedback-hint">
+            Share your experience with HealthyLife. You may mention prediction
+            accuracy, doctor consultation quality, or any improvements you'd
+            like to suggest.
+          </p>
+          <br />
+          <label for="review">Your Review:</label>
+          <textarea
+            id="review"
+            name="review"
+            placeholder="Write your feedback or suggestions here..."
+            maxlength="60"
+            required
+          ></textarea>
+          <small id="charCount">0 / 60</small>
+          <button type="submit" class="btn">Submit Feedback</button>
+        </form>
       </div>
+    </div>
 
-      <label for="review">Review:</label>
-      <textarea id="review" name="review" placeholder="Write your feedback..." required></textarea>
+    <!-- Thank You Popup -->
+    <div id="thankYouPopup" class="thankyou-popup">
+      <div class="thankyou-content">
+        <span class="close-thankyou" id="closeThankYou">&times;</span>
+        <h3>Thank You for Your Feedback!</h3>
+        <p>
+          Your feedback has been submitted successfully. We truly appreciate
+          your time and will work on improving our platform.
+        </p>
+      </div>
+    </div>
 
-      <button type="submit" class="btn">Submit Feedback</button>
-    </form>
-  </div>
-</div>
-<!-- Thank You Popup -->
-<div id="thankYouPopup" class="thankyou-popup">
-  <div class="thankyou-content">
-    <span class="close-thankyou" id="closeThankYou">&times;</span>
-    <h3>Thank You!</h3>
-    <p>Your feedback has been submitted successfully.</p>
-  </div>
-</div>
+    <!-- Info Popups -->
+    <div id="aboutPopup" class="info-popup">
+      <div class="info-content">
+        <span class="close-info" data-close="aboutPopup">&times;</span>
+        <h3>About Us</h3>
+        <h4><strong>Disclaimer:</strong></h4>
+        <h6>
+          This platform is for educational and informational purposes only and
+          does not replace professional medical advice, diagnosis, or treatment.
+          Always consult a licensed healthcare provider for medical concerns.
+        </h6>
+        <hr />
+        <br />
+        <p>
+          HealthyLife is your AI-powered health assistant, designed to simplify
+          your healthcare journey. With AI-enabled symptom analysis, instant
+          doctor consultations, pharmacy support, laboratory services, and
+          wellness guidance, we make healthcare accessible and convenient.
+        </p>
+        <p>
+          Our goal is to provide accurate health insights and connect patients
+          with verified healthcare professionals, ensuring safe and efficient
+          support. HealthyLife continuously updates its database to include new
+          treatments, medications, and medical practices.
+        </p>
+      </div>
+    </div>
 
+    <div id="faqPopup" class="info-popup">
+      <div class="info-content">
+        <span class="close-info" data-close="faqPopup">&times;</span>
+        <h3>Frequently Asked Questions</h3>
 
- <!-- Info Popups -->
-<div id="aboutPopup" class="info-popup">
-  <div class="info-content">
-    <span class="close-info" data-close="aboutPopup">&times;</span>
-    <h3>About Us</h3>
-    <h4><strong>Disclaimer:</strong></h4>
-    <h6>This platform is for educational and informational purposes only and does not replace professional medical advice, diagnosis, or treatment. Always consult a licensed healthcare provider for medical concerns.</h6>
-    <hr><br>
-    <p>
-      HealthyLife is your AI-powered health assistant, designed to simplify your healthcare journey. With AI-enabled symptom analysis, instant doctor consultations, pharmacy support, laboratory services, and wellness guidance, we make healthcare accessible and convenient. 
-    </p>
-    <p>
-      Our goal is to provide accurate health insights and connect patients with verified healthcare professionals, ensuring safe and efficient support. HealthyLife continuously updates its database to include new treatments, medications, and medical practices.
-    </p>
-  </div>
-</div>
+        <p>
+          <strong>Q1: How does HealthyLife work?</strong><br />
+          Enter your symptoms, and our AI-powered system provides possible
+          health predictions. You can then consult verified doctors directly
+          through the platform.
+        </p>
 
-<div id="faqPopup" class="info-popup">
-  <div class="info-content">
-    <span class="close-info" data-close="faqPopup">&times;</span>
-    <h3>Frequently Asked Questions</h3>
-    
-    <p>
-      <strong>Q1: How does HealthyLife work?</strong><br>
-      Enter your symptoms, and our AI-powered system provides possible health predictions. You can then consult verified doctors directly through the platform.
-    </p>
+        <p>
+          <strong>Q2: Is my personal and medical information secure?</strong
+          ><br />
+          Yes. We use encrypted databases and follow strict data privacy
+          regulations to ensure your health information is safe and
+          confidential.
+        </p>
 
-    <p>
-      <strong>Q2: Is my personal and medical information secure?</strong><br>
-      Yes. We use encrypted databases and follow strict data privacy regulations to ensure your health information is safe and confidential.
-    </p>
+        <p>
+          <strong>Q3: Can I book appointments with doctors directly?</strong
+          ><br />
+          After receiving AI-based health insights, you can choose a suitable
+          doctor, book a consultation, and receive the consultation link on your
+          registered email ID. You can then connect through our secure online
+          video calling system for a smooth tele-consultation experience.
+        </p>
 
-    <p>
-      <strong>Q3: Can I book appointments with doctors directly?</strong><br>
-      After receiving AI-based health insights, you can choose a suitable doctor, book a consultation, and receive the consultation link on your registered email ID. You can then connect through our secure online video calling system for a smooth tele-consultation experience.
-    </p>
+        <p>
+          <strong>Q4: Can doctors register on the platform?</strong><br />
+          Yes, verified healthcare professionals can register to offer services
+          in their city. Contact us via email or phone for registration details.
+        </p>
 
-    <p>
-      <strong>Q4: Can doctors register on the platform?</strong><br>
-      Yes, verified healthcare professionals can register to offer services in their city. Contact us via email or phone for registration details.
-    </p>
+        <p>
+          <strong>Q5: How can I suggest improvements or report issues?</strong
+          ><br />
+          You can reach out to us via
+          <a href="mailto:healthylife.attar@gmail.com"
+            >healthylife.attar.@gmail.com</a
+          >
+          or call +91-8088944535. We value user feedback and continuously work
+          to improve the platform.
+        </p>
 
-    <p>
-      <strong>Q5: How can I suggest improvements or report issues?</strong><br>
-      You can reach out to us via <a href="mailto:healthylife.attar@gmail.com">healthylife.attar.@gmail.com</a> or call +91-8088944535. We value user feedback and continuously work to improve the platform.
-    </p>
-    
-    <p>
-      <strong>Q6: Is HealthyLife a substitute for professional medical care?</strong><br>
-      No. HealthyLife is designed for educational and guidance purposes. Always consult a licensed healthcare provider for diagnosis and treatment.
-    </p>
-  </div>
-</div>
+        <p>
+          <strong
+            >Q6: Is HealthyLife a substitute for professional medical
+            care?</strong
+          ><br />
+          No. HealthyLife is designed for educational and guidance purposes.
+          Always consult a licensed healthcare provider for diagnosis and
+          treatment.
+        </p>
+      </div>
+    </div>
 
-
-<div id="supportPopup" class="info-popup">
-  <div class="info-content">
-    <span class="close-info" data-close="supportPopup">&times;</span>
-    <h3>Support</h3>
-    <p>
-      If you face any issues, contact us at <a href="mailto:healthylife.attar@gmail.com">healthylife.attar@gmail.com</a> or call +91-8088944535.
-    </p>
-    <br><hr><br>
-    <p>
-      <b>If you want to register your city, add local doctors, or have suggestions for platform improvement, please contact us through the same email or phone number. We welcome collaborations to expand our healthcare network.</b>
-    </p>
-  </div>
-</div>
+    <div id="supportPopup" class="info-popup">
+      <div class="info-content">
+        <span class="close-info" data-close="supportPopup">&times;</span>
+        <h3>Support</h3>
+        <p>
+          If you face any issues, contact us at
+          <a href="mailto:healthylife.attar@gmail.com"
+            >healthylife.attar@gmail.com</a
+          >
+          or call +91-8088944535.
+        </p>
+        <br />
+        <hr />
+        <br />
+        <p>
+          <b
+            >If you want to register your city, add local doctors, or have
+            suggestions for platform improvement, please contact us through the
+            same email or phone number. We welcome collaborations to expand our
+            healthcare network.</b
+          >
+        </p>
+      </div>
+    </div>
     <!-- JS FILES -->
     <script
       src="{{ url_for('static', filename='js/index.js') }}"
