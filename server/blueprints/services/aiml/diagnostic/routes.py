@@ -1,14 +1,14 @@
 from flask import Blueprint, render_template, request, jsonify
 from server.blueprints.services.aiml.diagnostic.service import DiagnosticService
 
-diagnostic_bp = Blueprint("diagnostic_bp", __name__, url_prefix="/diagnostic")
+diagnostic = Blueprint("diagnostic_bp", __name__, url_prefix="/diagnostic")
 
-@diagnostic_bp.route("/", methods=["GET"])
+@diagnostic.route("/", methods=["GET"])
 def page():
     return render_template("diagnostic.html")
 
 
-@diagnostic_bp.route("/predict", methods=["POST"])
+@diagnostic.route("/predict", methods=["POST"])
 def predict():
     try:
         data = request.get_json()

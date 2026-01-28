@@ -197,90 +197,122 @@
 
 </div>
 
-    <!-- Doctor Registration Popup -->
-    <div id="doctorPopup" class="doctor-popup">
-      <div class="doctor-header">
-        <h3>Doctor Registration Form</h3>
-        <span id="closeDoctor">&times;</span>
-      </div>
+   <!-- Doctor Registration Popup -->
+<div id="doctorPopup" class="doctor-popup">
+  <div class="doctor-header">
+    <h3>Doctor Registration Form</h3>
+    <span id="closeDoctor">&times;</span>
+  </div>
 
-      <form id="doctorForm" class="doctor-form" enctype="multipart/form-data">
-        <label>Full Name <span style="color: red">*</span></label>
-        <input type="text" name="name" placeholder="Dr. John Doe" required />
+  <form
+    id="doctorForm"
+    class="doctor-form"
+    enctype="multipart/form-data"
+  >
+    <label>Full Name <span style="color: red">*</span></label>
+    <input type="text" name="name" placeholder="Dr. John Doe" required />
 
-        <label>Phone Number <span style="color: red">*</span></label>
-        <input type="tel" name="phone" placeholder="+91 9876543210" required />
+    <label>Phone Number <span style="color: red">*</span></label>
+    <input type="tel" name="phone" placeholder="+91 9876543210" required />
 
-        <label>Email <span style="color: red">*</span></label>
-        <input
-          type="email"
-          name="email"
-          placeholder="doctor@example.com"
-          required
-        />
+    <label>Email <span style="color: red">*</span></label>
+    <input type="email" name="email" placeholder="doctor@example.com" required />
 
-        <label>Experience (Years) <span style="color: red">*</span></label>
-        <input
-          type="number"
-          name="experience"
-          placeholder="e.g. 10"
-          min="0"
-          required
-        />
+    <label>Experience (Years) <span style="color: red">*</span></label>
+    <input type="number" name="experience" placeholder="e.g. 10" min="0" required />
 
-        <label>Specialization <span style="color: red">*</span></label>
-        <input
-          type="text"
-          name="specialization"
-          placeholder="e.g. general surgeon"
-          required
-        />
+    <label>Specialization <span style="color: red">*</span></label>
+    <input type="text" name="specialization" placeholder="e.g. General Surgeon" required />
 
-        <label>Services Provided <span style="color: red">*</span></label>
-        <textarea
-          name="services"
-          placeholder="e.g. General Checkups, ECG, Surgery"
-          required
-        ></textarea>
+    <label>Services Provided <span style="color: red">*</span></label>
+    <textarea
+      name="services"
+      placeholder="e.g. General Checkups, ECG, Surgery"
+      required
+    ></textarea>
 
-        <label>Clinic/Hospital <span style="color: red">*</span></label>
-        <input
-          type="text"
-          name="clinic"
-          placeholder="e.g. Apollo Hospital"
-          required
-        />
+    <label>Clinic/Hospital <span style="color: red">*</span></label>
+    <input type="text" name="clinic" placeholder="e.g. Apollo Hospital" required />
 
-        <label>HOSPITAL Location <span style="color: red">*</span></label>
-        <select name="location" id="doctorLocation" required>
-          <option value="">Select City</option>
-          <option value="Bangalore South">Bangalore South</option>
-          <option value="Bangalore North">Bangalore North</option>
-          <option value="Bangalore Urban">Bangalore Urban</option>
-          <option value="Bangalore Rural">Bangalore Rural</option>
-        </select>
+    <label>Hospital Location <span style="color: red">*</span></label>
+    <select name="location" id="doctorLocation" required>
+      <option value="">Select City</option>
+      <option value="Bangalore Rural">Bangaluru</option>
+      <option value="Bangalore Urban">Bangalore Urban</option>
+      <option value="Bangalore Rural">Bangalore Rural</option>
+      <option value="Bangalore South">Pune</option>
+      <option value="Bangalore North">Mumbai</option>
+      <option value="Bangalore Rural">Hyderabad</option>
+    </select>
 
-        <label>Govt License Email <span style="color: red">*</span></label>
-        <input
-          type="email"
-          name="license"
-          id="licenseInput"
-          placeholder="ABC123@gov.ac.in"
-          required
-        />
-        <span id="licenseStatus"></span>
+    <label>Govt License Email <span style="color: red">*</span></label>
+    <input
+      type="email"
+      name="license"
+      id="licenseInput"
+      placeholder="Fake id not acepted !"
+      required
+    />
+    <span id="licenseStatus"></span>
 
-        <label>Passport Photo <span style="color: red">*</span></label>
-        <input
-          type="file"
-          name="photo"
-          accept="image/png, image/jpeg"
-          required
-        />
+    <!-- UPDATED PHOTO LABEL -->
+    <label>
+      Recent Original Photo (For Verification)
+      <span style="color: red">*</span>
+    </label>
+    <input
+      type="file"
+      name="photo"
+      accept="image/png, image/jpeg"
+      required
+    />
 
-        <button type="submit" class="btn">Send Registration Request</button>
-      </form>
+    <!-- AGREEMENT SECTION -->
+    <div class="agreement-box">
+      <label class="agreement-label">
+        <input type="checkbox" id="doctorAgreement" />
+        <span>
+
+          <p>
+            <strong>Accuracy of Information:</strong>
+            I confirm that all the information provided by me is
+            <strong>true, accurate, and complete</strong>.
+          </p>
+
+          <p>
+            <strong>Education & Qualification:</strong>
+            I declare that my medical education and professional
+            qualifications have been <strong>completed in India</strong>
+            and are valid as per applicable authorities.
+          </p>
+
+          <p>
+            <strong>Verification & Approval:</strong>
+            I understand that my registration will undergo
+            <strong>internal verification</strong> and may be
+            <strong>approved or rejected</strong>. Submission of
+            <strong>false or forged documents</strong> may lead to rejection
+            or removal from the platform.
+          </p>
+
+          <p>
+            <strong>Data Sharing & Payments:</strong>
+            I consent to sharing my professional information with
+            authorized internal teams and trusted partners for verification
+            and service delivery. I agree to the platform’s
+            <strong>internal payment and revenue-sharing policies</strong>,
+            including applicable commissions.
+          </p>
+
+        </span>
+      </label>
     </div>
+
+    <button type="submit" class="btn">
+      Send Registration Request
+    </button>
+  </form>
+</div>
 
     <!-- Success Popup -->
     <div id="successPopup" class="success-popup">

@@ -428,7 +428,7 @@ body.popup-open::before {
   border-radius: 10px;
   padding: 18px 20px 18px 50px;
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.25);
-  width: 800px;
+  width: 700px;
   font-size: 15px;
   display: none;
   z-index: 4000;
@@ -561,7 +561,7 @@ h6{
   margin-bottom: 10px;
   font-size: 16px;
   font-weight: 600;
-  color: #333; /* ensures visible on white background */
+  color: #333; 
   display: block;
   text-align: center;
 }

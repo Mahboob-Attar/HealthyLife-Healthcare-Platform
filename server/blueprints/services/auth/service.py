@@ -54,10 +54,7 @@ def auth_signup(data):
         "msg": "Account created successfully"
     }), 200
 
-
-# ==========================
 # LOGIN (USER / ADMIN)
-# ==========================
 def auth_login(data):
     email = data.get("email")
     password = data.get("password")
@@ -101,9 +98,7 @@ def auth_login(data):
     }), 200
 
 
-# ==========================
 # RESET PASSWORD
-# ==========================
 def reset_password(data):
     email = data.get("email")
     password = data.get("password")

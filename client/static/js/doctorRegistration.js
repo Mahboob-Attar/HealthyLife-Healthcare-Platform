@@ -47,11 +47,17 @@ licenseInput?.addEventListener("input", () => {
   }, 2500);
 });
 
-// =======================
 // FORM SUBMIT (FIXED URL)
-// =======================
 doctorForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
+
+  // ✅ AGREEMENT CHECK (ADD HERE)
+  const agree = document.getElementById("doctorAgreement");
+  if (!agree || !agree.checked) {
+    alert("⚠️ Please accept the agreement before submitting the registration.");
+    return;
+  }
+
   const formData = new FormData(doctorForm);
 
   if (formData.has("location")) {
@@ -80,7 +86,7 @@ doctorForm?.addEventListener("submit", async (e) => {
   }
 
   try {
-    const response = await fetch("/doctors/register", {   // ✅ FIX HERE
+    const response = await fetch("/doctors/register", {
       method: "POST",
       body: formData,
     });
@@ -91,7 +97,7 @@ doctorForm?.addEventListener("submit", async (e) => {
       doctorForm.reset();
       licenseStatus.textContent = "";
       successMessage.innerHTML =
-        "✅ Request sent successfully! Our team will verify your details for more update Active in your Inbox.";
+        "✅ Request sent successfully! Our team will verify your details and update you via email.";
       successPopup.classList.add("show");
 
       setTimeout(() => successPopup.classList.remove("show"), 7000);
@@ -104,6 +110,7 @@ doctorForm?.addEventListener("submit", async (e) => {
     alert("⚠️ Server error. Please try again.");
   }
 });
+
 
 closeSuccess?.addEventListener("click", () =>
   successPopup.classList.remove("show")

@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, jsonify, session, redirect
 from server.blueprints.services.admin.service import AdminService
 
-admin_bp = Blueprint("admin_bp", __name__, url_prefix="/admin")
+admin = Blueprint("admin_bp", __name__, url_prefix="/admin")
 
 # ---------------- AUTH GUARD ----------------
 def admin_required():
@@ -9,7 +9,7 @@ def admin_required():
 
 
 # ---------------- DASHBOARD PAGE ----------------
-@admin_bp.route("/dashboard")
+@admin.route("/dashboard")
 def dashboard_page():
     if not admin_required():
         return redirect("/")
@@ -17,7 +17,7 @@ def dashboard_page():
 
 
 # ---------------- DASHBOARD DATA (AJAX) ----------------
-@admin_bp.route("/dashboard/data")
+@admin.route("/dashboard/data")
 def dashboard_data():
     if not admin_required():
         return jsonify({"success": False, "message": "Unauthorized"}), 403
@@ -31,7 +31,7 @@ def dashboard_data():
 
 
 # ---------------- FEEDBACK RATINGS DATA ----------------
-@admin_bp.route("/dashboard/ratings")
+@admin.route("/dashboard/ratings")
 def feedback_ratings_data():
     if not admin_required():
         return jsonify({"success": False, "message": "Unauthorized"}), 403
@@ -45,7 +45,7 @@ def feedback_ratings_data():
 
 
 # ---------------- ADMIN REVIEWS PAGE ----------------
-@admin_bp.route("/dashboard/reviews")
+@admin.route("/dashboard/reviews")
 def admin_reviews():
     if not admin_required():
         return redirect("/")
@@ -58,8 +58,8 @@ def admin_reviews():
         return "Database connection error"
 
 
-# # ---------------- LOGOUT (OPTIONAL) ----------------
-# @admin_bp.route("/logout", methods=["POST"])
-# def admin_logout():
-#     session.clear()
-#     return jsonify({"success": True, "message": "Logged out"}), 200
+# # ---------------- LOGOUT ----------------
+@admin.route("/logout", methods=["POST"])
+def admin_logout():
+    session.clear()
+    return jsonify({"success": True, "message": "Logged out"}), 200

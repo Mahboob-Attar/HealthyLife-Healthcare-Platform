@@ -20,9 +20,7 @@ class DoctorService:
     @staticmethod
     def register(request):
         try:
-            # -------------------------
             # Form data
-            # -------------------------
             name = request.form.get("name")
             phone = request.form.get("phone")
             email = request.form.get("email")
@@ -36,15 +34,17 @@ class DoctorService:
 
             user_id = request.form.get("user_id")  # optional
 
-            # -------------------------
             # Validation
-            # -------------------------
             if not all([
                 name, phone, email, license_email,
                 specialization, experience, clinic,
                 location, services, photo
             ]):
-                return {"success": False, "message": "Missing required fields", "status": 400}
+                return {
+                    "success": False,
+                    "message": "Missing required fields",
+                    "status": 400
+                }
 
             if DoctorModel.find_by_email(email):
                 return {"success": False, "message": "Email already registered", "status": 409}
@@ -55,9 +55,7 @@ class DoctorService:
             if DoctorModel.find_by_license(license_email):
                 return {"success": False, "message": "License already registered", "status": 409}
 
-            # -------------------------
             # Image validation
-            # -------------------------
             if "." not in photo.filename:
                 return {"success": False, "message": "Invalid image file", "status": 400}
 
@@ -67,12 +65,11 @@ class DoctorService:
 
             os.makedirs(UPLOAD_FOLDER, exist_ok=True)
             filename = secure_filename(f"{uuid.uuid4().hex}.{ext}")
-            photo.save(os.path.join(UPLOAD_FOLDER, filename))
+            photo_path = os.path.join(UPLOAD_FOLDER, filename)
+            photo.save(photo_path)
 
-            # -------------------------
-            # Save to DB
-            # -------------------------
-            DoctorModel.create({
+            # Save to DB (CRITICAL)
+            created = DoctorModel.create({
                 "user_id": user_id,
                 "name": name,
                 "phone": phone,
@@ -86,9 +83,19 @@ class DoctorService:
                 "photo_path": filename
             })
 
-            # -------------------------
+            if not created:
+                # rollback file if DB insert failed
+                if os.path.exists(photo_path):
+                    os.remove(photo_path)
+
+                return {
+                    "success": False,
+                    "message": "Doctor registration failed",
+                    "status": 500
+                }
+
+           
             # Send confirmation email
-            # -------------------------
             html = render_template(
                 "emails/doctor_registration_email.html",
                 doctor_name=name,
@@ -113,4 +120,8 @@ class DoctorService:
 
         except Exception as e:
             print("❌ DoctorService.register Error:", e)
-            return {"success": False, "message": "Server Error", "status": 500}
+            return {
+                "success": False,
+                "message": "Internal Server Error",
+                "status": 500
+            }

@@ -1,13 +1,13 @@
 from flask import Blueprint, request, jsonify, session
 from server.blueprints.services.feedback.service import FeedbackService
 
-feedback_bp = Blueprint("feedback_bp", __name__, url_prefix="/feedback")
+feedback = Blueprint("feedback_bp", __name__, url_prefix="/feedback")
 
 
-@feedback_bp.route("/submit", methods=["POST"])
+@feedback.route("/submit", methods=["POST"])
 def submit_feedback():
     try:
-        # 🔒 User must be logged in
+        # User must be logged in
         if not session.get("logged_in"):
             return jsonify({
                 "success": False,
@@ -18,7 +18,7 @@ def submit_feedback():
         rating = data.get("rating")
         review = data.get("review", "").strip()
 
-        # ✅ Basic validation
+        # Basic validation
         if not rating or not review:
             return jsonify({
                 "success": False,
@@ -31,7 +31,7 @@ def submit_feedback():
                 "message": "Review must be within 60 characters"
             }), 400
 
-        # 🔐 Session-based identity
+        # Session-based identity
         user_id = session.get("user_id")
 
         FeedbackService.store(

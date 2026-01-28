@@ -4,7 +4,7 @@ from server.config.db import get_connection
 class DoctorModel:
     """
     Handles all database operations related to doctors.
-    Layered architecture: Model = DB only.
+    Model layer = DB only.
     """
 
     # Check email exists
@@ -12,47 +12,38 @@ class DoctorModel:
     def find_by_email(email: str) -> bool:
         conn = get_connection()
         cur = conn.cursor()
-
-        cur.execute(
-            "SELECT 1 FROM doctors WHERE email=%s LIMIT 1",
-            (email,)
-        )
-
+        cur.execute("SELECT 1 FROM doctors WHERE email=%s LIMIT 1", (email,))
         exists = cur.fetchone() is not None
-
         cur.close()
         conn.close()
         return exists
 
-    # Check license
+    # Check license email exists
     @staticmethod
     def find_by_license(license_email: str) -> bool:
         conn = get_connection()
         cur = conn.cursor()
-        cur.execute("SELECT 1 FROM doctors WHERE license_email=%s LIMIT 1", (license_email,))
+        cur.execute(
+            "SELECT 1 FROM doctors WHERE license_email=%s LIMIT 1",
+            (license_email,)
+        )
         exists = cur.fetchone() is not None
         cur.close()
         conn.close()
         return exists
 
-    # check mobile phone
+    # Check phone exists
     @staticmethod
     def find_by_phone(phone: str) -> bool:
         conn = get_connection()
         cur = conn.cursor()
-
-        cur.execute(
-            "SELECT 1 FROM doctors WHERE phone=%s LIMIT 1",
-            (phone,)
-        )
-
+        cur.execute("SELECT 1 FROM doctors WHERE phone=%s LIMIT 1", (phone,))
         exists = cur.fetchone() is not None
         cur.close()
         conn.close()
         return exists
 
-
-    # Create doctor
+    # Create doctor (FIXED)
     @staticmethod
     def create(data: dict) -> bool:
         conn = get_connection()
@@ -61,8 +52,18 @@ class DoctorModel:
         try:
             sql = """
                 INSERT INTO doctors
-                (name, phone, email, experience, specialization, services,
-                 clinic, location, photo_path, created_at)
+                (
+                    name,
+                    phone,
+                    email,
+                    license_email,
+                    specialization,
+                    experience,
+                    clinic,
+                    location,
+                    services,
+                    photo_path
+                )
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """
 
@@ -70,13 +71,13 @@ class DoctorModel:
                 data["name"],
                 data["phone"],
                 data["email"],
-                data.get("experience"),
+                data["license_email"],
                 data["specialization"],
-                data.get("services"),
-                data.get("clinic"),
-                data.get("location"),
-                data["photo_path"],
-                data["created_at"]
+                data["experience"],
+                data["clinic"],
+                data["location"],
+                data["services"],
+                data["photo_path"]
             ))
 
             conn.commit()
@@ -92,7 +93,6 @@ class DoctorModel:
             conn.close()
 
     # Get all doctors (public list)
-   
     @staticmethod
     def get_all():
         conn = get_connection()
@@ -107,11 +107,11 @@ class DoctorModel:
                 location,
                 photo_path
             FROM doctors
+            WHERE status = 'approved'
             ORDER BY created_at DESC
         """)
 
         doctors = cur.fetchall()
-
         cur.close()
         conn.close()
         return doctors

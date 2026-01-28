@@ -5,10 +5,8 @@ from server.blueprints.services.doctors.service import DoctorService
 doctors = Blueprint("doctors_bp", __name__, url_prefix="/doctors")
 
 
-# ---------------------------------------------------------
 # Serve doctor profile images
 # URL Example: /doctors/image/somefile.jpg
-# ---------------------------------------------------------
 @doctors.route("/image/<filename>")
 def doctor_image(filename):
     try:
@@ -19,10 +17,8 @@ def doctor_image(filename):
         return "Image not found", 404
 
 
-# ---------------------------------------------------------
 # Register Doctor (POST)
 # URL: /doctors/register
-# ---------------------------------------------------------
 @doctors.route("/register", methods=["POST"])
 def register_doctor():
     try:
@@ -36,10 +32,8 @@ def register_doctor():
         return jsonify({"success": False, "message": "Server Error"}), 500
 
 
-# ---------------------------------------------------------
 # Get All Doctors (GET)
 # URL: /doctors/all
-# ---------------------------------------------------------
 @doctors.route("/all", methods=["GET"])
 def get_doctors():
     try:
@@ -49,11 +43,8 @@ def get_doctors():
         print("❌ Get Doctors Error:", e)
         return jsonify({"success": False, "message": "Server Error"}), 500
 
-
-# ---------------------------------------------------------
-# OPTIONAL: Check Email Exists (GET)
+#  Check Email Exists (GET)
 # URL: /doctors/check-email?email=...
-# ---------------------------------------------------------
 @doctors.route("/check-email", methods=["GET"])
 def check_email():
     try:
@@ -65,10 +56,8 @@ def check_email():
         return jsonify({"exists": False}), 500
 
 
-# ---------------------------------------------------------
-# OPTIONAL: Check Phone Exists (GET)
+# Check Phone Exists (GET)
 # URL: /doctors/check-phone?phone=...
-# ---------------------------------------------------------
 @doctors.route("/check-phone", methods=["GET"])
 def check_phone():
     try:
