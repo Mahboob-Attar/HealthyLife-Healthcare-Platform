@@ -26,9 +26,18 @@ def create_and_send_otp(email, purpose="signup"):
         cur.close()
         conn.close()
 
-        html_body = render_template("emails/otp_email.html", otp=otp)
+        # choose template + subject by purpose
+        if purpose == "reset":
+            template = "emails/resetotp_email.html"
+            subject = "HealthyLife Password Reset OTP"
+        else:
+            template = "emails/otp_email.html"
+            subject = "HealthyLife Verification OTP"
 
-        send_email_html(email, "HealthyLife Verification OTP", html_body)
+        html_body = render_template(template, otp=otp)
+
+        send_email_html(email, subject, html_body)
+
 
         return {"status": "success", "msg": "OTP sent"}
 
@@ -64,4 +73,4 @@ def verify_otp(email, otp, purpose="signup"):
     cur.close()
     conn.close()
 
-    return {"status": "success", "msg": "OTP verified"}
+    return {"status": "success", "msg": "OTP verified"} 

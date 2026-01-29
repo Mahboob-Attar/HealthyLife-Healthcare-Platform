@@ -10,32 +10,35 @@ function closeAuthPopup() {
   document.getElementById("authMasterPopup").style.display = "none";
 }
 
-/* NAVIGATION*/
-function openLogin() {
-  showBox("userLoginBox");
-}
-function openForgotPassword() {
-  showBox("forgotBox");
-}
-function openAdminLogin() {
-  showBox("adminLoginBox");
-}
-function openSignup() {
-  showBox("userSignupBox");
+function showRoleBox() {
+  showBox("roleBox");
 }
 
-/* EMAIL VALIDATION*/
+function selectRole(role) {
+  if (role === "user") openSignup();
+  else openAdminLogin();
+}
+
+/* NAVIGATION*/
+
+function openLogin() { showBox("userLoginBox"); }
+function openForgotPassword() { showBox("forgotBox"); }
+function openAdminLogin() { showBox("adminLoginBox"); }
+function openSignup() { showBox("userSignupBox"); }
+
+/*EMAIL VALIDATION*/
 function validateEmail(email) {
   return /\S+@\S+\.\S+/.test(email);
 }
 
-/* OTP FIELD SETUP*/
+/*  OTP FIELD SETUP*/
 function setupOtpField(emailId, buttonId) {
   const emailInput = document.getElementById(emailId);
   const sendBtn = document.getElementById(buttonId);
   if (!emailInput || !sendBtn) return;
 
   sendBtn.disabled = true;
+
   emailInput.addEventListener("input", () => {
     sendBtn.disabled = !validateEmail(emailInput.value.trim());
   });
@@ -58,40 +61,68 @@ async function api(url, method = "POST", data = {}) {
 /* OTP STATE */
 let otpVerified = false;
 
-function showVerified() {
+function showVerified(inputId) {
   otpVerified = true;
-  const input = document.getElementById("u_otp");
+  const input = document.getElementById(inputId);
+  if (!input) return;
+
   input.style.border = "2px solid #28a745";
   input.style.color = "#28a745";
   input.style.fontWeight = "bold";
 }
 
-/* SEND OTP */
+/*SEND OTP (AUTO MODE)Works for signup + reset*/
+
 async function sendOTP() {
-  const email = u_email.value;
+  const signupVisible =
+    document.getElementById("userSignupBox").style.display === "flex";
+
+  const forgotVisible =
+    document.getElementById("forgotBox").style.display === "flex";
+
+  let email = "";
+  let purpose = "signup";
+
+  if (signupVisible) {
+    email = u_email.value.trim();
+    purpose = "signup";
+  }
+
+  if (forgotVisible) {
+    email = fp_email.value.trim();
+    purpose = "reset";
+  }
+
   if (!validateEmail(email)) return alert("Enter valid email!");
 
   const res = await api("/auth/send-otp", "POST", {
     email,
-    purpose: "signup",
+    purpose,
   });
+
   alert(res.msg);
 }
 
-/* USER SIGNUP */
+/* SER SIGNUP */
+
 async function userSignup() {
-  const name = u_name.value;
-  const email = u_email.value;
-  const otp = u_otp.value;
+  const name = u_name.value.trim();
+  const email = u_email.value.trim();
+  const otp = u_otp.value.trim();
   const pass = u_pass.value;
 
   if (!name || !email || !otp || !pass)
     return alert("All fields required!");
 
   if (!otpVerified) {
-    const v = await api("/auth/verify-otp", "POST", { email, otp });
+    const v = await api("/auth/verify-otp", "POST", {
+      email,
+      otp,
+      purpose: "signup",
+    });
+
     if (v.status !== "success") return alert(v.msg);
-    showVerified();
+    showVerified("u_otp");
   }
 
   const res = await api("/auth/signup", "POST", {
@@ -106,8 +137,11 @@ async function userSignup() {
 
 /* USER LOGIN */
 async function userLogin() {
-  const email = ul_email.value;
+  const email = ul_email.value.trim();
   const pass = ul_pass.value;
+
+  if (!email || !pass)
+    return alert("Email & password required");
 
   const res = await api("/auth/login", "POST", {
     email,
@@ -120,10 +154,11 @@ async function userLogin() {
   window.location.href = "/";
 }
 
-/* ADMIN LOGIN*/
+/*  ADMIN LOGIN*/
+
 async function adminLogin() {
   const res = await api("/admin/login", "POST", {
-    email: a_email.value,
+    email: a_email.value.trim(),
     password: a_pass.value,
   });
 
@@ -131,7 +166,30 @@ async function adminLogin() {
   window.location.href = "/admin/dashboard";
 }
 
-/* NAVBAR USER AVATAR*/
+/* RESET PASSWORD (MATCHES HTML)*/
+async function resetPassword() {
+  const email = fp_email.value.trim();
+  const otp = fp_otp.value.trim();
+  const pass = fp_pass.value;
+
+  if (!email || !otp || !pass)
+    return alert("All fields required!");
+
+  const res = await api("/auth/reset", "POST", {
+    email,
+    otp,
+    password: pass,
+  });
+
+  alert(res.msg);
+
+  if (res.status === "success") {
+    otpVerified = false;
+    openLogin();
+  }
+}
+
+/* NAVBAR USER AVATAR */
 function initUserNavbar() {
   const user = localStorage.getItem("user_name");
   const menuIcon = document.getElementById("menuIcon");
@@ -139,10 +197,12 @@ function initUserNavbar() {
   const avatar = document.getElementById("navUserAvatar");
   const dropdown = document.getElementById("userDropdown");
 
+  if (!avatar) return;
+
   if (user) {
     avatar.innerText = user.charAt(0).toUpperCase();
-    menuIcon.style.display = "none";
-    userContainer.style.display = "flex";
+    if (menuIcon) menuIcon.style.display = "none";
+    if (userContainer) userContainer.style.display = "flex";
   }
 
   avatar.onclick = () => {
@@ -151,7 +211,8 @@ function initUserNavbar() {
   };
 
   document.addEventListener("click", (e) => {
-    if (!userContainer.contains(e.target)) dropdown.style.display = "none";
+    if (userContainer && !userContainer.contains(e.target))
+      dropdown.style.display = "none";
   });
 }
 
@@ -161,7 +222,7 @@ function logoutUser() {
   window.location.href = "/";
 }
 
-/* INIT */
+/*INIT */
 document.addEventListener("DOMContentLoaded", () => {
   setupOtpField("u_email", "u_send_btn");
   setupOtpField("fp_email", "fp_send_btn");

@@ -3,11 +3,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from server.config.db import get_connection
 from server.config.email import send_email_html
 from datetime import datetime
+from .otp_service import verify_otp as verify_otp_service
 
 
-# ==========================
-# SIGNUP (USER ONLY)
-# ==========================
+# SIGNUP (USER ONLY
 def auth_signup(data):
     name = data.get("name")
     email = data.get("email")
@@ -32,9 +31,9 @@ def auth_signup(data):
 
     # Insert normal user (not admin)
     cur.execute("""
-        INSERT INTO users (name, email, password_hash, is_admin)
-        VALUES (%s, %s, %s, 0)
-    """, (name, email, hashed_pass))
+        INSERT INTO users (name, email, password_hash, is_admin,email_verified)
+        VALUES (%s, %s, %s, 0,1)
+    """, (name, email, hashed_pass,))
 
     conn.commit()
     cur.close()
@@ -98,18 +97,30 @@ def auth_login(data):
     }), 200
 
 
-# RESET PASSWORD
 def reset_password(data):
     email = data.get("email")
     password = data.get("password")
+    otp = data.get("otp")
 
-    if not email or not password:
-        return jsonify({"status": "error", "msg": "Email & new password required"}), 400
+    if not email or not password or not otp:
+        return jsonify({
+            "status": "error",
+            "msg": "Email, OTP & new password required"
+        }), 400
 
     email = email.strip().lower()
 
     if len(password) < 6:
-        return jsonify({"status": "error", "msg": "Password must be at least 6 characters"}), 400
+        return jsonify({
+            "status": "error",
+            "msg": "Password must be at least 6 characters"
+        }), 400
+
+    # VERIFY OTP FOR RESET PURPOSE
+    otp_result = verify_otp_service(email, otp, purpose="reset")
+
+    if otp_result["status"] != "success":
+        return jsonify(otp_result), 400
 
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
@@ -118,7 +129,10 @@ def reset_password(data):
     if not cur.fetchone():
         cur.close()
         conn.close()
-        return jsonify({"status": "error", "msg": "Email not found"}), 404
+        return jsonify({
+            "status": "error",
+            "msg": "Email not found"
+        }), 404
 
     hashed_pass = generate_password_hash(password)
 
@@ -126,8 +140,8 @@ def reset_password(data):
         "UPDATE users SET password_hash=%s WHERE email=%s",
         (hashed_pass, email)
     )
-    conn.commit()
 
+    conn.commit()
     cur.close()
     conn.close()
 
