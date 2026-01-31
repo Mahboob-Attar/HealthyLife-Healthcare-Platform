@@ -3,7 +3,6 @@ from server.blueprints.services.feedback.service import FeedbackService
 
 feedback = Blueprint("feedback_bp", __name__, url_prefix="/feedback")
 
-
 @feedback.route("/submit", methods=["POST"])
 def submit_feedback():
     try:

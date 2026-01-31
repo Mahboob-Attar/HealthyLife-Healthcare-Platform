@@ -1,6 +1,5 @@
 from server.blueprints.services.feedback.model import FeedbackModel
 
-
 class FeedbackService:
 
     @staticmethod

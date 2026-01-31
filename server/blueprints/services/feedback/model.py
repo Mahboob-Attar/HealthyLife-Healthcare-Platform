@@ -1,6 +1,5 @@
 from server.config.db import get_connection
 
-
 class FeedbackModel:
 
     @staticmethod

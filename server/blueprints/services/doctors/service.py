@@ -10,7 +10,6 @@ from server.config.email import send_email_html
 UPLOAD_FOLDER = "uploads/doctors"
 ALLOWED_EXT = {"png", "jpg", "jpeg", "gif"}
 
-
 class DoctorService:
 
     @staticmethod
@@ -93,7 +92,6 @@ class DoctorService:
                     "message": "Doctor registration failed",
                     "status": 500
                 }
-
            
             # Send confirmation email
             html = render_template(
