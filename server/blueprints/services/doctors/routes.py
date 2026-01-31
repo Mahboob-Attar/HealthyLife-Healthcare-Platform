@@ -22,7 +22,7 @@ def doctor_image(filename):
 @doctors.route("/register", methods=["POST"])
 def register_doctor():
     try:
-        response = DoctorService.register(request)  # returns dict with 'status'
+        response = DoctorService.register(request) 
         return jsonify({
             "success": response.get("success"),
             "message": response.get("message")
