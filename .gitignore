@@ -25,12 +25,10 @@ build/
 .idea/
 *.swp
 
-
 # Temporary files
 tempCodeRunnerFile.py
 *.tmp
 *~ 
-
 # Flask session storage
 flask_session/
 
