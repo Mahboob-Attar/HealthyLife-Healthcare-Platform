@@ -32,7 +32,7 @@ tempCodeRunnerFile.py
 *~ 
 
 # Flask session storage
-flask_session
+flask_session/
 
 # Uploaded files (doctor profiles, reports, etc.)
-uploads
+uploads/
