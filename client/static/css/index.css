@@ -64,8 +64,10 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 50px;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
+  overflow: hidden;
 }
+
 
 /* Left Content */
 .hero-text {
@@ -88,7 +90,7 @@ body {
 /* Button */
 .btn {
   padding: 12px 28px;
-  margin: 8px 8px 16px 8px; 
+  margin: 8px 8px 8px 8px; 
   border: none;
   border-radius: 25px;
   background: #fff;
@@ -99,6 +101,7 @@ body {
   transition: all 0.3s ease-in-out;
   display: inline-block;
 }
+
 
 .btn:hover {
   background: #1e3eff;
@@ -142,6 +145,7 @@ body {
 /* Chatbot Image */
 .chatbot-img {
   width: 120px;
+  height: 100px;
   animation: chatbotDance 3s ease-in-out infinite;
   transition: transform 0.3s ease-in-out;
   object-fit: cover;

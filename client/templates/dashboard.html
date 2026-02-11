@@ -19,7 +19,7 @@
         <li><a href="{{ url_for('home.index') }}">HOME</a></li>
         <li><a href="{{ url_for('diagnostic_bp.page') }}">DIAGNOSTIC</a></li>
         <li><a href="{{ url_for('appointments.appointment_page') }}">APPOINTMENT</a></li>
-        <li><a href="{{ url_for('admin_bp.dashboard_page') }}" class="active">DASHBOARD</a></li>
+        <li><a href="{{ url_for('dashboard.dashboard_page') }}" class="active">DASHBOARD</a></li>
       </ul>
     </nav>
   </header>
@@ -54,6 +54,56 @@
       </div>
     </div>
   </div>
+
+ <!-- ===== USER ONLY SECTION ===== -->
+  
+    {% if not is_admin %}
+
+    <section class="platform-expertise">
+
+        <h2 class="section-title">Our Medical Expertise</h2>
+
+        <div class="expertise-grid">
+
+            <div class="expert-card">
+                <img src="{{ url_for('static', filename='assets/general.png') }}">
+                <h3>General Consultation</h3>
+                <p>30+ experienced doctors available for routine health checkups and primary care.</p>
+            </div>
+
+            <div class="expert-card">
+                <img src="{{ url_for('static', filename='assets/heart.png') }}">
+                <h3>Heart Specialists</h3>
+                <p>20+ years experienced cardiologists for heart related treatments.</p>
+            </div>
+
+            <div class="expert-card">
+                <img src="{{ url_for('static', filename='assets/mental.png') }}">
+                <h3>Mental Health</h3>
+                <p>Professional psychiatrists and psychologists for mental wellness support.</p>
+            </div>
+
+            <div class="expert-card">
+                <img src="{{ url_for('static', filename='assets/gastric.png') }}">
+                <h3>Gastro & MS Care</h3>
+                <p>Specialists for gastric disorders, neurological issues & MS treatments.</p>
+            </div>
+
+            <div class="expert-card">
+                <img src="{{ url_for('static', filename='assets/sexual.png') }}">
+                <h3>Sexual Health</h3>
+                <p>Confidential consultations with certified professionals.</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    {% endif %}
+
+</div>
+
+ <!-- ===== USER ONLY SECTION end  ===== -->
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>

@@ -187,3 +187,72 @@ canvas[id="feedbackChart"] {
     height: 160px;
   }
 }
+
+
+/* PLATFORM EXPERTISE SECTION */
+
+.platform-expertise {
+    margin-top: 80px;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 28px;
+    color: #00eaff;
+    margin-bottom: 50px;
+}
+
+/* EXPERTISE GRID */
+
+.expertise-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 30px;
+}
+
+/* EXPERT CARDS*/
+
+.expert-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 18px;
+    padding: 20px;
+    text-align: center;
+    transition: 0.3s ease;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.expert-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0, 255, 255, 0.3);
+}
+
+.expert-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
+
+.expert-card h3 {
+    color: #00eaff;
+    margin-bottom: 10px;
+}
+
+.expert-card p {
+    font-size: 14px;
+    color: #cfd8ff;
+    line-height: 1.5;
+}
+
+/* RESPONSIVE*/
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 25px;
+    }
+
+    .navbar {
+        padding: 15px 20px;
+    }
+}

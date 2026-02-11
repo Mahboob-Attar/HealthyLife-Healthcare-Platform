@@ -5,6 +5,7 @@ from server.blueprints.services.feedback.routes import feedback
 from server.blueprints.services.aiml.diagnostic.routes import diagnostic
 from server.blueprints.services.aiml.chatbot.routes import chatbot
 from server.blueprints.services.admin.routes import admin
+from server.blueprints.services.dashboard.routes import dashboard
 from server.blueprints.services.auth.routes import auth
 
 def init_blueprints(app):
@@ -16,3 +17,5 @@ def init_blueprints(app):
     app.register_blueprint(chatbot)
     app.register_blueprint(admin)
     app.register_blueprint(auth)
+    app.register_blueprint(dashboard)
+

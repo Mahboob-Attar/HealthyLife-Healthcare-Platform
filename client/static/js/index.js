@@ -1,6 +1,6 @@
 // ===================== INFO POPUPS =====================
 
-// Popup Triggers
+// About Popup
 const aboutLink = document.querySelector('a[href="#about"]');
 if (aboutLink) {
   aboutLink.addEventListener("click", (e) => {
@@ -9,6 +9,7 @@ if (aboutLink) {
   });
 }
 
+// FAQ Popup
 const faqLink = document.querySelector('a[href="#faq"]');
 if (faqLink) {
   faqLink.addEventListener("click", (e) => {
@@ -17,6 +18,7 @@ if (faqLink) {
   });
 }
 
+// Support Popup
 const supportLink = document.querySelector('a[href="#contact"]');
 if (supportLink) {
   supportLink.addEventListener("click", (e) => {
@@ -35,18 +37,6 @@ document.querySelectorAll(".close-info").forEach((btn) => {
 
 // ===================== AUTH POPUP HANDLING =====================
 
-function showRoleBox() {
-  document
-    .querySelectorAll(".auth-box")
-    .forEach((box) => (box.style.display = "none"));
-  document.getElementById("roleBox").style.display = "flex";
-}
-
-function closeAuthPopup() {
-  const authPopup = document.getElementById("authMasterPopup");
-  if (authPopup) authPopup.style.display = "none";
-}
-
 document.addEventListener("DOMContentLoaded", () => {
   const menuIcon = document.querySelector(".menu-icon");
   const authPopup = document.getElementById("authMasterPopup");
@@ -54,43 +44,17 @@ document.addEventListener("DOMContentLoaded", () => {
   if (menuIcon && authPopup) {
     menuIcon.addEventListener("click", () => {
       authPopup.style.display = "flex";
-      showRoleBox();
+
+      // show role box safely (auth.js handles this)
+      if (typeof showRoleBox === "function") {
+        showRoleBox();
+      }
     });
 
     authPopup.addEventListener("click", (e) => {
-      if (e.target === authPopup) closeAuthPopup();
+      if (e.target === authPopup) {
+        authPopup.style.display = "none";
+      }
     });
   }
 });
-
-// ===================== AUTH SWITCH VIEW =====================
-
-function hideAllAuthBoxes() {
-  document
-    .querySelectorAll(".auth-box")
-    .forEach((box) => (box.style.display = "none"));
-}
-
-function selectRole(role) {
-  hideAllAuthBoxes();
-  if (role === "user") {
-    document.getElementById("userSignupBox").style.display = "flex";
-  } else if (role === "doctor") {
-    document.getElementById("doctorSignupBox").style.display = "flex";
-  }
-}
-
-function openLogin() {
-  hideAllAuthBoxes();
-  document.getElementById("userLoginBox").style.display = "flex";
-}
-
-function openForgotPassword() {
-  hideAllAuthBoxes();
-  document.getElementById("forgotBox").style.display = "flex";
-}
-
-function openAdminLogin() {
-  hideAllAuthBoxes();
-  document.getElementById("adminLoginBox").style.display = "flex";
-}

@@ -31,7 +31,7 @@ class DoctorService:
             location = request.form.get("location")
             photo = request.files.get("photo")
 
-            user_id = request.form.get("user_id")  # optional
+            user_id = request.form.get("user_id")  
 
             # Validation
             if not all([
@@ -117,7 +117,7 @@ class DoctorService:
             }
 
         except Exception as e:
-            print("❌ DoctorService.register Error:", e)
+            print("DoctorService.register Error:", e)
             return {
                 "success": False,
                 "message": "Internal Server Error",

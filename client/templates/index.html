@@ -58,14 +58,15 @@
         <a href="{{ url_for('diagnostic_bp.page') }}" class="btn"
           >Predict Now</a
         >
-        <a href="{{ url_for('appointments.appointment_page') }}" class="btn"
-          >Appointment Now</a
-        >
-        <a href="{{ url_for('admin_bp.dashboard_page') }}" class="btn"
-          >DASHBOARD</a
-        >
+        <a href="javascript:void(0);" onclick="goToAppointment()" class="btn">
+            Appointment Now
+          </a>
+        <a href="javascript:void(0);" onclick="goToDashboard()" class="btn">
+            DASHBOARD
+          </a>
         <button class="btn" id="doctorBtn">Doctor's Registration form!</button>
         <button class="btn" id="userBtn">Please provide feedback!!</button>
+         <button class="btn" id="doctoravailabilityBtn"> Set Availability </button>
 
         <!-- Chatbot Icon -->
         <div class="chatbot-container" id="chatbotIcon">
@@ -102,222 +103,221 @@
       </div>
     </div>
 
-   <!-- AUTH POPUP OVERLAY -->
-<div id="authMasterPopup" class="auth-overlay" style="display: none">
+    <!-- AUTH POPUP OVERLAY -->
+    <div id="authMasterPopup" class="auth-overlay" style="display: none">
+      <!-- ROLE SELECTION -->
+      <div class="auth-box" id="roleBox">
+        <h2>Select Role</h2>
+        <button class="auth-btn" onclick="selectRole('user')">User</button>
+        <button class="auth-btn" onclick="openAdminLogin()">Admin</button>
+        <p class="auth-small">
+          Already have an account? <span onclick="openLogin()">Login</span>
+        </p>
+      </div>
 
-  <!-- ROLE SELECTION -->
-  <div class="auth-box" id="roleBox">
-    <h2>Select Role</h2>
-    <button class="auth-btn" onclick="selectRole('user')">User</button>
-    <button class="auth-btn" onclick="openAdminLogin()">Admin</button>
-    <p class="auth-small">
-      Already have an account? <span onclick="openLogin()">Login</span>
-    </p>
-  </div>
+      <!-- USER SIGNUP -->
+      <div class="auth-box" id="userSignupBox" style="display: none">
+        <h2>User Signup</h2>
+        <input type="text" id="u_name" placeholder="Full Name" />
 
-  <!-- USER SIGNUP -->
-  <div class="auth-box" id="userSignupBox" style="display: none">
-    <h2>User Signup</h2>
-    <input type="text" id="u_name" placeholder="Full Name" />
+        <input type="email" id="u_email" placeholder="Email" />
+        <div class="otp-row">
+          <input type="text" id="u_otp" placeholder="OTP" />
+          <button id="u_send_btn" disabled onclick="sendOTP()">Send OTP</button>
+          <button id="u_resend_btn" style="display: none" onclick="sendOTP()">
+            Resend
+          </button>
+          <span id="u_timer" class="otp-timer"></span>
+        </div>
 
-    <input type="email" id="u_email" placeholder="Email" />
-    <div class="otp-row">
-      <input type="text" id="u_otp" placeholder="OTP" />
-      <button id="u_send_btn" disabled onclick="sendOTP()">
-        Send OTP
-      </button>
-      <button
-        id="u_resend_btn"
-        style="display: none"
-        onclick="sendOTP()"
-      >
-        Resend
-      </button>
-      <span id="u_timer" class="otp-timer"></span>
+        <input type="password" id="u_pass" placeholder="Password" />
+        <button class="auth-btn" onclick="userSignup()">Signup</button>
+        <p class="auth-small">
+          Switch Role? <span onclick="showRoleBox()">Click here</span>
+        </p>
+      </div>
+
+      <!-- USER LOGIN -->
+      <div class="auth-box" id="userLoginBox" style="display: none">
+        <h2>User Login</h2>
+        <input type="email" id="ul_email" placeholder="Email" />
+        <input type="password" id="ul_pass" placeholder="Password" />
+        <button class="auth-btn" onclick="userLogin()">Login</button>
+        <p class="auth-small" onclick="openForgotPassword()">
+          Forgot Password?
+        </p>
+        <p class="auth-small">
+          Switch Role? <span onclick="showRoleBox()">Click here</span>
+        </p>
+      </div>
+
+      <!-- ADMIN LOGIN -->
+      <div class="auth-box" id="adminLoginBox" style="display: none">
+        <h2>Admin Login</h2>
+        <input type="email" id="a_email" placeholder="Admin Email" />
+        <input type="password" id="a_pass" placeholder="Password" />
+        <button class="auth-btn" onclick="adminLogin()">Login</button>
+        <p class="auth-small">
+          Switch Role? <span onclick="showRoleBox()">Click here</span>
+        </p>
+      </div>
+
+      <!-- FORGOT PASSWORD -->
+      <div class="auth-box" id="forgotBox" style="display: none">
+        <h2>Reset Password</h2>
+        <input type="email" id="fp_email" placeholder="Email" />
+
+        <div class="otp-row">
+          <input type="text" id="fp_otp" placeholder="OTP" />
+          <button id="fp_send_btn" disabled onclick="sendOTP()">
+            Send OTP
+          </button>
+          <button id="fp_resend_btn" style="display: none" onclick="sendOTP()">
+            Resend
+          </button>
+          <span id="fp_timer" class="otp-timer"></span>
+        </div>
+
+        <input type="password" id="fp_pass" placeholder="New Password" />
+        <button class="auth-btn" onclick="resetPassword()">
+          Reset Password
+        </button>
+        <p class="auth-small" onclick="showRoleBox()">Back</p>
+      </div>
     </div>
 
-    <input type="password" id="u_pass" placeholder="Password" />
-    <button class="auth-btn" onclick="userSignup()">Signup</button>
-    <p class="auth-small">
-      Switch Role? <span onclick="showRoleBox()">Click here</span>
-    </p>
-  </div>
+    <!-- Doctor Registration Popup -->
+    <div id="doctorPopup" class="doctor-popup">
+      <div class="doctor-header">
+        <h3>Doctor Registration Form</h3>
+        <span id="closeDoctor">&times;</span>
+      </div>
 
-  <!-- USER LOGIN -->
-  <div class="auth-box" id="userLoginBox" style="display: none">
-    <h2>User Login</h2>
-    <input type="email" id="ul_email" placeholder="Email" />
-    <input type="password" id="ul_pass" placeholder="Password" />
-    <button class="auth-btn" onclick="userLogin()">Login</button>
-    <p class="auth-small" onclick="openForgotPassword()">
-      Forgot Password?
-    </p>
-    <p class="auth-small">
-      Switch Role? <span onclick="showRoleBox()">Click here</span>
-    </p>
-  </div>
+      <form id="doctorForm" class="doctor-form" enctype="multipart/form-data">
+        <label>Full Name <span style="color: red">*</span></label>
+        <input type="text" name="name" placeholder="Dr. John Doe" required />
 
-  <!-- ADMIN LOGIN -->
-  <div class="auth-box" id="adminLoginBox" style="display: none">
-    <h2>Admin Login</h2>
-    <input type="email" id="a_email" placeholder="Admin Email" />
-    <input type="password" id="a_pass" placeholder="Password" />
-    <button class="auth-btn" onclick="adminLogin()">Login</button>
-    <p class="auth-small">
-      Switch Role? <span onclick="showRoleBox()">Click here</span>
-    </p>
-  </div>
+        <label>Phone Number <span style="color: red">*</span></label>
+        <input type="tel" name="phone" placeholder="+91 9876543210" required />
 
-  <!-- FORGOT PASSWORD -->
-  <div class="auth-box" id="forgotBox" style="display: none">
-    <h2>Reset Password</h2>
-    <input type="email" id="fp_email" placeholder="Email" />
+        <label>Email <span style="color: red">*</span></label>
+        <input
+          type="email"
+          name="email"
+          placeholder="doctor@example.com"
+          required
+        />
 
-    <div class="otp-row">
-      <input type="text" id="fp_otp" placeholder="OTP" />
-      <button id="fp_send_btn" disabled onclick="sendOTP()">
-        Send OTP
-      </button>
-      <button
-        id="fp_resend_btn"
-        style="display: none"
-        onclick="sendOTP()"
-      >
-        Resend
-      </button>
-      <span id="fp_timer" class="otp-timer"></span>
+        <label>Experience (Years) <span style="color: red">*</span></label>
+        <input
+          type="number"
+          name="experience"
+          placeholder="e.g. 10"
+          min="0"
+          required
+        />
+
+        <label>Specialization <span style="color: red">*</span></label>
+        <input
+          type="text"
+          name="specialization"
+          placeholder="e.g. General Surgeon"
+          required
+        />
+
+        <label>Services Provided <span style="color: red">*</span></label>
+        <textarea
+          name="services"
+          placeholder="e.g. General Checkups, ECG, Surgery"
+          required
+        ></textarea>
+
+        <label>Clinic/Hospital <span style="color: red">*</span></label>
+        <input
+          type="text"
+          name="clinic"
+          placeholder="e.g. Apollo Hospital"
+          required
+        />
+
+        <label>Hospital Location <span style="color: red">*</span></label>
+        <select name="location" id="doctorLocation" required>
+          <option value="">Select City</option>
+          <option value="Bangalore South">Bangalore South</option>
+          <option value="Bangalore North">Bangalore North</option>
+          <option value="Bangalore Urban">Bangalore Urban</option>
+          <option value="Bangalore Rural">Bangalore Rural</option>
+        </select>
+
+        <label>Govt License Email <span style="color: red">*</span></label>
+        <input
+          type="email"
+          name="license"
+          id="licenseInput"
+          placeholder="Fake id not acepted !"
+          required
+        />
+        <span id="licenseStatus"></span>
+
+        <!-- UPDATED PHOTO LABEL -->
+        <label>
+          Recent Original Photo (For Verification)
+          <span style="color: red">*</span>
+        </label>
+        <input
+          type="file"
+          name="photo"
+          accept="image/png, image/jpeg"
+          required
+        />
+
+        <!-- AGREEMENT SECTION -->
+        <div class="agreement-box">
+          <label class="agreement-label">
+            <input type="checkbox" id="doctorAgreement" />
+            <span>
+              <p>
+                <strong>Accuracy of Information:</strong>
+                I confirm that all the information provided by me is
+                <strong>true, accurate, and complete</strong>.
+              </p>
+              <hr />
+              <br />
+              <p>
+                <strong>Education & Qualification:</strong>
+                I declare that my medical education and professional
+                qualifications have been <strong>completed in India</strong>
+                and are valid as per applicable authorities.
+              </p>
+              <hr />
+              <br />
+              <p>
+                <strong>Verification & Approval:</strong>
+                I understand that my registration will undergo
+                <strong>internal verification</strong> and may be
+                <strong>approved or rejected</strong>. Submission of
+                <strong>false or forged documents</strong> may lead to rejection
+                or removal from the platform.
+              </p>
+              <hr />
+              <br />
+              <p>
+                <strong>Data Sharing & Payments:</strong>
+                I consent to sharing my professional information with authorized
+                internal teams and trusted partners for verification and service
+                delivery. I agree to the platform’s
+                <strong>internal payment and revenue-sharing policies</strong>,
+                including applicable commissions.
+              </p>
+              <hr />
+              <br />
+            </span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn">Send Registration Request</button>
+      </form>
     </div>
-
-    <input type="password" id="fp_pass" placeholder="New Password" />
-    <button class="auth-btn" onclick="resetPassword()">
-      Reset Password
-    </button>
-    <p class="auth-small" onclick="showRoleBox()">Back</p>
-  </div>
-
-</div>
-
-   <!-- Doctor Registration Popup -->
-<div id="doctorPopup" class="doctor-popup">
-  <div class="doctor-header">
-    <h3>Doctor Registration Form</h3>
-    <span id="closeDoctor">&times;</span>
-  </div>
-
-  <form
-    id="doctorForm"
-    class="doctor-form"
-    enctype="multipart/form-data"
-  >
-    <label>Full Name <span style="color: red">*</span></label>
-    <input type="text" name="name" placeholder="Dr. John Doe" required />
-
-    <label>Phone Number <span style="color: red">*</span></label>
-    <input type="tel" name="phone" placeholder="+91 9876543210" required />
-
-    <label>Email <span style="color: red">*</span></label>
-    <input type="email" name="email" placeholder="doctor@example.com" required />
-
-    <label>Experience (Years) <span style="color: red">*</span></label>
-    <input type="number" name="experience" placeholder="e.g. 10" min="0" required />
-
-    <label>Specialization <span style="color: red">*</span></label>
-    <input type="text" name="specialization" placeholder="e.g. General Surgeon" required />
-
-    <label>Services Provided <span style="color: red">*</span></label>
-    <textarea
-      name="services"
-      placeholder="e.g. General Checkups, ECG, Surgery"
-      required
-    ></textarea>
-
-    <label>Clinic/Hospital <span style="color: red">*</span></label>
-    <input type="text" name="clinic" placeholder="e.g. Apollo Hospital" required />
-
-    <label>Hospital Location <span style="color: red">*</span></label>
-    <select name="location" id="doctorLocation" required>
-      <option value="">Select City</option>
-      <option value="Bangalore Rural">Bangaluru</option>
-      <option value="Bangalore Urban">Bangalore Urban</option>
-      <option value="Bangalore Rural">Bangalore Rural</option>
-      <option value="Bangalore South">Pune</option>
-      <option value="Bangalore North">Mumbai</option>
-      <option value="Bangalore Rural">Hyderabad</option>
-    </select>
-
-    <label>Govt License Email <span style="color: red">*</span></label>
-    <input
-      type="email"
-      name="license"
-      id="licenseInput"
-      placeholder="Fake id not acepted !"
-      required
-    />
-    <span id="licenseStatus"></span>
-
-    <!-- UPDATED PHOTO LABEL -->
-    <label>
-      Recent Original Photo (For Verification)
-      <span style="color: red">*</span>
-    </label>
-    <input
-      type="file"
-      name="photo"
-      accept="image/png, image/jpeg"
-      required
-    />
-
-    <!-- AGREEMENT SECTION -->
-    <div class="agreement-box">
-      <label class="agreement-label">
-        <input type="checkbox" id="doctorAgreement" />
-        <span>
-
-          <p>
-            <strong>Accuracy of Information:</strong>
-            I confirm that all the information provided by me is
-            <strong>true, accurate, and complete</strong>.
-          </p>
-                <hr>
-                <br>
-          <p>
-            <strong>Education & Qualification:</strong>
-            I declare that my medical education and professional
-            qualifications have been <strong>completed in India</strong>
-            and are valid as per applicable authorities.
-          </p>
-              <hr>
-                <br>
-          <p>
-            <strong>Verification & Approval:</strong>
-            I understand that my registration will undergo
-            <strong>internal verification</strong> and may be
-            <strong>approved or rejected</strong>. Submission of
-            <strong>false or forged documents</strong> may lead to rejection
-            or removal from the platform.
-          </p>
-                <hr>
-                  <br>
-          <p>
-            <strong>Data Sharing & Payments:</strong>
-            I consent to sharing my professional information with
-            authorized internal teams and trusted partners for verification
-            and service delivery. I agree to the platform’s
-            <strong>internal payment and revenue-sharing policies</strong>,
-            including applicable commissions.
-          </p>
-              <hr>
-                  <br>
-
-        </span>
-      </label>
-    </div>
-
-    <button type="submit" class="btn">
-      Send Registration Request
-    </button>
-  </form>
-</div>
 
     <!-- Success Popup -->
     <div id="successPopup" class="success-popup">

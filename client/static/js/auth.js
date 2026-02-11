@@ -1,4 +1,4 @@
-/* GLOBAL HELPERS*/
+/* GLOBAL HELPERS */
 function showBox(boxId) {
   document
     .querySelectorAll(".auth-box")
@@ -13,25 +13,31 @@ function closeAuthPopup() {
 function showRoleBox() {
   showBox("roleBox");
 }
-
 function selectRole(role) {
   if (role === "user") openSignup();
   else openAdminLogin();
 }
 
-/* NAVIGATION*/
+/* NAVIGATION */
+function openLogin() {
+  showBox("userLoginBox");
+}
+function openForgotPassword() {
+  showBox("forgotBox");
+}
+function openAdminLogin() {
+  showBox("adminLoginBox");
+}
+function openSignup() {
+  showBox("userSignupBox");
+}
 
-function openLogin() { showBox("userLoginBox"); }
-function openForgotPassword() { showBox("forgotBox"); }
-function openAdminLogin() { showBox("adminLoginBox"); }
-function openSignup() { showBox("userSignupBox"); }
-
-/*EMAIL VALIDATION*/
+/* EMAIL VALIDATION*/
 function validateEmail(email) {
   return /\S+@\S+\.\S+/.test(email);
 }
 
-/*  OTP FIELD SETUP*/
+/* OTP FIELD SETUP*/
 function setupOtpField(emailId, buttonId) {
   const emailInput = document.getElementById(emailId);
   const sendBtn = document.getElementById(buttonId);
@@ -44,11 +50,12 @@ function setupOtpField(emailId, buttonId) {
   });
 }
 
-/* API HELPER*/
+/* API HELPER (UPDATED) */
 async function api(url, method = "POST", data = {}) {
   try {
     const res = await fetch(url, {
       method,
+      credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: method === "GET" ? null : JSON.stringify(data),
     });
@@ -71,8 +78,7 @@ function showVerified(inputId) {
   input.style.fontWeight = "bold";
 }
 
-/*SEND OTP (AUTO MODE)Works for signup + reset*/
-
+/*SEND OTP */
 async function sendOTP() {
   const signupVisible =
     document.getElementById("userSignupBox").style.display === "flex";
@@ -103,16 +109,14 @@ async function sendOTP() {
   alert(res.msg);
 }
 
-/* SER SIGNUP */
-
+/* USER SIGNUP*/
 async function userSignup() {
   const name = u_name.value.trim();
   const email = u_email.value.trim();
   const otp = u_otp.value.trim();
   const pass = u_pass.value;
 
-  if (!name || !email || !otp || !pass)
-    return alert("All fields required!");
+  if (!name || !email || !otp || !pass) return alert("All fields required!");
 
   if (!otpVerified) {
     const v = await api("/auth/verify-otp", "POST", {
@@ -151,11 +155,13 @@ async function userLogin() {
   if (res.status !== "success") return alert(res.msg);
 
   localStorage.setItem("user_name", res.name);
+
+  //  Redirect to common dashboard
   window.location.href = "/";
 }
 
-/*  ADMIN LOGIN*/
 
+/* ADMIN LOGIN*/
 async function adminLogin() {
   const res = await api("/admin/login", "POST", {
     email: a_email.value.trim(),
@@ -163,17 +169,17 @@ async function adminLogin() {
   });
 
   if (res.status !== "success") return alert(res.msg);
-  window.location.href = "/admin/dashboard";
+
+  window.location.href = "/dashboard/";
 }
 
-/* RESET PASSWORD (MATCHES HTML)*/
+/*  RESET PASSWORD */
 async function resetPassword() {
   const email = fp_email.value.trim();
   const otp = fp_otp.value.trim();
   const pass = fp_pass.value;
 
-  if (!email || !otp || !pass)
-    return alert("All fields required!");
+  if (!email || !otp || !pass) return alert("All fields required!");
 
   const res = await api("/auth/reset", "POST", {
     email,
@@ -189,9 +195,8 @@ async function resetPassword() {
   }
 }
 
-/* NAVBAR USER AVATAR */
-function initUserNavbar() {
-  const user = localStorage.getItem("user_name");
+/*  NAVBAR SESSION CHECK (FIXED)*/
+async function initUserNavbar() {
   const menuIcon = document.getElementById("menuIcon");
   const userContainer = document.getElementById("navUserContainer");
   const avatar = document.getElementById("navUserAvatar");
@@ -199,10 +204,21 @@ function initUserNavbar() {
 
   if (!avatar) return;
 
-  if (user) {
-    avatar.innerText = user.charAt(0).toUpperCase();
-    if (menuIcon) menuIcon.style.display = "none";
+  const res = await api("/auth/me", "GET");
+
+  if (res.logged_in) {
+    if (menuIcon) menuIcon.style.display = "flex";
     if (userContainer) userContainer.style.display = "flex";
+
+    if (res.role === "admin") {
+      avatar.innerText = "A";
+    } else {
+      const name = localStorage.getItem("user_name") || "U";
+      avatar.innerText = name.charAt(0).toUpperCase();
+    }
+  } else {
+    if (menuIcon) menuIcon.style.display = "flex";
+    if (userContainer) userContainer.style.display = "none";
   }
 
   avatar.onclick = () => {
@@ -216,15 +232,44 @@ function initUserNavbar() {
   });
 }
 
-/* LOGOUT*/
-function logoutUser() {
+/* LOGOUT (FIXED)*/
+async function logoutUser() {
+  await api("/auth/logout", "POST");
   localStorage.removeItem("user_name");
   window.location.href = "/";
 }
 
-/*INIT */
+/* INIT*/
 document.addEventListener("DOMContentLoaded", () => {
   setupOtpField("u_email", "u_send_btn");
   setupOtpField("fp_email", "fp_send_btn");
   initUserNavbar();
 });
+
+async function goToDashboard() {
+  const res = await api("/auth/me", "GET");
+
+  if (!res.logged_in) {
+    alert("You must login first.");
+    return;
+  }
+  window.location.href = "/dashboard/";
+}
+
+
+async function goToAppointment() {
+  const res = await api("/auth/me", "GET");
+
+  if (!res.logged_in) {
+    alert("You must login first.");
+    return;
+  }
+
+  if (res.role === "admin") {
+    alert("Admin cannot book appointments.");
+    return;
+  }
+
+  // doctor or patient allowed
+  window.location.href = "/appointments";
+}

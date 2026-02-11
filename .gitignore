@@ -31,3 +31,8 @@ tempCodeRunnerFile.py
 *.tmp
 *~ 
 
+# Flask session storage
+flask_session/
+
+# Uploaded files (doctor profiles, reports, etc.)
+uploads/

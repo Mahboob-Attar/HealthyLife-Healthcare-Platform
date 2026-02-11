@@ -82,20 +82,23 @@ def auth_login(data):
     cur.close()
     conn.close()
 
-    # Set session (STATEFUL)
+    #  FIXED ROLE SYSTEM
     session.clear()
     session["logged_in"] = True
     session["user_id"] = user["id"]
     session["user_name"] = user["name"]
-    session["is_admin"] = bool(user["is_admin"])
+
+    if user["is_admin"] == 1:
+        session["role"] = "admin"
+    else:
+        session["role"] = "user"
 
     return jsonify({
         "status": "success",
         "msg": "Login successful",
         "name": user["name"],
-        "is_admin": bool(user["is_admin"])
+        "role": session["role"]
     }), 200
-
 
 def reset_password(data):
     email = data.get("email")

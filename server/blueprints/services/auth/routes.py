@@ -1,10 +1,11 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session
 from .otp_service import create_and_send_otp, verify_otp as verify_otp_service
 from .service import auth_signup, auth_login, reset_password
 
 auth = Blueprint("auth_bp", __name__, url_prefix="/auth")
 
-# SEND OTP
+
+# ---------------- SEND OTP ----------------
 @auth.route("/send-otp", methods=["POST"])
 def send_otp():
     data = request.get_json()
@@ -18,7 +19,7 @@ def send_otp():
     return jsonify(result), 200
 
 
-# VERIFY OTP
+# ---------------- VERIFY OTP ----------------
 @auth.route("/verify-otp", methods=["POST"])
 def verify_otp_route():
     data = request.get_json()
@@ -33,24 +34,39 @@ def verify_otp_route():
     return jsonify(result), 200
 
 
-# SIGNUP (USER ONLY)
+# ---------------- SIGNUP ----------------
 @auth.route("/signup", methods=["POST"])
 def signup():
     data = request.get_json()
     return auth_signup(data)
 
 
-
-# LOGIN (USER / ADMIN)
+# ---------------- LOGIN ----------------
 @auth.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
     return auth_login(data)
 
 
-
-# RESET PASSWORD
+# ---------------- RESET PASSWORD ----------------
 @auth.route("/reset", methods=["POST"])
 def reset():
     data = request.get_json()
     return reset_password(data)
+
+
+# ---------------- LOGOUT (COMMON FOR ALL ROLES) ----------------
+@auth.route("/logout", methods=["POST"])
+def logout():
+    session.clear()
+    return jsonify({"status": "success", "msg": "Logged out successfully"})
+
+# ---------------- Check session api to frontend ----------------
+@auth.route("/me", methods=["GET"])
+def get_current_user():
+    if session.get("logged_in"):
+        return jsonify({
+            "logged_in": True,
+            "role": session.get("role")
+        })
+    return jsonify({"logged_in": False})

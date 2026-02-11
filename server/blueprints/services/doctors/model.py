@@ -85,7 +85,7 @@ class DoctorModel:
 
         except Exception as e:
             conn.rollback()
-            print("❌ DoctorModel.create Error:", e)
+            print("DoctorModel.create Error:", e)
             return False
 
         finally:
